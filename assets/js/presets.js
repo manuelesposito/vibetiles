@@ -1543,6 +1543,16 @@
 		try { return cleanTweaks(JSON.parse(localStorage.getItem(TWEAKS_KEY) || '{}') || {}); } catch (e) { return {}; }
 	}
 	var HISTORY = [], FUTURE = [], lastPush = 0, undoing = false; 
+	var UNDO_KEY = 'architrave-undo';
+	function keepHistory() { if (READER) return; try { sessionStorage.setItem(UNDO_KEY, JSON.stringify({ h: HISTORY, f: FUTURE })); } catch (e) {  } }
+	(function () {
+		if (READER) return;
+		try {
+			var o = JSON.parse(sessionStorage.getItem(UNDO_KEY) || '{}'), ok = function (x) { return x && typeof x === 'object' && typeof x.tweaks === 'string' && typeof x.style === 'string'; };
+			if (Array.isArray(o.h)) HISTORY = o.h.filter(ok).slice(-40);
+			if (Array.isArray(o.f)) FUTURE = o.f.filter(ok).slice(-40);
+		} catch (e) {  }
+	})();
 	function storedSide() { try { return localStorage.getItem('quire-side') || ''; } catch (e) { return ''; } } 
 	function changedKey(wasText, nextText) {
 		var a, b;
@@ -1572,6 +1582,7 @@
 				var nowMs = Date.now();
 				if (nowMs - lastPush > 700) { HISTORY.push({ tweaks: was, side: storedSide(), style: current, what: changedKey(was, next), base: siteBase(current) }); if (HISTORY.length > 40) HISTORY.shift(); }
 				lastPush = nowMs;
+				keepHistory();
 			}
 			if (next === '{}') localStorage.removeItem(TWEAKS_KEY); else localStorage.setItem(TWEAKS_KEY, next);
 		} catch (e) {  }
@@ -3218,7 +3229,7 @@
 			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
-			undoing = false; lastPush = 0; siteSaveSoon();
+			undoing = false; lastPush = 0; keepHistory(); siteSaveSoon();
 			mark();
 			return true;
 		},
@@ -3230,7 +3241,7 @@
 			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
-			undoing = false; lastPush = 0; siteSaveSoon();
+			undoing = false; lastPush = 0; keepHistory(); siteSaveSoon();
 			mark();
 			return true;
 		},
@@ -3288,7 +3299,7 @@
 			var all = readTweaks(), e = entryFromRecord(rec);
 			if (Object.keys(e).length) all[s.id] = e; else delete all[s.id];
 			lastPush = 0; writeTweaks(all);
-			if (HISTORY.length) HISTORY[HISTORY.length - 1].what = what || 'version';
+			if (HISTORY.length) { HISTORY[HISTORY.length - 1].what = what || 'version'; keepHistory(); }
 			applyNow(s, wanted(s)); applyRoles();
 			return true;
 		},

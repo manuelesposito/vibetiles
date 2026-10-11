@@ -2493,6 +2493,20 @@
 	}
 	/* ONE STEP BACK, AND THE ONE BEFORE IT (Manuel, 2026-09-19, "what would Apple do … ok do it"): every change the panel makes to a style goes through writeTweaks, so what stood before each write is kept, with the side, and Rückgängig puts it back; one wrong press on Zurücksetzen had lost a whole evening's tuning. A drag writes at every stop, so writes that follow each other within 0.7s are one step and what is kept is what stood before the first. Kept for the page's life only, forty deep; changing tile is not a change to a style and is not in it. */
 	var HISTORY = [], FUTURE = [], lastPush = 0, undoing = false; /* FUTURE: what Undo took back, for Redo (2026-09-28, the lab's ⇧⌘Z) */
+	/* THE HISTORY OUTLIVES A RELOAD (1.4.94 / 0.56.36; Manuel, 2026-10-11, tuning a style in many small steps: "how many
+	   undo steps do we have and do they get lost"). Forty steps, kept in the browser's session store after every
+	   change, read back when the page loads: a reload keeps them, closing the tab still clears them. Not for readers,
+	   whose panel has no Undo. */
+	var UNDO_KEY = 'architrave-undo';
+	function keepHistory() { if (READER) return; try { sessionStorage.setItem(UNDO_KEY, JSON.stringify({ h: HISTORY, f: FUTURE })); } catch (e) { /* full or private: the history stays with the page */ } }
+	(function () {
+		if (READER) return;
+		try {
+			var o = JSON.parse(sessionStorage.getItem(UNDO_KEY) || '{}'), ok = function (x) { return x && typeof x === 'object' && typeof x.tweaks === 'string' && typeof x.style === 'string'; };
+			if (Array.isArray(o.h)) HISTORY = o.h.filter(ok).slice(-40);
+			if (Array.isArray(o.f)) FUTURE = o.f.filter(ok).slice(-40);
+		} catch (e) { /* nothing kept */ }
+	})();
 	function storedSide() { try { return localStorage.getItem('quire-side') || ''; } catch (e) { return ''; } } /* not `sideNow`: a variable of that name further down in this file shadowed the function, every save threw inside its own try, and nothing the panel changed was kept (caught by the undo test before it shipped) */
 	/* WHAT A STEP CHANGED, so Undo can say it (2026-09-23, Apple's "Undo Typing"):
 	   the first key of this style's tweaks that differs, a role's id when it was
@@ -2525,6 +2539,7 @@
 				var nowMs = Date.now();
 				if (nowMs - lastPush > 700) { HISTORY.push({ tweaks: was, side: storedSide(), style: current, what: changedKey(was, next), base: siteBase(current) }); if (HISTORY.length > 40) HISTORY.shift(); }
 				lastPush = nowMs;
+				keepHistory();
 			}
 			/* nothing tweaked is no key at all (2026-09-26): '{}' broke "a dial at rest writes nothing" */
 			if (next === '{}') localStorage.removeItem(TWEAKS_KEY); else localStorage.setItem(TWEAKS_KEY, next);
@@ -4858,7 +4873,7 @@
 			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
-			undoing = false; lastPush = 0; siteSaveSoon();
+			undoing = false; lastPush = 0; keepHistory(); siteSaveSoon();
 			mark();
 			return true;
 		},
@@ -4870,7 +4885,7 @@
 			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
-			undoing = false; lastPush = 0; siteSaveSoon();
+			undoing = false; lastPush = 0; keepHistory(); siteSaveSoon();
 			mark();
 			return true;
 		},
@@ -4939,7 +4954,7 @@
 			var all = readTweaks(), e = entryFromRecord(rec);
 			if (Object.keys(e).length) all[s.id] = e; else delete all[s.id];
 			lastPush = 0; writeTweaks(all);
-			if (HISTORY.length) HISTORY[HISTORY.length - 1].what = what || 'version';
+			if (HISTORY.length) { HISTORY[HISTORY.length - 1].what = what || 'version'; keepHistory(); }
 			applyNow(s, wanted(s)); applyRoles();
 			return true;
 		},
