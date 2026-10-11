@@ -483,7 +483,7 @@
 	/* A LOOK IS CHOSEN BY SEEING IT (the prototype's lookRow, decided 2026-09-27: drawn looks stay): every
 	   choice drawn small on the page's own paper, in its ink and its button colour, the chosen one ringed.
 	   draw: button (the levels), tag, link, chosen (menus and tabs), surface (cards), picture, frame, fade */
-	var LOOK_DRAW = { pictureFilter: 'picture', pictureFrame: 'frame', pictureFade: 'fade', primaryButton: 'button', secondaryButton: 'button', tertiaryButton: 'button', tags: 'tag', links: 'link', currentItem: 'chosen', cards: 'surface', pictureframe: 'frame', picturefade: 'fade', quotes: 'quote', fields: 'surface', pictures: 'picture', framepattern: 'frame', fadeedges: 'fade' };
+	var LOOK_DRAW = { pictureFilter: 'picture', pictureFrame: 'frame', pictureFade: 'fade', primaryButton: 'button', secondaryButton: 'button', tertiaryButton: 'button', tags: 'tag', links: 'link', currentItem: 'chosen', cards: 'surface', pictureframe: 'frame', picturefade: 'fade', quotes: 'quote', fields: 'field', pictures: 'picture', framepattern: 'frame', fadeedges: 'fade' };
 	var LOOK_SHORT = { shadow: 'Shadow', text: 'Text' };
 	/* A LINE UNDER A ROW WHOSE NAME IS NOT ENOUGH (2026-10-06, the whole-panel pass B1): what it touches, in a few words */
 	var ROW_NOTE = { hyphenate: 'Where words break at the end of a line', opening: 'The first paragraph a size larger', borderStrength: 'How dark the lines are' };
@@ -509,6 +509,9 @@
 		if (draw === 'link') return '<i class="ldpw-dln" data-ln="' + id + '">link</i>';
 		if (draw === 'chosen') return '<i class="ldpw-dch" data-ch="' + id + '"><b>One</b><u>Two</u></i>';
 		if (draw === 'surface') return '<i class="ldpw-dsf" data-sf="' + id + '"><b></b><b></b></i>';
+		/* A FIELD IS ONE ROW, NOT A CARD (0.56.37; Manuel's go, 2026-10-11, on the Cards and Fields rows showing the same three
+		   pictures): a glyph and one line, the search pill's shape, in the same three materials. */
+		if (draw === 'field') return '<i class="ldpw-dsf ldpw-dfi" data-sf="' + id + '"><b></b><b></b></i>';
 		if (draw === 'quote') return '<i class="ldpw-dq" data-q="' + id + '">“Aa”</i>';
 		if (draw === 'picture') return id === 'hidden' ? '<i class="ldpw-dpic is-hid">' + esc(t('Show')) + '</i>' : '<i class="ldpw-dpic' + (id === 'dither' || id === 'pixel' ? ' is-px' : id === 'halftone' ? ' is-ht' : '') + '" style="filter:' + (PIC_FILTER[id] || 'none') + '"></i>';
 		if (draw === 'frame') return '<i class="ldpw-dpic ldpw-dfr" data-fr="' + id + '"></i>';

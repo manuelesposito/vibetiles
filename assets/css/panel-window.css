@@ -310,7 +310,10 @@
 #ldp-window .ldpw-dsf b { display: block; height: 3px; border-radius: 2px; background: color-mix(in oklab, var(--li) 55%, transparent); }
 #ldp-window .ldpw-dsf b + b { width: 60%; }
 #ldp-window .ldpw-dsf[data-sf="flat"] { background: color-mix(in oklab, var(--li) 9%, var(--lp)); }
-#ldp-window .ldpw-dsf[data-sf="box"] { background: color-mix(in oklab, var(--li) 6%, var(--lp)); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--li) 30%, transparent); }
+#ldp-window .ldpw-dsf[data-sf="box"] { background: var(--lp); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--li) 30%, transparent); } 
+#ldp-window .ldpw-dfi { height: 40%; width: 70%; grid-auto-flow: column; justify-content: start; align-items: center; gap: 5px; padding: 0 7px; border-radius: 5px; }
+#ldp-window .ldpw-dfi b:first-child { width: 5px; height: 5px; border-radius: 50%; box-shadow: inset 0 0 0 1.2px color-mix(in oklab, var(--li) 55%, transparent); background: transparent; }
+#ldp-window .ldpw-dfi b + b { width: 26px; height: 3px; }
 #ldp-window .ldpw-dsf[data-sf="raised"] { background: var(--lp); box-shadow: 0 0 0 .5px color-mix(in oklab, var(--li) 15%, transparent), 0 3px 8px rgb(0 0 0 / .35); }
 #ldp-window .ldpw-dsf[data-sf="top"] { border-radius: 0; box-shadow: inset 0 1.5px 0 color-mix(in oklab, var(--li) 45%, transparent); }
 #ldp-window .ldpw-dq { font: italic 13px/1 Georgia, serif; padding: 5px 7px; color: var(--li); }

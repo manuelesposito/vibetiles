@@ -428,7 +428,7 @@
 		if (bare) return pop(key, label(key), s.get(key), items, function (id) { s.set(key, id); });
 		return row(label(key), pop(key, label(key), s.get(key), items, function (id) { s.set(key, id); }), ROW_NOTE[key] ? esc(t(ROW_NOTE[key])) : '');
 	}
-	var LOOK_DRAW = { pictureFilter: 'picture', pictureFrame: 'frame', pictureFade: 'fade', primaryButton: 'button', secondaryButton: 'button', tertiaryButton: 'button', tags: 'tag', links: 'link', currentItem: 'chosen', cards: 'surface', pictureframe: 'frame', picturefade: 'fade', quotes: 'quote', fields: 'surface', pictures: 'picture', framepattern: 'frame', fadeedges: 'fade' };
+	var LOOK_DRAW = { pictureFilter: 'picture', pictureFrame: 'frame', pictureFade: 'fade', primaryButton: 'button', secondaryButton: 'button', tertiaryButton: 'button', tags: 'tag', links: 'link', currentItem: 'chosen', cards: 'surface', pictureframe: 'frame', picturefade: 'fade', quotes: 'quote', fields: 'field', pictures: 'picture', framepattern: 'frame', fadeedges: 'fade' };
 	var LOOK_SHORT = { shadow: 'Shadow', text: 'Text' };
 	var ROW_NOTE = { hyphenate: 'Where words break at the end of a line', opening: 'The first paragraph a size larger', borderStrength: 'How dark the lines are' };
 	var LOOK_NOTE = { primaryButton: 'The main action, like Subscribe', secondaryButton: 'A second choice next to it', tertiaryButton: 'Small actions, like Share', links: 'In the text', currentItem: 'The page you are on, the tab that is open', cards: 'Link cards and coloured boxes in the text', fields: 'Search, comment and sign-up fields', quotes: 'Quotations in an article', pictureFilter: 'Every picture on the site', pictureFrame: 'A mat around each picture' };  
@@ -446,6 +446,7 @@
 		if (draw === 'link') return '<i class="ldpw-dln" data-ln="' + id + '">link</i>';
 		if (draw === 'chosen') return '<i class="ldpw-dch" data-ch="' + id + '"><b>One</b><u>Two</u></i>';
 		if (draw === 'surface') return '<i class="ldpw-dsf" data-sf="' + id + '"><b></b><b></b></i>';
+		if (draw === 'field') return '<i class="ldpw-dsf ldpw-dfi" data-sf="' + id + '"><b></b><b></b></i>';
 		if (draw === 'quote') return '<i class="ldpw-dq" data-q="' + id + '">“Aa”</i>';
 		if (draw === 'picture') return id === 'hidden' ? '<i class="ldpw-dpic is-hid">' + esc(t('Show')) + '</i>' : '<i class="ldpw-dpic' + (id === 'dither' || id === 'pixel' ? ' is-px' : id === 'halftone' ? ' is-ht' : '') + '" style="filter:' + (PIC_FILTER[id] || 'none') + '"></i>';
 		if (draw === 'frame') return '<i class="ldpw-dpic ldpw-dfr" data-fr="' + id + '"></i>';
