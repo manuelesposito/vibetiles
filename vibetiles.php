@@ -1,12 +1,13 @@
 <?php
 /**
  * Plugin Name:       Vibetiles
+ * Plugin URI:        https://elmastudio.de/en/vibetiles/
  * Description:       Design your site on the live page: a panel with dials for colours, fonts, sizes and spacing, light and dark, and saved styles your readers can pick too.
- * Version:           0.56.39
+ * Version:           0.56.40
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            Elmastudio
- * Author URI:        https://elmastudio.de
+ * Author URI:        https://elmastudio.de/en/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       vibetiles
@@ -39,7 +40,7 @@ if ( defined( 'ARCHITRAVE_PANEL_VERSION' ) ) {
 	return;
 }
 
-define( 'ARCHITRAVE_PANEL_VERSION', '0.56.39' );
+define( 'ARCHITRAVE_PANEL_VERSION', '0.56.40' );
 define( 'ARCHITRAVE_PANEL_FILE', __FILE__ );
 
 require_once __DIR__ . '/panel.php';
