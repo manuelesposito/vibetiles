@@ -344,6 +344,7 @@ html.ldp-aiming, html.ldp-aiming * { cursor: crosshair !important; }
 #ldp-aim[hidden] { display: none; }
 #ldp-aim span { position: absolute; left: -2px; bottom: calc(100% + 6px); display: flex; gap: 6px; align-items: baseline; white-space: nowrap; padding: 4px 8px; border-radius: 6px; background: #0a84ff; color: #fff; font: 600 12px/1.2 "LDP Inter", "Inter Variable", system-ui, sans-serif; letter-spacing: normal; text-transform: none; }
 #ldp-aim span small { font: 400 11px/1.2 "LDP Inter", "Inter Variable", system-ui, sans-serif; opacity: .8; }
+#ldp-aim span small.ldp-aim-out { opacity: .6; padding-left: 6px; border-left: 1px solid rgb(255 255 255 / .35); } 
 #ldp-aim.is-below span { bottom: auto; top: calc(100% + 6px); }
 .ldp-mark { position: fixed; z-index: 99988; pointer-events: none; border-radius: 6px; box-shadow: 0 0 0 2px #0a84ff, 0 0 0 5px rgb(10 132 255 / .18); }
 .ldp-mark span { position: absolute; left: -2px; bottom: calc(100% + 6px); white-space: nowrap; padding: 2px 8px; border-radius: 999px; background: #0a84ff; color: #fff; font: 600 11px/16px "LDP Inter", "Inter Variable", system-ui, sans-serif; letter-spacing: 0; }

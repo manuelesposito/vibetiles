@@ -1183,6 +1183,7 @@
 	document.addEventListener('keyup', function (e) { if (e.key === 'm' || e.key === 'M') compareOff(); });
 	window.addEventListener('blur', compareOff);
 	var TARGETS = [
+		['.architrave-panel-opener, [data-live-design-slot], [data-reading-panel-open]', 'button', '', 'Vibetiles button'],
 		['mark', 'colour', 'highlight', 'Highlighter'],
 		['.quire-button.primary, [data-ldp-button="main"], .quire-icon-button.filled, :is(.wp-block-post-content, .entry-content) .wp-block-button:not(.is-style-outline) > .wp-block-button__link', 'buttons', 'primaryButton', 'Main'],
 		['.quire-button.ghost', 'buttons', 'tertiaryButton', 'Quiet buttons'],
@@ -1220,7 +1221,9 @@
 		['blockquote', 'type', 'role:quote', 'Quotes'],
 		['.wp-block-comment-content, .comment-content', 'type', 'role:body', 'Reading text'],
 		['.quire-nav-section-heading, .quire-nav-section-head', 'type', 'role:interface', 'Interface'],
-		['.rail-newsletter-field', 'type', 'role:interface', 'Interface'],
+		
+		['.rail-newsletter-field-words, .rail-foot > .rail-more-trigger > span', 'type', 'role:interface', 'Interface'],
+		['.rail-newsletter-field, .rail-foot > .rail-more-trigger', 'corners-and-lines', 'cards', 'Cards'],
 		['.post-sections-list', 'type', 'role:body', 'Reading text'],
 		['.post-sections-phone-name, .post-sections-phone-toggle, .post-sections-bar', 'type', 'role:interface', 'Interface'],
 		['nav, .wp-block-navigation, .sidebar-column', 'type', 'role:interface', 'Interface'],
@@ -1228,20 +1231,34 @@
 		['.release-route, .post-link-card, .post-neighbour, .support-box, .release-panel, .theme-card, .wp-block-post-content .wp-block-group.has-background, .entry-content .wp-block-group.has-background', 'corners-and-lines', 'cards', 'Cards'],
 		['main, .content-column, .wp-site-blocks, body', 'colour', '', 'Colour']
 	];
-	var aiming = false, aimBox = null;
-	function targetOf(el) {
-		if (!el || !el.closest || !win || win.contains(el) || el.closest('#wpadminbar, .architrave-panel-opener, [data-reading-panel-open], .reading-panel')) return null;
-		for (var i = 0; i < TARGETS.length; i++) { var hit = el.closest(TARGETS[i][0]); if (hit) return { el: hit, section: TARGETS[i][1], key: TARGETS[i][2], label: TARGETS[i][3] }; }
-		return null;
+	var aiming = false, aimBox = null, aimEl = null;
+	function targetsOf(el) {
+		if (!el || !el.closest || !win || win.contains(el) || el.closest('#wpadminbar, .reading-panel')) return [];
+		var hits = [];
+		for (var i = 0; i < TARGETS.length; i++) {
+			var hit = el.closest(TARGETS[i][0]);
+			if (hit && !hits.some(function (h) { return h.el === hit; })) hits.push({ el: hit, section: TARGETS[i][1], key: TARGETS[i][2], label: TARGETS[i][3] });
+		}
+		if (!hits.length) return hits;
+		var first = hits[0], outer = hits.slice(1).filter(function (h) { return h.el !== first.el && h.el.contains(first.el); });
+		outer.sort(function (a, b) { return a.el === b.el ? 0 : (a.el.contains(b.el) ? 1 : -1); });
+		return [first].concat(outer);
+	}
+	function targetOf(el, out) {
+		var all = targetsOf(el); if (!all.length) return null;
+		var x = all[Math.min(out ? 1 : 0, all.length - 1)];
+		x.next = !out && all[1] ? all[1] : null;
+		return x;
 	}
 	function aimShow(x) {
 		if (!x) { if (aimBox) aimBox.hidden = true; return; }
 		if (!aimBox) { aimBox = document.createElement('div'); aimBox.id = 'ldp-aim'; aimBox.innerHTML = '<span></span>'; document.body.appendChild(aimBox); }
 		var r = x.el.getBoundingClientRect(), sec = sections().filter(function (y) { return y.id === x.section; })[0];
+		var secName = function (id) { var y = sections().filter(function (z) { return z.id === id; })[0]; return y ? y.name : (id === 'button' ? t('Button') : t('Colour')); };
 		aimBox.hidden = false;
 		aimBox.style.cssText = 'left:' + (r.left - 3) + 'px;top:' + (r.top - 3) + 'px;width:' + (r.width + 6) + 'px;height:' + (r.height + 6) + 'px';
 		aimBox.classList.toggle('is-below', r.top < 60);
-		aimBox.firstChild.innerHTML = esc(t(x.label)) + '<small>' + esc(sec ? sec.name : t('Colour')) + '</small>';
+		aimBox.firstChild.innerHTML = esc(t(x.label)) + '<small>' + esc(secName(x.section)) + '</small>' + (x.next ? '<small class="ldp-aim-out">⇧ ' + esc(t(x.next.label)) + '</small>' : '');
 	}
 	function aimSet(on) { aiming = on; document.documentElement.classList.toggle('ldp-aiming', on); if (!on) aimShow(null); var b = win && win.querySelector('[data-act="aim"]'); if (b) { b.classList.toggle('is-aim', on); b.setAttribute('aria-pressed', String(on)); } }
 	function openTarget(x) {
@@ -1289,10 +1306,12 @@
 	window.addEventListener('scroll', function (e) { if (win && e.target && e.target.nodeType === 1 && win.contains(e.target)) return; marksHide(); }, true); 
 	window.addEventListener('resize', marksHide);
 	function mayAim(e) { return !RD() && (aiming || e.altKey) && !phone() && St() && St().editable && St().editable(); }
-	document.addEventListener('pointermove', function (e) { if (mayAim(e)) aimShow(targetOf(e.target)); else if (aimBox && !aimBox.hidden) aimShow(null); }, true);
+	document.addEventListener('pointermove', function (e) { aimEl = e.target; if (mayAim(e)) aimShow(targetOf(e.target, e.shiftKey)); else if (aimBox && !aimBox.hidden) aimShow(null); }, true);
+	document.addEventListener('keydown', function (e) { if (e.key === 'Shift' && aimEl && mayAim(e)) aimShow(targetOf(aimEl, true)); }, true);
+	document.addEventListener('keyup', function (e) { if (e.key === 'Shift' && aimEl && mayAim(e)) aimShow(targetOf(aimEl, false)); }, true);
 	document.addEventListener('click', function (e) {
 		if (!mayAim(e)) return;
-		var x = targetOf(e.target); if (!x) return; 
+		var x = targetOf(e.target, e.shiftKey); if (!x) return; 
 		e.preventDefault(); e.stopPropagation(); aimSet(false); openTarget(x);
 	}, true);
 	document.addEventListener('keydown', function (e) { if (aiming && e.key === 'Escape') { e.stopPropagation(); aimSet(false); } }, true);
