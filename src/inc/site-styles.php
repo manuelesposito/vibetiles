@@ -69,7 +69,34 @@ function architrave_site_styles_raw() {
 function architrave_site_styles() {
 	$raw   = architrave_site_styles_raw();
 	$state = is_string( $raw ) && '' !== $raw ? json_decode( $raw, true ) : null;
-	return architrave_site_styles_clean( is_array( $state ) ? $state : array() );
+	return architrave_site_styles_stamped( architrave_site_styles_clean( is_array( $state ) ? $state : array() ) );
+}
+
+/**
+ * THE STATE CARRIES A STAMP (1.4.92, 2026-10-11). Every write raises it, every
+ * answer names it, and a page that already holds a newer stamp than the one a
+ * GET brings back knows that answer is an older copy of the site (a replica or
+ * a cache answering after a write) and lets it go. Without it the page took the
+ * older copy for the site's truth, and the change it had just saved was undone
+ * on the page and, with the next save, on the site (Manuel: "I change something
+ * in the other row and afterwards on the main row, it changes the other row").
+ * Milliseconds, never less than the stamp before plus one, so it only rises.
+ *
+ * @return int
+ */
+function architrave_site_styles_stamp() {
+	return (int) get_option( 'architrave_panel_site_styles_stamp', 0 );
+}
+
+/**
+ * The state with its stamp.
+ *
+ * @param array $state A clean state.
+ * @return array
+ */
+function architrave_site_styles_stamped( $state ) {
+	$state['stamp'] = architrave_site_styles_stamp();
+	return $state;
 }
 
 /**
@@ -308,6 +335,9 @@ function architrave_site_style_values( $value, $depth ) {
 function architrave_site_styles_write( $state ) {
 	$state = architrave_site_styles_clean( $state );
 	update_option( 'architrave_panel_site_styles', wp_json_encode( $state ), true ); /* autoloaded: read on every page */
+	$stamp = max( architrave_site_styles_stamp() + 1, (int) floor( microtime( true ) * 1000 ) );
+	update_option( 'architrave_panel_site_styles_stamp', $stamp, true ); /* autoloaded with the state: printed into every page beside it */
+	$state['stamp'] = $stamp;
 	return $state;
 }
 

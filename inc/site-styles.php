@@ -56,7 +56,16 @@ function architrave_site_styles_raw() {
 function architrave_site_styles() {
 	$raw   = architrave_site_styles_raw();
 	$state = is_string( $raw ) && '' !== $raw ? json_decode( $raw, true ) : null;
-	return architrave_site_styles_clean( is_array( $state ) ? $state : array() );
+	return architrave_site_styles_stamped( architrave_site_styles_clean( is_array( $state ) ? $state : array() ) );
+}
+
+function architrave_site_styles_stamp() {
+	return (int) get_option( 'architrave_panel_site_styles_stamp', 0 );
+}
+
+function architrave_site_styles_stamped( $state ) {
+	$state['stamp'] = architrave_site_styles_stamp();
+	return $state;
 }
 
 function architrave_site_styles_clean( $state ) {
@@ -227,6 +236,9 @@ function architrave_site_style_values( $value, $depth ) {
 function architrave_site_styles_write( $state ) {
 	$state = architrave_site_styles_clean( $state );
 	update_option( 'architrave_panel_site_styles', wp_json_encode( $state ), true );
+	$stamp = max( architrave_site_styles_stamp() + 1, (int) floor( microtime( true ) * 1000 ) );
+	update_option( 'architrave_panel_site_styles_stamp', $stamp, true );
+	$state['stamp'] = $stamp;
 	return $state;
 }
 

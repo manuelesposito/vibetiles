@@ -116,7 +116,9 @@
 	var SITE = { styles: [], 'default': '' };
 	var PUBLISH = window.architravePublish || null;
 	function baseOf(s) { return (s.own || s.site) ? (s.base || 'standard') : s.id; }
+	var siteStamp = 0;
 	function takeSite(state) {
+		if (state && typeof state.stamp === 'number' && state.stamp > siteStamp) siteStamp = state.stamp;
 		for (var i = STYLES.length - 1; i >= 0; i--) if (STYLES[i].site) STYLES.splice(i, 1);
 		SITE = state && typeof state === 'object' ? state : { styles: [], 'default': '' };
 		(Array.isArray(SITE.styles) ? SITE.styles : []).forEach(function (o) {
@@ -1578,6 +1580,25 @@
 	var siteSaveTimer = 0, siteSaving = '', siteSent = {};
 	function siteBase(id) { var o = byId(id); return o && o.site ? JSON.stringify(o) : null; }
 	function restoreBase(id, json) { var o = byId(id); if (!o || !o.site) return; try { STYLES[STYLES.indexOf(o)] = JSON.parse(json); } catch (e) {  } }
+	function landStep(h) {
+		var s = byId(h.style) || byId(current);
+		if (s && s.site && h.base && h.style === current) {
+			var keep = siteBase(s.id), rec = null;
+			restoreBase(s.id, h.base);
+			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) {  }
+			try { rec = lookOf(JSON.parse(window.ArchitraveStyles.exportStyle() || '{}')); } catch (e) { rec = null; }
+			restoreBase(s.id, keep);
+			if (rec) {
+				var all = readTweaks(), e = entryFromRecord(rec);
+				if (Object.keys(e).length) all[s.id] = e; else delete all[s.id];
+				try { if (JSON.stringify(all) === '{}') localStorage.removeItem(TWEAKS_KEY); else localStorage.setItem(TWEAKS_KEY, JSON.stringify(all)); } catch (e) {  }
+			}
+			return s;
+		}
+		try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) {  }
+		if (h.base) restoreBase(h.style, h.base); 
+		return s;
+	}
 	var siteFresh = 0, siteFreshing = null;
 	function refreshSite(now) {
 		if (!PUBLISH || !PUBLISH.url || !window.fetch) return Promise.resolve(false);
@@ -1588,6 +1609,7 @@
 			.then(function (state) {
 				siteFresh = Date.now();
 				if (!state || !Array.isArray(state.styles)) return false;
+				if (typeof state.stamp === 'number' && state.stamp < siteStamp) return false;
 				var was = {}, moved = false;
 				STYLES.forEach(function (o) { if (o.site) was[o.id] = siteBase(o.id); });
 				takeSite(state);
@@ -3184,6 +3206,7 @@
 		retime: function () { return Focus.retime(); },
 		setFocus: function (on) { Focus.set(on); },
 		canUndo: function () { return HISTORY.length > 0; },
+		
 		undoWhat: function () { var h = HISTORY[HISTORY.length - 1]; return h && h.what || ''; },
 		canRedo: function () { return FUTURE.length > 0; },
 		redoWhat: function () { var h = FUTURE[FUTURE.length - 1]; return h && h.what || ''; },
@@ -3192,9 +3215,7 @@
 			var was = ''; try { was = localStorage.getItem(TWEAKS_KEY) || '{}'; } catch (e) {  }
 			HISTORY.push({ tweaks: was, side: storedSide(), style: current, what: h.what, base: siteBase(current) });
 			undoing = true;
-			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) {  }
-			if (h.base) restoreBase(h.style, h.base); 
-			var s = byId(h.style) || byId(current);
+			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
 			undoing = false; lastPush = 0; siteSaveSoon();
@@ -3206,9 +3227,7 @@
 			var now = ''; try { now = localStorage.getItem(TWEAKS_KEY) || '{}'; } catch (e) {  }
 			FUTURE.push({ tweaks: now, side: storedSide(), style: current, what: h.what, base: siteBase(current) }); 
 			undoing = true;
-			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) {  }
-			if (h.base) restoreBase(h.style, h.base); 
-			var s = byId(h.style) || byId(current);
+			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
 			undoing = false; lastPush = 0; siteSaveSoon();

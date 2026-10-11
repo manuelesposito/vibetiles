@@ -173,7 +173,11 @@
 	var SITE = { styles: [], 'default': '' };
 	var PUBLISH = window.architravePublish || null;
 	function baseOf(s) { return (s.own || s.site) ? (s.base || 'standard') : s.id; }
+	/* THE NEWEST STAMP THIS PAGE HAS SEEN (1.4.92, 2026-10-11): the site stamps every answer (inc/site-styles.php);
+	   an answer stamped older than this is an older copy of the site and is let go (refreshSite). */
+	var siteStamp = 0;
 	function takeSite(state) {
+		if (state && typeof state.stamp === 'number' && state.stamp > siteStamp) siteStamp = state.stamp;
 		for (var i = STYLES.length - 1; i >= 0; i--) if (STYLES[i].site) STYLES.splice(i, 1);
 		SITE = state && typeof state === 'object' ? state : { styles: [], 'default': '' };
 		(Array.isArray(SITE.styles) ? SITE.styles : []).forEach(function (o) {
@@ -2538,6 +2542,26 @@
 	   So each step of Undo and Redo also holds the record it stood on (base), and puts it back with its tweaks. */
 	function siteBase(id) { var o = byId(id); return o && o.site ? JSON.stringify(o) : null; }
 	function restoreBase(id, json) { var o = byId(id); if (!o || !o.site) return; try { STYLES[STYLES.indexOf(o)] = JSON.parse(json); } catch (e) { /* kept as it is */ } }
+	/* An undo or redo step put on the page: see A STEP LANDS AS CHANGES OVER THE SITE AS IT IS NOW (the API's undo). */
+	function landStep(h) {
+		var s = byId(h.style) || byId(current);
+		if (s && s.site && h.base && h.style === current) {
+			var keep = siteBase(s.id), rec = null;
+			restoreBase(s.id, h.base);
+			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) { /* private window */ }
+			try { rec = lookOf(JSON.parse(window.ArchitraveStyles.exportStyle() || '{}')); } catch (e) { rec = null; }
+			restoreBase(s.id, keep);
+			if (rec) {
+				var all = readTweaks(), e = entryFromRecord(rec);
+				if (Object.keys(e).length) all[s.id] = e; else delete all[s.id];
+				try { if (JSON.stringify(all) === '{}') localStorage.removeItem(TWEAKS_KEY); else localStorage.setItem(TWEAKS_KEY, JSON.stringify(all)); } catch (e) { /* private window */ }
+			}
+			return s;
+		}
+		try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) { /* private window */ }
+		if (h.base) restoreBase(h.style, h.base); /* SHOWN IS SHOWN: the step is the style as it stood, saved record and changes together */
+		return s;
+	}
 	/* THE SITE AS IT IS NOW (0.32.1, Manuel: "fix the helper bug, go"). A page held the site's styles as they were
 	   when it loaded. Another browser changed one (his Focus, edited in his own Chrome) and this page knew nothing:
 	   its next save sent its old copy with its one change in it, and the other browser's colours were gone; and a
@@ -2556,6 +2580,11 @@
 			.then(function (state) {
 				siteFresh = Date.now();
 				if (!state || !Array.isArray(state.styles)) return false;
+				/* AN OLDER COPY OF THE SITE IS NOT THE SITE (1.4.92; Manuel, 2026-10-11: a row he had set went back to its old
+				   look while he set the next one). Measured live: a GET after a save once answered with the record from before
+				   it; the page took that for the truth, drew the old row again, and the next save wrote it back to the site.
+				   Whatever answers with a stamp older than the one the page's last save or load brought is let go. */
+				if (typeof state.stamp === 'number' && state.stamp < siteStamp) return false;
 				var was = {}, moved = false;
 				STYLES.forEach(function (o) { if (o.site) was[o.id] = siteBase(o.id); });
 				takeSite(state);
@@ -4808,6 +4837,15 @@
 		retime: function () { return Focus.retime(); },
 		setFocus: function (on) { Focus.set(on); },
 		canUndo: function () { return HISTORY.length > 0; },
+		/* A STEP LANDS AS CHANGES OVER THE SITE AS IT IS NOW (1.4.92; Manuel, 2026-10-11: "the undo ... doesn't work").
+		   A step holds the style as it stood: the saved record of its day and the changes over it. Putting that record
+		   back as the saved one (restoreBase, 0.31.0) held for a moment only: the save that follows asks the site first,
+		   the site answers with the newer record, the page takes it, and the step is gone again. Measured live: Undo drew
+		   the old look, and two seconds later the new one was back. So the step is worked out as the whole look it was,
+		   and that look is written as changes over the record the site holds NOW (entryFromRecord, as a version brought
+		   back is), which no refresh can take away; the save then puts it on the site. The old way stays for a step of
+		   another style or of a style that is not the site's. */
+		/* (landStep is the function below, hoisted) */
 		/* The key the next Undo takes back ('' when it is not known). */
 		undoWhat: function () { var h = HISTORY[HISTORY.length - 1]; return h && h.what || ''; },
 		canRedo: function () { return FUTURE.length > 0; },
@@ -4817,9 +4855,7 @@
 			var was = ''; try { was = localStorage.getItem(TWEAKS_KEY) || '{}'; } catch (e) { /* private window */ }
 			HISTORY.push({ tweaks: was, side: storedSide(), style: current, what: h.what, base: siteBase(current) });
 			undoing = true;
-			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) { /* private window */ }
-			if (h.base) restoreBase(h.style, h.base); /* SHOWN IS SHOWN: the step is the style as it stood, saved record and changes together */
-			var s = byId(h.style) || byId(current);
+			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
 			undoing = false; lastPush = 0; siteSaveSoon();
@@ -4831,9 +4867,7 @@
 			var now = ''; try { now = localStorage.getItem(TWEAKS_KEY) || '{}'; } catch (e) { /* private window */ }
 			FUTURE.push({ tweaks: now, side: storedSide(), style: current, what: h.what, base: siteBase(current) }); /* what stands now, for Redo */
 			undoing = true;
-			try { localStorage.setItem(TWEAKS_KEY, h.tweaks); } catch (e) { /* private window */ }
-			if (h.base) restoreBase(h.style, h.base); /* SHOWN IS SHOWN: the step is the style as it stood, saved record and changes together */
-			var s = byId(h.style) || byId(current);
+			var s = landStep(h);
 			if (s) { apply(s, wanted(s)); applyRoles(); }
 			if (h.side && h.side !== storedSide()) press('[data-quire-modes="palette"] [data-side="' + h.side + '"]');
 			undoing = false; lastPush = 0; siteSaveSoon();
