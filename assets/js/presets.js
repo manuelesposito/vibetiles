@@ -3279,7 +3279,7 @@
 			var all = readTweaks(); delete all[id]; writeTweaks(all);
 			apply(s, s);
 			
-			press('[data-quire-modes="palette"] [data-side="dark"]');
+			press('[data-quire-modes="palette"] [data-side="auto"]');
 			this.setAccent(true);
 			this.setFocus(false);
 		}

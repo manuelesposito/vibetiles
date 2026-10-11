@@ -90,7 +90,7 @@
 	var state = {
 		palette: paletteOf(storedPalette) && SHOWN.indexOf(storedPalette) !== -1 ? storedPalette : palettesInOrder()[0].id,
 		
-		side: Modes.sides.indexOf(storedSide) !== -1 ? storedSide : (window.architravePanelHostSide && Modes.sides.indexOf(window.architravePanelHostSide) !== -1 ? window.architravePanelHostSide : (Modes.sides.indexOf('dark') !== -1 ? 'dark' : sidesInOrder()[0]))
+		side: Modes.sides.indexOf(storedSide) !== -1 ? storedSide : (window.architravePanelHostSide && Modes.sides.indexOf(window.architravePanelHostSide) !== -1 ? window.architravePanelHostSide : (Modes.sides.indexOf('auto') !== -1 ? 'auto' : sidesInOrder()[0]))
 	};
 	
 	function tellBrowser() {

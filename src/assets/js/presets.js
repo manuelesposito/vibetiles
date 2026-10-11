@@ -4917,8 +4917,8 @@
 			/* EVERYTHING (Manuel, 2026-09-13: "it really should reset everything"):
 			   the side back to its default, the accent on, the focus mode on; the
 			   text size is in the recipe already. */
-			/* THE DEFAULT SIDE IS DARK (Manuel, 2026-09-19: "when I make Zurücksetzen it is dunkel. Dunkel ist der Default"). 1.3.269 made a first visit dark and left the reset pressing System, so by day a reset turned the page light. */
-			press('[data-quire-modes="palette"] [data-side="dark"]');
+			/* THE DEFAULT SIDE IS SYSTEM AGAIN (Manuel, 2026-10-11: "the default should be auto for readers... Set it to auto"); a reset lands where a first visit lands. From 2026-09-19 to 1.4.88 both were dark on his word of that day. */
+			press('[data-quire-modes="palette"] [data-side="auto"]');
 			this.setAccent(true);
 			this.setFocus(false);
 		}

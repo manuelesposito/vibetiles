@@ -174,9 +174,9 @@
 	   here before. */
 	var state = {
 		palette: paletteOf(storedPalette) && SHOWN.indexOf(storedPalette) !== -1 ? storedPalette : palettesInOrder()[0].id,
-		/* A FIRST VISIT IS DARK (Manuel, 2026-09-19: "make dark the default for all the styles. Someone coming for the first time to our webpage will be presented with the dark style unless he switches to light or system. And that is for all tiles"). The side is the reader's and not a style's, so one default covers every tile. It was the follower, the control's first entry (see above); the control still lists System first and marks Dark, which is the room the reader is in. A stored choice still wins. */
-		/* ON SOMEBODY ELSE'S THEME A FIRST VISIT IS ON THAT THEME'S SIDE (0.11.47, Manuel on Ollie, 2026-09-24: the page was white and the panel on it dark). The plugin prints the side the theme is on; Architrave prints nothing and keeps the dark default above. */
-		side: Modes.sides.indexOf(storedSide) !== -1 ? storedSide : (window.architravePanelHostSide && Modes.sides.indexOf(window.architravePanelHostSide) !== -1 ? window.architravePanelHostSide : (Modes.sides.indexOf('dark') !== -1 ? 'dark' : sidesInOrder()[0]))
+		/* A FIRST VISIT FOLLOWS THE SYSTEM AGAIN (Manuel, 2026-10-11: "The standard or the default should be auto for readers in the Vibetiles panel, not light or dark mode... I think right now it's dark. Set it to auto"). 1.3.269 had made it dark on his word of 2026-09-19; this takes that back. The side is the reader's and not a style's, so one default covers every tile: System, the control's first entry. A stored choice still wins. */
+		/* ON SOMEBODY ELSE'S THEME A FIRST VISIT IS ON THAT THEME'S SIDE (0.11.47, Manuel on Ollie, 2026-09-24: the page was white and the panel on it dark). The plugin prints the side the theme is on; Architrave prints nothing and follows the system. */
+		side: Modes.sides.indexOf(storedSide) !== -1 ? storedSide : (window.architravePanelHostSide && Modes.sides.indexOf(window.architravePanelHostSide) !== -1 ? window.architravePanelHostSide : (Modes.sides.indexOf('auto') !== -1 ? 'auto' : sidesInOrder()[0]))
 	};
 
 	/* FOLLOW, DON'T JUST APPLY. A page that only applies once is right when it
