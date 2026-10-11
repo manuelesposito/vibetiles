@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Vibetiles
  * Description:       Design your site on the live page: a panel with dials for colours, fonts, sizes and spacing, light and dark, and saved styles your readers can pick too.
- * Version:           0.56.33
+ * Version:           0.56.34
  * Requires at least: 6.6
  * Requires PHP:      7.4
  * Author:            Elmastudio

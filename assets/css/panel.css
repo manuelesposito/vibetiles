@@ -837,6 +837,24 @@
 	background: var(--surface-base);
 	box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 28px rgb(0 0 0 / 0.14);
 }
+@media (hover: hover) {
+	:root[data-cards="outline"] :is(.post-link-card, .post-neighbour):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		background: var(--surface-base);
+		box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) color-mix(in srgb, var(--line), var(--text-primary) 25%);
+	}
+	:root[data-cards="raised"] :is(.post-link-card, .post-neighbour):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		background: var(--surface-base);
+		box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent), 0 2px 4px rgb(0 0 0 / 0.1), 0 14px 36px rgb(0 0 0 / 0.18);
+	}
+}
+:root[data-cards="outline"] :is(.post-link-card, .post-neighbour):active:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	background: var(--surface-hover);
+	box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) color-mix(in srgb, var(--line), var(--text-primary) 25%);
+}
+:root[data-cards="raised"] :is(.post-link-card, .post-neighbour):active:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	background: var(--surface-hover);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 28px rgb(0 0 0 / 0.14);
+}
 :root[data-quotes="plain"] :is(#ldp-lv, .single-post-article .wp-block-post-content blockquote):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	border-inline-start-color: transparent;
 	padding-inline-start: 0;
@@ -1344,6 +1362,38 @@
 	:root[data-face] :is(.post-card .post-kicker, .post-card .wp-block-post-title, .post-card .post-meta, .post-card .post-body, .single-post-article > *) {
 		font-optical-sizing: auto;
 		font-variation-settings: normal;
+	}
+	:root[data-cards="outline"] body .rail-newsletter-field:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="outline"] body .rail-foot > .rail-more-trigger:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		--more-ground: transparent;
+		background: transparent;
+		box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) var(--line);
+	}
+	:root[data-cards="raised"] body .rail-newsletter-field:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="raised"] body .rail-foot > .rail-more-trigger:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		--more-ground: var(--surface-base);
+		background: var(--surface-base);
+		box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 6px 16px rgb(0 0 0 / 0.1);
+	}
+	@media (hover: hover) {
+		:root[data-cards="outline"] body .rail-newsletter-field:hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="outline"] body .rail-foot > .rail-more-trigger:hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+			--more-ground: transparent;
+			background: transparent;
+			box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) color-mix(in srgb, var(--line), var(--text-primary) 25%);
+		}
+		:root[data-cards="raised"] body .rail-newsletter-field:hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="raised"] body .rail-foot > .rail-more-trigger:hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+			--more-ground: var(--surface-base);
+			background: var(--surface-base);
+			box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 28px rgb(0 0 0 / 0.14);
+		}
+	}
+	:root[data-cards="outline"] body .rail-newsletter-field:is(:active, [aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="outline"] body .rail-foot > .rail-more-trigger:is(:active, [aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		--more-ground: var(--surface-hover);
+		background: var(--surface-hover);
+		box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) color-mix(in srgb, var(--line), var(--text-primary) 25%);
+	}
+	:root[data-cards="raised"] body .rail-newsletter-field:is(:active, [aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-cards="raised"] body .rail-foot > .rail-more-trigger:is(:active, [aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		--more-ground: var(--surface-hover);
+		background: var(--surface-hover);
+		box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 6px 16px rgb(0 0 0 / 0.1);
 	}
 	:root[data-tint="brown"] .newsletter-night {
 		--accent: #e0b490; --accent-contrast: #382e26; --accent-muted: #6c4c31;
