@@ -3035,7 +3035,13 @@
 			   card at three hundredths is no card at all (Terminal lifts its own
 			   by twenty-four). */
 			'--surface-raised:' + (dark ? shade(P, rise(P, 0.03, 0.24)) : P) + ';' +
-			'--surface-hover:' + (F || 'color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-hover, 6%))') + ';' +
+			/* THE HOVER RUNG TAKES THE GUARD THE BUTTONS HAVE (1.4.97 / 0.56.39; Manuel, 2026-10-11, Cloth with the Cards colour
+			   on the paper: "We lost the hover on the search results"). The Cards colour was the hover rung wherever a style had
+			   one; a Cards colour within 1.15:1 of the paper made the rung the ground itself, and every room that does not
+			   re-mix its rungs (the search palette) hovered in its own colour. liftRest's guard, since 2026-10-02 the buttons'
+			   and the cards', holds here too: such a colour steps into the paper instead. Measured live: row and room both
+			   #d4a27f before. */
+			'--surface-hover:' + liftRest(F, P, Ig, dark) + ';' +
 			'--surface-selected:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-selected, 10%));' +
 			'--surface-pressed:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-pressed, 16%));' +
 			'--surface-track:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-hover, 6%));' +

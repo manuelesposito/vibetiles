@@ -1890,7 +1890,7 @@
 			'--surface-subtle:' + (F || field(P, 0.045, 0.20)) + ';' +
 			(F ? '--surface-floating:' + F + ';--ldp-lift:' + F + ';' : '') + 
 			'--surface-raised:' + (dark ? shade(P, rise(P, 0.03, 0.24)) : P) + ';' +
-			'--surface-hover:' + (F || 'color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-hover, 6%))') + ';' +
+			'--surface-hover:' + liftRest(F, P, Ig, dark) + ';' +
 			'--surface-selected:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-selected, 10%));' +
 			'--surface-pressed:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-pressed, 16%));' +
 			'--surface-track:color-mix(in srgb, ' + P + ', ' + Ig + ' var(--step-surface-hover, 6%));' +
