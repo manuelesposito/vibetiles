@@ -6,6 +6,7 @@ A design panel built for AI. Tell your AI how your site should feel, and it styl
 
 It works on block themes. Until you move a dial, the page is exactly what your theme draws, and the Original tile gives that back at any time. The site owner gets the full panel; readers get a small one: reading size, light and dark, and the styles the owner publishes.
 
+- **Install:** [Vibetiles on wordpress.org](https://wordpress.org/plugins/vibetiles/), or Plugins > Add New in your dashboard and search for Vibetiles
 - **Connect your AI:** [Vibetiles Connector](https://github.com/manuelesposito/vibetiles-connector)
 - **Not on WordPress:** [Vibetiles for HTML sites](https://github.com/manuelesposito/vibetiles-html)
 
