@@ -1995,10 +1995,10 @@
 		--tile-ring-gap: var(--surface-base);
 	}
 	@media (hover: hover) {
-		:root[data-lines="on"][data-fills="off"] :is(.quire-menu-item.is-open, .quire-menu-item:hover, .quire-nav-item:hover, .wp-block-navigation-item__content:hover, .site-search-row.is-active, .index-pagination a.page-numbers:hover, .reading-stepper button:hover, .rail-more-trigger:hover, button.reading-row:hover, .comments-pill:hover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navigation-item__content, .wp-block-pages-list__item__link):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		:root[data-lines="on"][data-fills="off"] :is(.quire-menu-item.is-open, .quire-menu-item:hover, .quire-nav-item:hover, .wp-block-navigation-item__content:hover, .site-search-row.is-active, .index-pagination a.page-numbers:hover, .reading-stepper button:hover, button.reading-row:hover, .comments-pill:hover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navigation-item__content, .wp-block-pages-list__item__link):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 			box-shadow: inset 0 0 0 var(--border-width-default) var(--line);
 		}
-		:root[data-lines="on"][data-fills="off"] :is(.quire-menu-item.is-open, .quire-menu-item:hover, .quire-nav-item:hover, .wp-block-navigation-item__content:hover, .site-search-row.is-active, .index-pagination a.page-numbers:hover, .reading-stepper button:hover, .rail-more-trigger:hover, button.reading-row:hover, .comments-pill:hover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navigation-item__content, .wp-block-pages-list__item__link):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+		:root[data-lines="on"][data-fills="off"] :is(.quire-menu-item.is-open, .quire-menu-item:hover, .quire-nav-item:hover, .wp-block-navigation-item__content:hover, .site-search-row.is-active, .index-pagination a.page-numbers:hover, .reading-stepper button:hover, button.reading-row:hover, .comments-pill:hover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navigation-item__content, .wp-block-pages-list__item__link):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 			background: var(--ink-alpha-weak);
 		}
 		:root[data-lines="on"][data-fills="off"] :is(.quire-button:not(.primary, .comments-pill):hover, .paper-stack-btn:hover, .reading-side-btn:hover, .reading-back:hover, .rail-collapse-corner .quire-icon-button:hover, .rail-expand .quire-icon-button:hover, .code-block-controls .quire-icon-button:hover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
@@ -2011,17 +2011,14 @@
 			border-color: var(--line);
 		}
 	}
-	:root[data-lines="on"] :is(.quire-button[aria-expanded="true"]:not(.comments-open-btn):not(:where(.rail-collapse-btn)), .paper-stack-btn[aria-expanded="true"]:not(:where(.rail-collapse-btn)), .reading-side-btn[aria-expanded="true"], .rail-more-trigger[aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	:root[data-lines="on"] :is(.quire-button[aria-expanded="true"]:not(.comments-open-btn):not(:where(.rail-collapse-btn)), .paper-stack-btn[aria-expanded="true"]:not(:where(.rail-collapse-btn)), .reading-side-btn[aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 		background: var(--surface-selected);
 		color: var(--text-primary);
 	}
 	:root[data-lines="on"][data-fills="off"] :is(.quire-button[aria-expanded="true"]:not(.comments-open-btn):not(:where(.rail-collapse-btn)), .paper-stack-btn[aria-expanded="true"]:not(:where(.rail-collapse-btn)), .reading-side-btn[aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 		border-color: var(--text-primary);
 	}
-	:root[data-lines="on"][data-fills="off"] .rail-more-trigger[aria-expanded="true"]:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
-		box-shadow: inset 0 0 0 var(--border-width-default) var(--line);
-	}
-	:root[data-lines="on"][data-fills="off"] :is(.quire-button[aria-expanded="true"]:not(.comments-open-btn):not(:where(.rail-collapse-btn)), .paper-stack-btn[aria-expanded="true"]:not(:where(.rail-collapse-btn)), .reading-side-btn[aria-expanded="true"], .rail-more-trigger[aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	:root[data-lines="on"][data-fills="off"] :is(.quire-button[aria-expanded="true"]:not(.comments-open-btn):not(:where(.rail-collapse-btn)), .paper-stack-btn[aria-expanded="true"]:not(:where(.rail-collapse-btn)), .reading-side-btn[aria-expanded="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 		background: transparent;
 	}
 	:root[data-lines="on"] .reading-stepper button + button:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener))::before {
@@ -2036,12 +2033,12 @@
 			box-shadow: 0 0 0 var(--border-width-default) var(--text-primary);
 		}
 	}
-	:root[data-lines="on"]:not([data-chosen-item]) :is(.quire-menu-item.is-selected, .quire-menu-item[aria-checked="true"], .quire-nav-item[aria-current], .current-menu-item > .wp-block-navigation-item__content, .wp-block-navigation-item__content[aria-current="page"], .quire-segmented :is(button, a).is-active, .reading-segment button[aria-checked="true"], .site-search-row:active, .index-pagination .page-numbers.current, button.reading-row[aria-checked="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-chosen-item] :is(.quire-menu-item.is-selected, .quire-menu-item[aria-checked="true"], .quire-nav-item[aria-current], .reading-segment button[aria-checked="true"], .site-search-row:active, .index-pagination .page-numbers.current, button.reading-row[aria-checked="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.quire-menu-item:active, .quire-nav-item:active, .wp-block-navigation-item__content:active, .quire-button:not(.primary):active, .paper-stack-btn:active, .rail-collapse-corner .quire-icon-button:active, .rail-expand .quire-icon-button:active, .rail-more-trigger:active, .reading-stepper button:active, .site-search-row:active, .index-pagination a.page-numbers:active, button.reading-row:active, .reading-back:active):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	:root[data-lines="on"]:not([data-chosen-item]) :is(.quire-menu-item.is-selected, .quire-menu-item[aria-checked="true"], .quire-nav-item[aria-current], .current-menu-item > .wp-block-navigation-item__content, .wp-block-navigation-item__content[aria-current="page"], .quire-segmented :is(button, a).is-active, .reading-segment button[aria-checked="true"], .site-search-row:active, .index-pagination .page-numbers.current, button.reading-row[aria-checked="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-chosen-item] :is(.quire-menu-item.is-selected, .quire-menu-item[aria-checked="true"], .quire-nav-item[aria-current], .reading-segment button[aria-checked="true"], .site-search-row:active, .index-pagination .page-numbers.current, button.reading-row[aria-checked="true"]):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-fills="off"] :is(.quire-menu-item:active, .quire-nav-item:active, .wp-block-navigation-item__content:active, .quire-button:not(.primary):active, .paper-stack-btn:active, .rail-collapse-corner .quire-icon-button:active, .rail-expand .quire-icon-button:active, .reading-stepper button:active, .site-search-row:active, .index-pagination a.page-numbers:active, button.reading-row:active, .reading-back:active):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 		background: var(--text-primary);
 		color: var(--surface-base);
 		box-shadow: none;
 	}
-	:root[data-lines="on"]:not([data-fills="off"]) :is(.quire-menu-item:active, .quire-nav-item:active, .wp-block-navigation-item__content:active, .quire-button:not(.primary):active, .paper-stack-btn:active, .rail-collapse-corner .quire-icon-button:active, .rail-expand .quire-icon-button:active, .rail-more-trigger:active, .reading-stepper button:active, .site-search-row:active, .index-pagination a.page-numbers:active, button.reading-row:active, .reading-back:active):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+	:root[data-lines="on"]:not([data-fills="off"]) :is(.quire-menu-item:active, .quire-nav-item:active, .wp-block-navigation-item__content:active, .quire-button:not(.primary):active, .paper-stack-btn:active, .rail-collapse-corner .quire-icon-button:active, .rail-expand .quire-icon-button:active, .reading-stepper button:active, .site-search-row:active, .index-pagination a.page-numbers:active, button.reading-row:active, .reading-back:active):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 		background: var(--surface-pressed);
 		color: var(--text-primary);
 		box-shadow: none;
