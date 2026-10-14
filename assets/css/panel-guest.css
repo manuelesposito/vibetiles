@@ -1458,16 +1458,16 @@ html:root[data-soft="on"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navi
 	font-style: var(--code-style);
 }
 :root[data-code-size] .wp-block-post-content :is(code, kbd):not(pre *) {
-	font-size: calc(0.8em * var(--code-size, 1));
+	font-size: max(var(--text-floor-content), calc(0.8em * var(--code-size, 1)));
 }
 :root[data-code-size] .wp-block-post-content pre {
-	font-size: calc(var(--text-heading-sm) * var(--code-size, 1));
+	font-size: max(var(--text-floor-content), calc(var(--text-heading-sm) * var(--code-size, 1)));
 }
 :root[data-code-size] .single-post-article .wp-block-post-content .code-block pre {
-	font-size: calc(var(--text-lg) * var(--code-size, 1));
+	font-size: max(var(--text-floor-content), calc(var(--text-lg) * var(--code-size, 1)));
 }
 :root[data-code-size] .comments-section .wp-block-comment-content pre.comment-code {
-	font-size: calc(var(--text-base) * var(--code-size, 1));
+	font-size: max(var(--text-floor-content), calc(var(--text-base) * var(--code-size, 1)));
 }
 :root[data-code-leading] :is(.wp-block-post-content pre, .single-post-article .wp-block-post-content .code-block pre, .comments-section .wp-block-comment-content pre.comment-code) {
 	line-height: calc(var(--code-line-height) * var(--code-leading, 1));
@@ -1518,12 +1518,20 @@ html:root[data-soft="on"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navi
 :root[data-pictureframe="off"] :is(.post-card .post-media img, .single-post-article .article-media img, :is(.single-post-article, .post-card.format-link .post-format-body) .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot)) {
 	border: 0;
 	padding: 0;
-	outline: var(--border-width-default) solid color-mix(in srgb, var(--text-primary) 8%, transparent);
-	outline-offset: calc(-1 * var(--border-width-default));
 	background: none;
 }
-:root[data-pictureframe="off"] :is(.post-card .post-media img, .single-post-article .article-media img, :is(.single-post-article, .post-card.format-link .post-format-body) .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot)).ldp-blends {
-	outline-color: color-mix(in srgb, var(--text-primary) 20%, transparent);
+:root[data-picture-edge="faint"] {
+	--ldp-pic-edge: 8%;
+}
+:root[data-picture-edge="medium"] {
+	--ldp-pic-edge: 16%;
+}
+:root[data-picture-edge="strong"] {
+	--ldp-pic-edge: 30%;
+}
+:root[data-pictureframe="off"]:is([data-picture-edge="faint"], [data-picture-edge="medium"], [data-picture-edge="strong"]) :is(.post-card .post-media img, .single-post-article .article-media img, :is(.single-post-article, .post-card.format-link .post-format-body) .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot)) {
+	outline: var(--border-width-default) solid color-mix(in srgb, var(--text-primary) var(--ldp-pic-edge), transparent);
+	outline-offset: calc(-1 * var(--border-width-default));
 }
 :root[data-pictureframe="off"][data-picturefade="on"] .single-post-article .article-media img {
 	outline: none;
@@ -1960,14 +1968,14 @@ body :root[data-fills="off"] .theme-card:active, :root[data-fills="off"] .theme-
 :root[data-rounded="off"] :is(.sidebar-column .rail-more-menu, .rail-more-sub):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	--radius-overlay: 0px;
 }
-:root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener))::before, :root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener))::after {
-	border-radius: 0;
+:root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener, .architrave-panel-opener *, #ldp-window, #ldp-window *, #ldp-aim, #ldp-aim *, #ldp-compare, #ldp-compare *, #ldpw-zoom, #ldpw-zoom *, .ldp-mark, .ldp-mark *, .ldp-preview-bar, .ldp-preview-bar *, .architrave-door-ghosts, .architrave-door-ghosts *, #wpadminbar, #wpadminbar *)), :root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener, .architrave-panel-opener *, #ldp-window, #ldp-window *, #ldp-aim, #ldp-aim *, #ldp-compare, #ldp-compare *, #ldpw-zoom, #ldpw-zoom *, .ldp-mark, .ldp-mark *, .ldp-preview-bar, .ldp-preview-bar *, .architrave-door-ghosts, .architrave-door-ghosts *, #wpadminbar, #wpadminbar *))::before, :root[data-rounded="off"] body *:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener, .architrave-panel-opener *, #ldp-window, #ldp-window *, #ldp-aim, #ldp-aim *, #ldp-compare, #ldp-compare *, #ldpw-zoom, #ldpw-zoom *, .ldp-mark, .ldp-mark *, .ldp-preview-bar, .ldp-preview-bar *, .architrave-door-ghosts, .architrave-door-ghosts *, #wpadminbar, #wpadminbar *))::after {
+	border-radius: 0 !important;
+}
+:root[data-rounded="off"] #ldp-window #ldp-lv {
+	border-radius: 0 !important;
 }
 :root[data-rounded="off"] :is(.reading-tint, .reading-tint::after, .reading-dots i):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
-	border-radius: 50%;
-}
-:root[data-rounded="off"] :is(.post-card.format-quote, .single-format-quote .single-post-article .wp-block-post-content) blockquote.wp-block-quote:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-rounded="off"] :is(.post-card .post-media img, .single-post-article .article-media img, .single-post-article .wp-block-post-content img, .post-card.format-link .post-format-body .wp-block-post-content img):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-rounded="off"] .post-ruler .ruler-label:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-rounded="off"] .rail-newsletter-door-picture:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
-	border-radius: 0;
+	border-radius: 50% !important;
 }
 :root[data-lines="on"] body.has-frame .frame-paper:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"][data-rail-collapsed] body.has-frame .sidebar-column:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)), :root[data-lines="on"]:not([data-comments-open]) body.has-frame .comments-side:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	border: var(--border-width-default) solid var(--line);

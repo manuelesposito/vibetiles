@@ -404,7 +404,7 @@
 		pictureFilter: { none: 'As they are', grayscale: 'Black & white', sepia: 'Sepia', tinted: 'Tinted', duotone: 'Duotone', grain: 'Grain', warm: 'Sun-warmed', hidden: 'Hidden' },
 		pictureFrame: { none: 'None', plain: 'Plain', dots: 'Dots', checker: 'Checkerboard' },
 		pictureFade: { none: 'None', bottom: 'Bottom', sides: 'Sides and bottom', all: 'All sides' },
-		pictureShadow: { none: 'None', soft: 'Soft' }, pictureCorners: { match: 'Like the cards', square: 'Square' },
+		pictureShadow: { none: 'None', soft: 'Soft' }, pictureEdge: { none: 'None', faint: 'Faint', medium: 'Medium', strong: 'Strong' }, pictureCorners: { match: 'Like the cards', square: 'Square' },
 		framepattern: { plain: 'Plain', dots: 'Dots', checker: 'Checkerboard' },
 		capface: { text: 'Text font', bold: 'Text font, bold', fraunces: 'Fraunces', title: 'Title font' }, hyphenate: { auto: 'With justified text', few: 'Long words only', any: 'Wherever possible', off: 'Never' }, paragraphs: { spaced: 'Spaced', indented: 'Indented' }, piccorners: { cards: 'Like the cards', square: 'Square' }, pictureshadow: { off: 'Off', soft: 'Soft' }, opening: { off: 'Off', big: 'Big' }, widefigures: { off: 'Off', on: 'On' }, subcolour: { title: 'Like the title', ink: 'Text' }
 	};
@@ -430,7 +430,7 @@
 	}
 	var LOOK_DRAW = { pictureFilter: 'picture', pictureFrame: 'frame', pictureFade: 'fade', primaryButton: 'button', secondaryButton: 'button', tertiaryButton: 'button', tags: 'tag', links: 'link', currentItem: 'chosen', cards: 'surface', pictureframe: 'frame', picturefade: 'fade', quotes: 'quote', fields: 'field', pictures: 'picture', framepattern: 'frame', fadeedges: 'fade' };
 	var LOOK_SHORT = { shadow: 'Shadow', text: 'Text' };
-	var ROW_NOTE = { hyphenate: 'Where words break at the end of a line', opening: 'The first paragraph a size larger', borderStrength: 'How dark the lines are' };
+	var ROW_NOTE = { hyphenate: 'Where words break at the end of a line', opening: 'The first paragraph a size larger', borderStrength: 'How dark the lines are', pictureEdge: 'A fine line, for white pictures on a white page' };
 	var LOOK_NOTE = { primaryButton: 'The main action, like Subscribe', secondaryButton: 'A second choice next to it', tertiaryButton: 'Small actions, like Share', links: 'In the text', currentItem: 'The page you are on, the tab that is open', cards: 'Link cards and coloured boxes in the text', fields: 'Search, comment and sign-up fields', quotes: 'Quotations in an article', pictureFilter: 'Every picture on the site', pictureFrame: 'A mat around each picture' };  
 	var PIC_FILTER = { plain: 'none', bw: 'grayscale(1)', sepia: 'sepia(.85) contrast(1.05)', duo: 'grayscale(1) sepia(1) saturate(1.6) hue-rotate(175deg) brightness(.95)', accent: 'grayscale(1) contrast(1.2) sepia(.6) hue-rotate(200deg) saturate(2.2)', grain: 'contrast(1.1) saturate(.85)', warm: 'sepia(.18) saturate(1.12) contrast(1.02)' };
 	function lookColours() {
@@ -539,7 +539,7 @@
 	function picturesPage() {
 		var s = St(), look = s.get('pictureFilter'), hidden = look === 'hidden', frame = s.get('pictureFrame');
 		return box(pickRow('pictureFilter') + (look === 'none' || hidden ? '' : switchRow('colourOnHover', false, esc(t('The picture shows its colours under the pointer')))) + (hidden ? '' : switchRow('dimInDark', false, esc(t('Only in dark appearance'))) ) +
-			(hidden ? '' : looksRow('pictureFrame', looksOf('pictureFrame')) + (frame !== 'none' ? levelRow('frameWidth', ' px') : '') + (s.guest() ? '' : looksRow('pictureFade', looksOf('pictureFade'))))) +
+			(hidden ? '' : looksRow('pictureFrame', looksOf('pictureFrame')) + (frame !== 'none' ? levelRow('frameWidth', ' px') : s.guest() ? '' : pickRow('pictureEdge'))  + (s.guest() ? '' : looksRow('pictureFade', looksOf('pictureFade'))))) +
 			(hidden || s.guest() ? '' : box(pickRow('pictureShadow') + pickRow('pictureCorners'))); 
 	}
 	var fxOpen = {}, fxFind = null, fxAll = false;
@@ -889,7 +889,7 @@
 		if (!w && VALUE_UNIT[k]) return v + VALUE_UNIT[k];
 		return w ? t(w) : k === 'size' ? v + ' px' : String(v);
 	}
-	var DRAWN_ON = { pictureFilter: 'pictures', colourOnHover: 'pictures', dimInDark: 'pictures', pictureFrame: 'pictures', frameWidth: 'pictures', pictureFade: 'pictures', pictureShadow: 'pictures', pictureCorners: 'pictures', buttonColour: 'buttons', radius: 'corners-and-lines', borderWidth: 'corners-and-lines', borderStyle: 'corners-and-lines', borderStrength: 'corners-and-lines', fill: 'corners-and-lines', lineLength: 'layout', titleWidth: 'layout', pictureWidth: 'layout', figureWidth: 'layout', button: 'buttons', buttonShape: 'buttons', primaryButton: 'buttons', secondaryButton: 'buttons', tertiaryButton: 'buttons', tags: 'buttons', tagsMatchButtons: 'buttons', links: 'buttons', currentItem: 'buttons' };
+	var DRAWN_ON = { pictureFilter: 'pictures', colourOnHover: 'pictures', dimInDark: 'pictures', pictureFrame: 'pictures', frameWidth: 'pictures', pictureFade: 'pictures', pictureShadow: 'pictures', pictureEdge: 'pictures', pictureCorners: 'pictures', buttonColour: 'buttons', radius: 'corners-and-lines', borderWidth: 'corners-and-lines', borderStyle: 'corners-and-lines', borderStrength: 'corners-and-lines', fill: 'corners-and-lines', lineLength: 'layout', titleWidth: 'layout', pictureWidth: 'layout', figureWidth: 'layout', button: 'buttons', buttonShape: 'buttons', primaryButton: 'buttons', secondaryButton: 'buttons', tertiaryButton: 'buttons', tags: 'buttons', tagsMatchButtons: 'buttons', links: 'buttons', currentItem: 'buttons' };
 	var WELL_ON = { button: 'buttons', title: 'type', headings: 'type', body: 'type', quote: 'type', meta: 'type', 'interface': 'type', code: 'type' };
 	function changeSection(path) {
 		var p = path.split('.'), k = p[0], x = setting(k);
@@ -1489,7 +1489,7 @@
 			'<div class="ldpw-scroll">' + pageBody(x) + '</div>' + foot(x, s, deep, built) + menuHTML() + (note ? '<p class="ldpw-note-line" role="status">' + esc(note) + '</p>' : '') +
 		'</div>';
 	}
-	var WHAT = { paragraphs: 'Paragraphs', piccorners: 'Picture corners', pictureshadow: 'Picture shadow', subcolour: 'Section headings', opening: 'Opening sentence', widefigures: 'Wide pictures in the text', lines: 'Lines', line: 'Lines', linestyle: 'Line style', hairlines: 'Fine lines', darkground: 'Dark ground', fills: 'Fills', fill: 'Fills', rounded: 'Rounded corners', corners: 'Corner size', buttonShape: 'Button shape', tagsMatchButtons: 'Tags follow the buttons', primaryButton: 'Main buttons', secondaryButton: 'Other buttons', tertiaryButton: 'Quiet buttons', tags: 'Tags', currentItem: 'Chosen item', fullpicture: 'Picture width', quotes: 'Quotes', notes: 'Notes', fields: 'Fields', linewidth: 'Line width', cards: 'Cards', soft: 'Softer reading text', softlevel: 'Softer reading text', quietlevel: 'Softer reading text', smallsoft: 'Small text', links: 'Links', categories: 'Categories',
+	var WHAT = { paragraphs: 'Paragraphs', piccorners: 'Picture corners', pictureshadow: 'Picture shadow', pictureEdge: 'Picture edge', subcolour: 'Section headings', opening: 'Opening sentence', widefigures: 'Wide pictures in the text', lines: 'Lines', line: 'Lines', linestyle: 'Line style', hairlines: 'Fine lines', darkground: 'Dark ground', fills: 'Fills', fill: 'Fills', rounded: 'Rounded corners', corners: 'Corner size', buttonShape: 'Button shape', tagsMatchButtons: 'Tags follow the buttons', primaryButton: 'Main buttons', secondaryButton: 'Other buttons', tertiaryButton: 'Quiet buttons', tags: 'Tags', currentItem: 'Chosen item', fullpicture: 'Picture width', quotes: 'Quotes', notes: 'Notes', fields: 'Fields', linewidth: 'Line width', cards: 'Cards', soft: 'Softer reading text', softlevel: 'Softer reading text', quietlevel: 'Softer reading text', smallsoft: 'Small text', links: 'Links', categories: 'Categories',
 		justify: 'Justified text', hyphenate: 'Hyphens', dropcap: 'Drop cap', capLines: 'Drop cap height', capface: 'Drop cap font', pictures: 'Picture effects', picturedim: 'Dim in the dark',
 		pictureframe: 'Frame around pictures', picturefade: 'Fade the edges', fadeedges: 'Fade the edges', marker: 'Highlighter', markercolour: 'Highlighter', button: 'Button colour', pillbuttons: 'Pill buttons', widepicture: 'Wide top picture', widehead: 'Wide title', measure: 'Line length', space: 'Space', framewidth: 'Frame width', framepattern: 'Frame pattern', palette: 'Colour', tint: 'Colour', preset: 'Colour', colours: 'Colour', accent: 'Colour',
 		face: 'Font', sans: 'Font', reading: 'Size', leading: 'Line spacing', reset: 'Reset everything', version: 'Restore' };

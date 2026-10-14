@@ -146,6 +146,26 @@ def check_balanced(css: str, name: str = "style.css") -> None:
         head = css.splitlines()[opened - 1].strip()[:80]
         raise SystemExit(f"{name}:{opened}: this block never closes: {head}\n"
                          f"  {len(stack)} block(s) stay open at the end of the file; every rule after line {opened} would sit inside")
+    check_floored(css, name)
+
+
+def check_floored(css: str, name: str = "style.css") -> None:
+    """Refuse a type size that a dial can shrink with no floor under it.
+
+    WHY (2026-10-14, the privacy page's "Last updated" line at 7.5px: "that
+    shouldn't be possible"): a style set Small text to 0.62, and the date's
+    size was `calc(12px * var(--small-size))` with nothing under it. Most role
+    sizes already sat on `max(var(--text-floor-content) | --text-floor-ui, ...)`;
+    seventeen did not. Every `font-size` that multiplies by a `--*-size` dial
+    must name one of the two floors on the same line, or the build stops here.
+    """
+    import re
+    pat = re.compile(r"font-size:[^;{}]*\* var\(--[a-z-]*size")
+    bad = [f"{name}:{i}: {l.strip()[:100]}" for i, l in enumerate(css.splitlines(), 1)
+           if pat.search(l) and "text-floor-" not in l]
+    if bad:
+        raise SystemExit("a dial can shrink these sizes below the floor; wrap them in max(var(--text-floor-content), ...):\n  "
+                         + "\n  ".join(bad))
 
 
 # ── a small parser: rules, and at-rules that hold rules ─────────────────────

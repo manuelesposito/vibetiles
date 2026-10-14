@@ -61,6 +61,7 @@
     "pictureCorners": "The pictures' corners: match (the corners every card and button has, the rest) or square (pictures cut square while cards and buttons keep theirs).",
     "piccorners": "Retired 2026-10-03 and still read: becomes pictureCorners (cards is match).",
     "pictureShadow": "A soft shadow under the pictures, so a white screenshot stands off a white paper: none (the rest) or soft; by night a faint light edge instead. Architrave's page only.",
+    "pictureEdge": "A fine line around pictures without a frame, so a white screenshot keeps its edge on a white paper: none (the rest), faint (the ink at 8 %), medium (16 %) or strong (30 %), drawn inside the picture. Architrave's page only.",
     "pictureshadow": "Retired 2026-10-03 and still read: becomes pictureShadow (off is none).",
     "subcolour": "Retired 2026-10-02 and still read: ink keeps the headings in the ink under a coloured title (roles.headings.colour ink).",
     "opening": "The article's first paragraph speaks up, as a launch page opens on one big sentence: off (the rest) or big (1.4 times the text, medium, in the ink). Architrave's page only.",

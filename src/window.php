@@ -106,7 +106,7 @@ function live_design_window_page( $setting ) {
 	if ( ! empty( $setting['key'] ) && in_array( $setting['key'], array( 'lineLength', 'titleWidth', 'pictureWidth', 'figureWidth' ), true ) ) {
 		return 'Layout'; /* the layout in WordPress's words (2026-10-03), which the old window never drew */
 	}
-	if ( ! empty( $setting['key'] ) && in_array( $setting['key'], array( 'pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureCorners' ), true ) ) {
+	if ( ! empty( $setting['key'] ) && in_array( $setting['key'], array( 'pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureEdge', 'pictureCorners' ), true ) ) {
 		return 'Pictures'; /* the pictures' keys (2026-10-03) */
 	}
 	if ( ! empty( $setting['key'] ) && in_array( $setting['key'], array( 'picturefade', 'fadeedges' ), true ) ) {

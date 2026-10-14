@@ -552,7 +552,7 @@
 		DIALS.forEach(function (d) { if (data[d] !== undefined) entry[d] = data[d]; });
 		if (entry.palette === undefined) entry.palette = 'neutral';
 		OPTS.forEach(function (k) { if (typeof data[k] === 'boolean' && inRecord(k)) entry[k] = data[k]; });
-		['pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureCorners', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tagsMatchButtons', 'currentItem', 'lineLength', 'titleWidth', 'pictureWidth', 'figureWidth', 'radius', 'borderWidth', 'borderStyle', 'borderStrength', 'tint', 'sans', 'scope', 'pictures', 'capLines', 'line', 'fill', 'softlevel', 'quietlevel', 'smallsoft', 'measure', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'framewidth', 'linestyle', 'corners', 'fadeedges', 'markercolour', 'framepattern', 'button', 'buttonshape', 'buttonstyle', 'buttonmedium', 'buttonquiet', 'tags', 'chosenitem', 'linewidth', 'cards', 'quotes', 'notes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'piccorners', 'pictureshadow', 'opening', 'widefigures', 'fullpicture', 'categories', 'links'].forEach(function (k) { if (data[k] !== undefined) entry[k] = data[k]; });
+		['pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureCorners', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tagsMatchButtons', 'currentItem', 'lineLength', 'titleWidth', 'pictureWidth', 'figureWidth', 'radius', 'borderWidth', 'borderStyle', 'borderStrength', 'tint', 'sans', 'scope', 'pictures', 'capLines', 'line', 'fill', 'softlevel', 'quietlevel', 'smallsoft', 'measure', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'framewidth', 'linestyle', 'corners', 'fadeedges', 'markercolour', 'framepattern', 'button', 'buttonshape', 'buttonstyle', 'buttonmedium', 'buttonquiet', 'tags', 'chosenitem', 'linewidth', 'cards', 'quotes', 'notes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'piccorners', 'pictureshadow', 'pictureEdge', 'opening', 'widefigures', 'fullpicture', 'categories', 'links'].forEach(function (k) { if (data[k] !== undefined) entry[k] = data[k]; });
 		['spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle'].forEach(function (k) { if (typeof entry[k] === 'number') entry[k] = String(entry[k]); }); /* a pasted record may give the four jobs' sizes as numbers */
 		if (data.roles && typeof data.roles === 'object') { entry.roles = data.roles; entry.architrave = 3; }
 		if (data.effects && typeof data.effects === 'object') { var fx0 = effectsOf({ effects: data.effects }, null); if (Object.keys(fx0).length) entry.effects = fx0; } /* only known details, only off their rest */
@@ -627,7 +627,7 @@
 	var FADE_EDGES = ['sides', 'bottom', 'all'];
 	var MARKERS = ['yellow', 'green', 'pink', 'blue', 'orange', 'text', 'muted', 'own'];
 	var FRAME_PATTERNS = ['plain', 'dots', 'checker'];
-	var PICKS = { categories: { attr: 'data-categories', list: ['below', 'above', 'hidden'] }, tags: { attr: 'data-tags', list: ['text', 'filled', 'tinted', 'gray', 'outlined'] }, cards: { attr: 'data-cards', list: ['filled', 'outlined', 'raised'] }, quotes: { attr: 'data-quotes', list: ['indented', 'plain', 'sideLine', 'filled'] }, fields: { attr: 'data-fields', list: ['filled', 'outlined', 'raised'] }, paragraphs: { attr: 'data-paragraphs', list: ['spaced', 'indented'] }, capface: { attr: 'data-cap-face', list: ['text', 'bold', 'fraunces', 'title'] }, hyphenate: { attr: 'data-hyphenate', list: ['auto', 'few', 'any', 'off'] }, opening: { attr: 'data-opening', list: ['off', 'big'] }, links: { attr: 'data-links', list: ['both', 'coloured', 'underlined', 'bold', 'wash'] }, fullpicture: { attr: 'data-full-picture', list: ['off', 'on'] }, widefigures: { attr: 'data-wide-figures', list: ['off', 'on'] }, linewidth: { attr: 'data-line-width', list: ['1', '2', '3', '5'] }, buttonstyle: { attr: 'data-button-style', list: ['filled', 'outlined', 'shadow', 'tinted', 'gray', 'text'] }, buttonmedium: { attr: 'data-button-medium', list: ['gray', 'filled', 'tinted', 'outlined', 'shadow', 'text'] }, buttonquiet: { attr: 'data-button-quiet', list: ['text', 'filled', 'tinted', 'gray', 'outlined', 'shadow'] }, buttonshape: { attr: 'data-button-shape', list: ['cards', 'square', 'rounded', 'pill'] }, chosenitem: { attr: 'data-chosen-item', list: ['gray', 'filled', 'outlined', 'bold'] }, pictureshadow: { attr: 'data-picture-shadow', list: ['off', 'soft'] }, piccorners: { attr: 'data-pic-corners', list: ['cards', 'square'] } };
+	var PICKS = { categories: { attr: 'data-categories', list: ['below', 'above', 'hidden'] }, tags: { attr: 'data-tags', list: ['text', 'filled', 'tinted', 'gray', 'outlined'] }, cards: { attr: 'data-cards', list: ['filled', 'outlined', 'raised'] }, quotes: { attr: 'data-quotes', list: ['indented', 'plain', 'sideLine', 'filled'] }, fields: { attr: 'data-fields', list: ['filled', 'outlined', 'raised'] }, paragraphs: { attr: 'data-paragraphs', list: ['spaced', 'indented'] }, capface: { attr: 'data-cap-face', list: ['text', 'bold', 'fraunces', 'title'] }, hyphenate: { attr: 'data-hyphenate', list: ['auto', 'few', 'any', 'off'] }, opening: { attr: 'data-opening', list: ['off', 'big'] }, links: { attr: 'data-links', list: ['both', 'coloured', 'underlined', 'bold', 'wash'] }, pictureEdge: { attr: 'data-picture-edge', list: ['none', 'faint', 'medium', 'strong'] }, fullpicture: { attr: 'data-full-picture', list: ['off', 'on'] }, widefigures: { attr: 'data-wide-figures', list: ['off', 'on'] }, linewidth: { attr: 'data-line-width', list: ['1', '2', '3', '5'] }, buttonstyle: { attr: 'data-button-style', list: ['filled', 'outlined', 'shadow', 'tinted', 'gray', 'text'] }, buttonmedium: { attr: 'data-button-medium', list: ['gray', 'filled', 'tinted', 'outlined', 'shadow', 'text'] }, buttonquiet: { attr: 'data-button-quiet', list: ['text', 'filled', 'tinted', 'gray', 'outlined', 'shadow'] }, buttonshape: { attr: 'data-button-shape', list: ['cards', 'square', 'rounded', 'pill'] }, chosenitem: { attr: 'data-chosen-item', list: ['gray', 'filled', 'outlined', 'bold'] }, pictureshadow: { attr: 'data-picture-shadow', list: ['off', 'soft'] }, piccorners: { attr: 'data-pic-corners', list: ['cards', 'square'] } };
 	var EFFECTS = {};
 	var LEVELS = {
 		space: { stops: ['xcompact', 'compact', 'standard', 'spacious', 'xspacious'], rest: 'standard', attr: 'data-space', prop: '--space-step' },
@@ -714,7 +714,7 @@
 	var ROLE_COLOURS = ['ink', 'accent', 'own', 'muted'];
 	var LIST = {
 		labelMax: 40,
-		schema: ['architrave', 'label', 'base', 'reading', 'justify', 'dropcap', 'radius', 'borderWidth', 'titleWidth', 'colourOnHover', 'dimInDark', 'pictureFade', 'pictureFrame', 'pictureWidth', 'categories', 'tagsMatchButtons', 'alternates', 'scope', 'pictureFilter', 'capLines', 'borderStrength', 'links', 'lineLength', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'frameWidth', 'borderStyle', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tags', 'currentItem', 'cards', 'quotes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'pictureCorners', 'pictureShadow', 'opening', 'figureWidth', 'effects', 'roles', 'colours'],
+		schema: ['architrave', 'label', 'base', 'reading', 'justify', 'dropcap', 'radius', 'borderWidth', 'titleWidth', 'colourOnHover', 'dimInDark', 'pictureFade', 'pictureFrame', 'pictureWidth', 'categories', 'tagsMatchButtons', 'alternates', 'scope', 'pictureFilter', 'capLines', 'borderStrength', 'links', 'lineLength', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'frameWidth', 'borderStyle', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tags', 'currentItem', 'cards', 'quotes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'pictureCorners', 'pictureShadow', 'pictureEdge', 'opening', 'figureWidth', 'effects', 'roles', 'colours'],
 		choices: { scope: SCOPE, capLines: ['2', '3', '4'], borderStyle: LINE_STYLE },
 		wells: ['background', 'background2', 'card', 'text', 'mutedText', 'accent', 'highlight', 'button', 'title', 'headings', 'body', 'quote', 'meta', 'interface', 'code'],
 		meaning: {
@@ -779,6 +779,7 @@
 			pictureCorners: 'The pictures\' corners: match (the corners every card and button has, the rest) or square (pictures cut square while cards and buttons keep theirs).',
 			piccorners: 'Retired 2026-10-03 and still read: becomes pictureCorners (cards is match).',
 			pictureShadow: 'A soft shadow under the pictures, so a white screenshot stands off a white paper: none (the rest) or soft; by night a faint light edge instead. Architrave\'s page only.',
+			pictureEdge: 'A fine line around pictures without a frame, so a white screenshot keeps its edge on a white paper: none (the rest), faint (the ink at 8 %), medium (16 %) or strong (30 %), drawn inside the picture. Architrave\'s page only.',
 			pictureshadow: 'Retired 2026-10-03 and still read: becomes pictureShadow (off is none).',
 			subcolour: 'Retired 2026-10-02 and still read: ink keeps the headings in the ink under a coloured title (roles.headings.colour ink).',
 			opening: 'The article\'s first paragraph speaks up, as a launch page opens on one big sentence: off (the rest) or big (1.4 times the text, medium, in the ink). Architrave\'s page only.',
@@ -1919,7 +1920,7 @@
 		if (tw && d.list.indexOf(tw[key]) !== -1) return tw[key];
 		return (s && d.list.indexOf(s[key]) !== -1) ? s[key] : pickRest(key);
 	}
-	function applyPicks() { Object.keys(PICKS).forEach(function (k) { var d = PICKS[k], v = pickOf(k), e = SURFACE_ENGINE[k] && SURFACE_ENGINE[k][v] ? SURFACE_ENGINE[k][v] : v; if (v === (k === 'quotes' ? pickRest(k) : d.list[0])) root.removeAttribute(d.attr); else if (root.getAttribute(d.attr) !== e) root.setAttribute(d.attr, e); }); screenEffects(); } /* a surface's saved word stamps the engine's own (2026-10-03) */
+	function applyPicks() { Object.keys(PICKS).forEach(function (k) { var d = PICKS[k], v = pickOf(k), e = SURFACE_ENGINE[k] && SURFACE_ENGINE[k][v] ? SURFACE_ENGINE[k][v] : v; if (v === (k === 'quotes' ? pickRest(k) : d.list[0])) root.removeAttribute(d.attr); else if (root.getAttribute(d.attr) !== e) root.setAttribute(d.attr, e); }); } /* a surface's saved word stamps the engine's own (2026-10-03) */
 	/* THE EXTRAS' DETAILS (EFFECTS, the list's table; 2026-09-29, lab/the-instrument-extras.html
 	   round two). A style's `effects` holds per effect only the details off their rest; a
 	   reader's tweak the same, over it. effectsOf merges the two, keeping only known
@@ -1973,61 +1974,9 @@
 		if (window.requestAnimationFrame) window.requestAnimationFrame(run);
 		setTimeout(run, 250);
 	}
-	/* PICTURES THAT MELT INTO THE PAGE (2026-10-02, the styles review; Manuel: a picture should "always have a border separating the image
-	   from the background if there's not enough contrast. If there's enough contrast we don't need it"). Each picture's outer ring of pixels
-	   is read once from a 32 x 32 copy; where more than a fifth of it stands under 1.3:1 from what the picture stands on, the picture is
-	   marked ldp-blends and style.css draws its edge clearly. A photo is not marked and keeps the faint edge; a picture mostly see-through
-	   (a logo) is not marked, an edge would make a box of it; a picture that cannot be read (another site's) is marked, the safe side.
-	   Compared again when the side or the colours change, read again only when the picture does. */
-	var EDGE_PICS = '.post-card .post-media img, .single-post-article .article-media img, .single-post-article .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot), .post-card.format-link .post-format-body .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot)';
-	var edgeCanvas = null, edgeWatched = false, edgeT = null;
-	function edgeLum(r, g, b) { var f = function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); }
-	function edgeCtx(n) { if (!edgeCanvas) edgeCanvas = document.createElement('canvas'); edgeCanvas.width = edgeCanvas.height = n; return edgeCanvas.getContext('2d', { willReadFrequently: true }); }
-	function edgeRing(img) { /* the outer two rows of the copy, as lights; [] when see-through; null when unreadable */
-		if (img.__ldpRingSrc === img.currentSrc) return img.__ldpRing;
-		var ring = null, N = 32;
-		try {
-			var g = edgeCtx(N); g.clearRect(0, 0, N, N); g.drawImage(img, 0, 0, N, N);
-			var d = g.getImageData(0, 0, N, N).data, all = 0; ring = [];
-			for (var y = 0; y < N; y++) for (var x = 0; x < N; x++) {
-				if (x > 1 && x < N - 2 && y > 1 && y < N - 2) continue;
-				var i = (y * N + x) * 4; all++; if (d[i + 3] >= 128) ring.push(edgeLum(d[i], d[i + 1], d[i + 2]));
-			}
-			if (ring.length < all / 2) ring = [];
-		} catch (e) { ring = null; }
-		img.__ldpRing = ring; img.__ldpRingSrc = img.currentSrc; return ring;
-	}
-	function edgeGround(el) { /* the light of the first painted box under the picture */
-		for (var e = el.parentElement; e; e = e.parentElement) {
-			var bg = window.getComputedStyle(e).backgroundColor;
-			if (bg && !/^(transparent|rgba\(0, 0, 0, 0\))$/.test(bg) && !/\/ 0\)$/.test(bg)) {
-				try { var g = edgeCtx(1); g.clearRect(0, 0, 1, 1); g.fillStyle = bg; g.fillRect(0, 0, 1, 1); var d = g.getImageData(0, 0, 1, 1).data; if (d[3] > 200) return edgeLum(d[0], d[1], d[2]); } catch (x) { return null; }
-			}
-		}
-		return null;
-	}
-	function pictureEdges() {
-		if (!document.body || !window.getComputedStyle) return;
-		var pics = Array.prototype.slice.call(document.querySelectorAll(EDGE_PICS)), grounds = [];
-		pics.forEach(function (img) { grounds.push(edgeGround(img)); }); /* read every ground first, then mark (MEASURE ONCE) */
-		pics.forEach(function (img, k) {
-			if (!img.complete || !img.naturalWidth) { if (!img.__ldpEdgeWait) { img.__ldpEdgeWait = true; img.addEventListener('load', function () { nextFrame(pictureEdges); }, { once: true }); } return; }
-			var ring = edgeRing(img), G = grounds[k], blends;
-			if (ring === null) blends = true;
-			else if (!ring.length || G === null) blends = false;
-			else { var near = ring.filter(function (L) { return (Math.max(L, G) + 0.05) / (Math.min(L, G) + 0.05) < 1.3; }).length; blends = near > ring.length / 5; }
-			if (img.classList.contains('ldp-blends') !== blends) img.classList.toggle('ldp-blends', blends);
-		});
-		if (!edgeWatched) {
-			edgeWatched = true;
-			new MutationObserver(function () { clearTimeout(edgeT); edgeT = setTimeout(function () { nextFrame(pictureEdges); }, 120); }).observe(root, { attributes: true, attributeFilter: ['data-theme', 'style', 'data-colours', 'data-style', 'data-pictures', 'data-pictureframe'] });
-		}
-	}
-	function screenEffects() {
-		if (!document.body || typeof document.createElementNS !== 'function' || !window.getComputedStyle) return; /* not in the generator's stub */
-		nextFrame(pictureEdges);
-	}
-	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', screenEffects); else screenEffects();
+	/* PICTURES THAT MELT INTO THE PAGE (2026-10-02 to 2026-10-14): pictureEdges() read each picture's outer pixels and marked the
+	   ones that melted into the page for a clearer edge. Gone with the always-on edge: the edge is the setting pictureEdge now
+	   (Manuel, 2026-10-14: an option, off unless asked for, its strength his to pick). */
 	function applyButton() { var v = buttonOf(); if (v === BUTTONS[0]) root.removeAttribute('data-button'); else if (root.getAttribute('data-button') !== v) root.setAttribute('data-button', v); }
 	function applyMarkerColour() { var v = markerColourOf(); if (v === MARKERS[0]) root.removeAttribute('data-marker-colour'); else if (root.getAttribute('data-marker-colour') !== v) root.setAttribute('data-marker-colour', v); }
 	function applyFadeEdges() { var v = fadeEdgesOf(); if (v === FADE_EDGES[0]) root.removeAttribute('data-fade-edges'); else if (root.getAttribute('data-fade-edges') !== v) root.setAttribute('data-fade-edges', v); }
@@ -2428,7 +2377,7 @@
 	   and this one no longer reads (bold, wide, hyphens, tracking at the top
 	   level) and unaliased role values stayed in a reader's record and kept a
 	   style "adjusted" with nothing to reset. Only what is read survives. */
-	var TWEAK_KEYS = DIALS.concat(OPTS, ['pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureCorners', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tagsMatchButtons', 'currentItem', 'lineLength', 'titleWidth', 'pictureWidth', 'figureWidth', 'radius', 'borderWidth', 'borderStyle', 'borderStrength', 'tint', 'sans', 'scope', 'roles', 'colours', 'pictures', 'capLines', 'line', 'fill', 'softlevel', 'quietlevel', 'smallsoft', 'measure', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'framewidth', 'linestyle', 'corners', 'fadeedges', 'markercolour', 'framepattern', 'button', 'buttonshape', 'buttonstyle', 'buttonmedium', 'buttonquiet', 'tags', 'chosenitem', 'linewidth', 'cards', 'quotes', 'notes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'piccorners', 'pictureshadow', 'opening', 'widefigures', 'fullpicture', 'categories', 'links', 'preset', 'was', 'effects']).filter(function (k) { return k === 'palette' || inRecord(k); });
+	var TWEAK_KEYS = DIALS.concat(OPTS, ['pictureFilter', 'colourOnHover', 'dimInDark', 'pictureFrame', 'frameWidth', 'pictureFade', 'pictureShadow', 'pictureCorners', 'buttonColour', 'buttonShape', 'primaryButton', 'secondaryButton', 'tertiaryButton', 'tagsMatchButtons', 'currentItem', 'lineLength', 'titleWidth', 'pictureWidth', 'figureWidth', 'radius', 'borderWidth', 'borderStyle', 'borderStrength', 'tint', 'sans', 'scope', 'roles', 'colours', 'pictures', 'capLines', 'line', 'fill', 'softlevel', 'quietlevel', 'smallsoft', 'measure', 'space', 'spaceInside', 'spaceItems', 'spaceSections', 'spaceTitle', 'framewidth', 'linestyle', 'corners', 'fadeedges', 'markercolour', 'framepattern', 'button', 'buttonshape', 'buttonstyle', 'buttonmedium', 'buttonquiet', 'tags', 'chosenitem', 'linewidth', 'cards', 'quotes', 'notes', 'fields', 'paragraphs', 'capface', 'hyphenate', 'piccorners', 'pictureshadow', 'pictureEdge', 'opening', 'widefigures', 'fullpicture', 'categories', 'links', 'preset', 'was', 'effects']).filter(function (k) { return k === 'palette' || inRecord(k); });
 	function cleanTweaks(all) {
 		var out = {};
 		Object.keys(all || {}).forEach(function (id) {

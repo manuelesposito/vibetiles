@@ -238,7 +238,7 @@
 	   Architrave's page draws are marked here: false, and set() says so. */
 	var PAGE = { colour: 'Colour', type: 'Type', layout: 'Layout', 'corners-and-lines': 'Corners & Lines', buttons: 'Buttons', pictures: 'Pictures' };
 	var WELL_MEANS = { background: 'The page the text sits on (Paper).', background2: 'The space around the page and the rails, a second background a theme may have (Ground).', card: 'What stands on the page: menus, boxes, fields (Cards).', text: 'The text.', mutedText: 'The quiet text of dates and captions (Soft text).', accent: 'The brand colour of links and main buttons.', highlight: 'The highlighter: marked words and selected text. Left out: none.', button: 'The buttons\' own colour, used when buttonColour is own.' };
-	var ARCHITRAVE_ONLY = ['titleWidth', 'pictureWidth', 'figureWidth', 'tertiaryButton', 'pictureFade', 'pictureShadow', 'pictureCorners', 'opening'];
+	var ARCHITRAVE_ONLY = ['titleWidth', 'pictureWidth', 'figureWidth', 'tertiaryButton', 'pictureFade', 'pictureShadow', 'pictureEdge', 'pictureCorners', 'opening'];
 	function hereOn(key) { return !(window.architravePanelGuest && ARCHITRAVE_ONLY.indexOf(key) !== -1); }
 	function meansOf(key, mean) {
 		if (mean[key]) return mean[key];

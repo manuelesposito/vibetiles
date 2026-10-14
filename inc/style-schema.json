@@ -244,6 +244,12 @@
     "none",
     "soft"
   ],
+  "pictureEdge": [
+    "none",
+    "faint",
+    "medium",
+    "strong"
+  ],
   "opening": [
     "off",
     "big"
