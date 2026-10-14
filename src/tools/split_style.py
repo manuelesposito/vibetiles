@@ -95,6 +95,59 @@ def strip_comments(css: str) -> str:
     return re.sub(r"/\*.*?\*/", "", css, flags=re.S)
 
 
+def check_balanced(css: str, name: str = "style.css") -> None:
+    """Refuse a stylesheet whose boxes do not all close.
+
+    WHY (2026-10-11, "check Elmastudio on mobile ... it's completely
+    destroyed"): the 0.56.26 edit wrote a new rule where the closing brace of
+    an `@media (hover: hover)` block had been. A browser does not complain: it
+    treats every rule after that point as part of the still-open block, so
+    193K of style.css, every phone rule among it, applied only to screens with
+    a mouse. Nine releases shipped like that. This walk counts the braces the
+    way a browser nests them, skipping comments and quoted strings, and stops
+    the build at the first file that opens a box it never shuts, an unclosed
+    comment, or a closing brace with nothing open. It names the line, then
+    raises SystemExit so no zip is written.
+    """
+    stack: list[int] = []
+    i, n = 0, len(css)
+    line = 1
+    while i < n:
+        c = css[i]
+        if c == "\n":
+            line += 1
+        elif c == "/" and css.startswith("/*", i):
+            end = css.find("*/", i + 2)
+            if end < 0:
+                raise SystemExit(f"{name}:{line}: a comment opens here and never closes; everything after it is lost")
+            line += css.count("\n", i, end)
+            i = end + 2
+            continue
+        elif c in "\"'":
+            q = c
+            j = i + 1
+            while j < n and css[j] != q:
+                if css[j] == "\\":
+                    j += 1
+                if css[j] == "\n":
+                    break  # an unterminated string ends at the line, as in a browser
+                j += 1
+            i = j + 1
+            continue
+        elif c == "{":
+            stack.append(line)
+        elif c == "}":
+            if not stack:
+                raise SystemExit(f"{name}:{line}: a closing brace with no open block before it")
+            stack.pop()
+        i += 1
+    if stack:
+        opened = stack[-1]
+        head = css.splitlines()[opened - 1].strip()[:80]
+        raise SystemExit(f"{name}:{opened}: this block never closes: {head}\n"
+                         f"  {len(stack)} block(s) stay open at the end of the file; every rule after line {opened} would sit inside")
+
+
 # ── a small parser: rules, and at-rules that hold rules ─────────────────────
 
 HOLDERS = ("@media", "@supports", "@starting-style", "@layer", "@container")

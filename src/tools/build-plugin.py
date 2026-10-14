@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import re
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -56,7 +57,8 @@ COPIED = [
     "inc/style-schema.json",
     "inc/style-guide.json",
 ]
-PHP = "/Users/manuelesposito/Library/Application Support/Local/lightning-services/php-8.1.29+0/bin/darwin-arm64/bin/php"
+# Any php on the PATH (Homebrew since 2026-10-12, when Local left the Mac), else Local's old one.
+PHP = shutil.which("php") or "/Users/manuelesposito/Library/Application Support/Local/lightning-services/php-8.1.29+0/bin/darwin-arm64/bin/php"
 
 SRC_README = """# The source
 
@@ -333,6 +335,7 @@ def main() -> int:
     sys.path.insert(0, str(THEME / "tools"))
     import split_style  # the plugin's half of style.css
 
+    split_style.check_balanced((THEME / "style.css").read_text())  # every box shut, or no zip (2026-10-11)
     _theme_half_text, plugin_half = split_style.split((THEME / "style.css").read_text())
     _theme_half, _ = split_style.divide(split_style.parse(split_style.strip_comments((THEME / "style.css").read_text())))
     panel_css = (
@@ -482,6 +485,9 @@ def main() -> int:
     # a placeholder and the build writes the header's number over it.
     version = re.search(r"\*\s*Version:\s*([0-9.]+)", (THEME / OWN / f"{SLUG}.php").read_text()).group(1)
 
+    for p, rel in files:  # every box shut, or no zip and the old one untouched (2026-10-11)
+        if p.suffix == ".css":
+            split_style.check_balanced(p.read_text(), rel)
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as z:
         for p, rel in files:
             data = php_stripped(p) if p.suffix == ".php" else strip(p, p.read_bytes())

@@ -1366,36 +1366,34 @@
    dial. They are inert until a look is chosen, by value rather than by a gate:
    --surface-layer rests at none and --picture-filter at none, and Architrave
    ships them ungated on every page for the same reason. */
-@media (hover: hover) {
-	.architrave-duotone {
-		position: absolute; width: 0; height: 0; overflow: hidden;
-	}
-	.architrave-duotone .duo-dark {
-		flood-color: var(--duo-dark, #000);
-	}
-	.architrave-duotone .duo-light {
-		flood-color: var(--duo-light, #fff);
-	}
-	body::before, body::after {
-		content: var(--surface-layer);
-		position: fixed;
-		inset: 0;
-		z-index: calc(var(--layer-overlay) + 1);
-		pointer-events: none;
-	}
-	body::before {
-		opacity: var(--surface-grain);
-		mix-blend-mode: overlay;
-		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1'/></filter><rect width='200' height='200' filter='url(%23g)'/></svg>");
-		background-size: 200px 200px;
-	}
-	body::after {
-		background-image:
-		radial-gradient(ellipse at center, transparent var(--surface-vignette-reach, 55%), rgb(from var(--text-primary) r g b / var(--surface-vignette)) 100%),
-		repeating-linear-gradient(to bottom, rgb(from var(--text-primary) r g b / var(--surface-scanlines)) 0 1px, transparent 1px var(--surface-scanline-pitch));
-	}
-	body img:not(.emoji, .wp-smiley):not(:where(.reading-panel *, #wpadminbar *)) {
-		filter: var(--picture-filter) var(--picture-dim);
-		image-rendering: var(--picture-rendering);
-	}
+.architrave-duotone {
+	position: absolute; width: 0; height: 0; overflow: hidden;
+}
+.architrave-duotone .duo-dark {
+	flood-color: var(--duo-dark, #000);
+}
+.architrave-duotone .duo-light {
+	flood-color: var(--duo-light, #fff);
+}
+body::before, body::after {
+	content: var(--surface-layer);
+	position: fixed;
+	inset: 0;
+	z-index: calc(var(--layer-overlay) + 1);
+	pointer-events: none;
+}
+body::before {
+	opacity: var(--surface-grain);
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1'/></filter><rect width='200' height='200' filter='url(%23g)'/></svg>");
+	background-size: 200px 200px;
+}
+body::after {
+	background-image:
+	radial-gradient(ellipse at center, transparent var(--surface-vignette-reach, 55%), rgb(from var(--text-primary) r g b / var(--surface-vignette)) 100%),
+	repeating-linear-gradient(to bottom, rgb(from var(--text-primary) r g b / var(--surface-scanlines)) 0 1px, transparent 1px var(--surface-scanline-pitch));
+}
+body img:not(.emoji, .wp-smiley):not(:where(.reading-panel *, #wpadminbar *)) {
+	filter: var(--picture-filter) var(--picture-dim);
+	image-rendering: var(--picture-rendering);
 }

@@ -926,7 +926,37 @@ function architrave_site_styles_handle( $request ) {
 			return new WP_Error( 'architrave_no_action', __( 'Nothing to do.', 'vibetiles' ), array( 'status' => 400 ) );
 	}
 
-	return rest_ensure_response( architrave_site_styles_write( $state ) );
+	$written = architrave_site_styles_write( $state );
+	if ( 'update' === $action ) {
+		architrave_site_styles_purge_soon();
+	} elseif ( 'start' !== $action ) {
+		architrave_site_styles_purge();
+	}
+	return rest_ensure_response( $written );
+}
+
+/**
+ * THE HOST'S PAGE CACHE LETS GO (2026-10-14; Manuel made a new style the default
+ * and Ellen, in a private window, still opened the old one). Every page carries
+ * the site's styles inline, and WordPress.com kept its stored copies of the pages,
+ * each server its own, so visitors got the old default until a copy happened to
+ * be rebuilt. Now a write asks the host to drop them. The action is WordPress.com's
+ * own (mu-plugins/edge-cache, run at shutdown); on a host without it nothing listens.
+ */
+function architrave_site_styles_purge() {
+	wp_clear_scheduled_hook( 'architrave_site_styles_purge' );
+	do_action( 'edge_cache_purge_domain' );
+}
+add_action( 'architrave_site_styles_purge', 'architrave_site_styles_purge' );
+
+/**
+ * WHILE A STYLE IS BEING TUNED: the panel saves about a second after every change,
+ * and a cleared cache costs the next visitor of each page a slower load, so an edit
+ * clears once, a minute after the last one.
+ */
+function architrave_site_styles_purge_soon() {
+	wp_clear_scheduled_hook( 'architrave_site_styles_purge' );
+	wp_schedule_single_event( time() + 60, 'architrave_site_styles_purge' );
 }
 
 /**

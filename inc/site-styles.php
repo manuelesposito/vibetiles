@@ -697,7 +697,24 @@ function architrave_site_styles_handle( $request ) {
 			return new WP_Error( 'architrave_no_action', __( 'Nothing to do.', 'vibetiles' ), array( 'status' => 400 ) );
 	}
 
-	return rest_ensure_response( architrave_site_styles_write( $state ) );
+	$written = architrave_site_styles_write( $state );
+	if ( 'update' === $action ) {
+		architrave_site_styles_purge_soon();
+	} elseif ( 'start' !== $action ) {
+		architrave_site_styles_purge();
+	}
+	return rest_ensure_response( $written );
+}
+
+function architrave_site_styles_purge() {
+	wp_clear_scheduled_hook( 'architrave_site_styles_purge' );
+	do_action( 'edge_cache_purge_domain' );
+}
+add_action( 'architrave_site_styles_purge', 'architrave_site_styles_purge' );
+
+function architrave_site_styles_purge_soon() {
+	wp_clear_scheduled_hook( 'architrave_site_styles_purge' );
+	wp_schedule_single_event( time() + 60, 'architrave_site_styles_purge' );
 }
 
 function architrave_as_reader() {

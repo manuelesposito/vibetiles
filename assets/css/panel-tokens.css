@@ -165,6 +165,29 @@
 	--face-newsreader: "Newsreader", Georgia, serif;
 	--marker: #fff347;
 	--marker-ink: #1c1c18;
+	--text-floor-content: 12px;
+	--text-floor-ui: 11px;
+	--reading-link-ink: var(--accent);
+	--groove-page: var(--surface-track);
+	--chip-page: var(--surface-track-selected);
+	--code-line-height: 1.5;
+	--surface-layer: none;
+	--surface-grain: 0;
+	--surface-scanlines: 0;
+	--surface-scanline-pitch: 3px;
+	--surface-vignette: 0;
+	--picture-filter: ;
+	--picture-dim: ;
+	--picture-rendering: auto;
+	--picture-frame: var(--space-2);
+	--reading-align: start;
+	--reading-hyphens: manual;
+	--reading-dropcap: normal;
+	--reading-dropcap-gap: 0;
+	--reading-tracking: normal;
+	--reading-word-gap: normal;
+	--layout-settings-width: calc(var(--layout-content-width-min) + 2 * var(--space-16));
+	--font-settings: "Inter Variable", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 :root[data-theme="arcade-dark"], .theme-arcade-dark {
 	--surface-canvas: #040418;
