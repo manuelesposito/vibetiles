@@ -118,7 +118,7 @@
 		gone: function (what) { return (window.architravePanelGuestGone || []).indexOf(what) !== -1; },
 		dead: function (what) {
 			/* a size row of the seven is dead while every engine role it moves is (guest-size.js takes a role off once it finds something to measure) */
-			var SIZE_OF = { title: ['head'], headings: ['head'], body: ['read', 'comment'], quote: ['quote'], meta: ['small', 'kicker'], 'interface': ['ui'], code: ['code'] }, lim = window.architravePanelGuestLimits || [];
+			var SIZE_OF = { title: ['head'], headings: ['head'], body: ['read', 'comment'], quote: ['quote'], meta: ['small', 'kicker'], 'meta.category': ['kicker'], 'interface': ['ui'], code: ['code'] }, lim = window.architravePanelGuestLimits || [];
 			if (/^size:/.test(what) && SIZE_OF[what.slice(5)]) return SIZE_OF[what.slice(5)].every(function (r) { return lim.indexOf('size:' + r) !== -1; });
 			if (lim.indexOf(what) !== -1) return true;
 			var s = S();
@@ -199,7 +199,7 @@
 		type: function (id) { var s = S(); return s && s.type ? s.type(id) : {}; },
 		setType: function (id, dial, v) { var s = S(); if (s && s.setType) s.setType(id, dial, v); },
 		typeDials: function (id) { var s = S(); return s && s.typeDials ? s.typeDials(id) : []; },
-		typeSizes: function (id) { var s = S(); return s && s.typeSizes ? s.typeSizes(id) : []; },
+		typeSizes: function (id, dial) { var s = S(); return s && s.typeSizes ? s.typeSizes(id, dial) : []; }, /* dial: categorySize counts from the category line's own 26 (2026-10-15) */
 		typeLines: ['tight', 'snug', 'normal', 'relaxed', 'loose'],
 		typeLetters: ['tighter', 'tight', 'normal', 'wide', 'wider', 'widest'],
 		weights: function (face) { var s = S(); return s ? s.weightsFor(face) : []; },

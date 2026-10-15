@@ -375,6 +375,7 @@
 		var fv = FOLLOW[v.font] ? t(v.font === 'interface' ? 'Interface font' : 'Reading font') + ' · ' + faceName(face) : faceName(v.font); /* the lab's: "Reading font · Newsreader" */
 		var out = (r.where ? '<p class="ldpw-hint">' + esc(t(r.where)) + '</p>' : '') + box(navRow('data-font="' + role + '" data-f="font:' + role + '"', t('Font'), fv) +
 			(s.dead('size:' + role) ? row(t('Size'), '<span class="ldpw-val">' + esc(v.px + ' px') + '</span>', '', 'is-off') : stepSlider(P + 'size', t('Size'), s.typeSizes(role).map(function (x) { return { id: x.id, label: x.px + ' px' }; }), v.size, function (id) { s.setType(role, 'size', id); }, '0')) +
+			(has('categorySize') ? catRows(s, v, P) : '') +
 			(weights.length ? stepSlider(P + 'weight', t('Weight'), weights.map(function (w) { return { id: w, label: weightWord(w) + ' ' + WEIGHT_NUMBER[w] }; }), v.weight, function (id) { s.setType(role, 'weight', id); })
 				: row(t('Weight'), '<span class="ldpw-val">' + esc(weightWord(v.weight)) + '</span>', '', 'is-off')) +
 			(has('lineHeight') ? stepSlider(P + 'lineHeight', t('Line spacing'), s.typeLines.map(function (id) { return { id: id, label: t(LINE_WORD[id]) }; }), v.lineHeight, function (id) { s.setType(role, 'lineHeight', id); }, 'normal') : '') +
@@ -390,6 +391,14 @@
 				row(t('Capitals'), swBtn('data-rset="capitals"', v.capitals, t('Capitals'))));
 		}
 		return out;
+	}
+	/* THE CATEGORY LINE'S OWN SIZE (2026-10-15, Manuel: "category is too big and if I make it smaller the date is getting
+	   too small"): Small text's one size moved the 26px category line and the 16px date together. Off, the category follows
+	   Size as before; on, it has a size of its own and the dates stay where they are. Turning it on keeps the size it shows. */
+	function catRows(s, v, P) {
+		var own = v.categorySize !== 'same', off = s.dead('size:meta.category');
+		return row(t('Own category size'), swBtn('data-catown', own, t('Own category size'), off), esc(t(own ? 'The category line under the title has its own size' : 'The category line follows Size')), off ? 'is-off' : '') +
+			(own && !off ? stepSlider(P + 'categorySize', t('Category line'), s.typeSizes(role, 'categorySize').map(function (x) { return { id: x.id, label: x.px + ' px' }; }), v.categorySize, function (id) { s.setType(role, 'categorySize', id); }, '0') : '');
 	}
 	/* THE FONT LIST, as a page: a search on top, the anchors a role may follow, the faces in their groups, in the panel's own type */
 	var fontGet = {}; /* a library face while it is fetched ('busy') and once it is on the site ('got') */
@@ -1002,7 +1011,7 @@
 	var WIDTH_WORD = { content: 'Content', wide: 'Wide', full: 'Full' };
 	var VALUE_WORD = { radius: { none: 'Square', small: 'Small', medium: 'Medium', large: 'Large', xlarge: 'Very large' }, borderWidth: { none: 'None', hairline: 'Hairline', '1': '1 px', '2': '2 px', '3': '3 px', '5': '5 px' }, buttonColour: BUTTON_WORD, titleWidth: WIDTH_WORD, pictureWidth: WIDTH_WORD, figureWidth: WIDTH_WORD, scope: { article: 'In articles', all: 'Everywhere' } };
 	var VALUE_UNIT = { lineLength: ' letters', borderStrength: ' %', frameWidth: ' px', spaceInside: ' px', spaceItems: ' px', spaceSections: ' px', spaceTitle: ' px', capLines: ' lines' };
-	var DIAL_WORD = { font: 'Font', weight: 'Weight', size: 'Size', letterSpacing: 'Character spacing', capitals: 'Capitals', italic: 'Italic', lineHeight: 'Line spacing', align: 'Alignment', colour: 'Colour' };
+	var DIAL_WORD = { font: 'Font', weight: 'Weight', size: 'Size', categorySize: 'Category line', letterSpacing: 'Character spacing', capitals: 'Capitals', italic: 'Italic', lineHeight: 'Line spacing', align: 'Alignment', colour: 'Colour' };
 	var TOP_WORD = { face: 'Reading font', sans: 'Interface font', reading: 'Size', leading: 'Line spacing', palette: 'Colour', preset: 'Colour', tint: 'Colour', accent: 'Accent', capLines: 'Drop cap height' };
 	var TOP_SECTION = { face: 'type', sans: 'type', reading: 'type', leading: 'type', roles: 'type', capLines: 'type', justify: 'type', dropcap: 'type', hyphenate: 'type', capface: 'type', palette: 'colour', preset: 'colour', tint: 'colour', accent: 'colour', colours: 'colour', effects: 'effects' };
 	function changeName(path) {
@@ -1026,6 +1035,7 @@
 		if (isHex(v)) return v.toUpperCase();
 		var w = (PICK_WORD[path] && PICK_WORD[path][v]) || (PICK_WORD[k] && PICK_WORD[k][v]) || (LEVEL_WORD[k] && LEVEL_WORD[k][v]) || (k === 'weight' && WEIGHT_LABEL[v]) || (k === 'markercolour' && MARKER_WORD[v]) || (k === 'button' && BUTTON_WORD[v]);
 		if (path.indexOf('roles.') === 0 && k === 'size') { var px = (St().typeSizes(path.split('.')[1]).filter(function (x) { return x.id === String(v); })[0] || {}).px; return px ? px + ' px' : String(v); }
+		if (path.indexOf('roles.') === 0 && k === 'categorySize') { if (v === 'same') return t('Follows Size'); var cpx = (St().typeSizes('meta', 'categorySize').filter(function (x) { return x.id === String(v); })[0] || {}).px; return cpx ? cpx + ' px' : String(v); }
 		if (path.indexOf('roles.') === 0 && k === 'lineHeight' && LINE_WORD[v]) return t(LINE_WORD[v]);
 		if (path.indexOf('roles.') === 0 && k === 'letterSpacing' && LETTER_WORD[v]) return t(LETTER_WORD[v]);
 		if (path.indexOf('roles.') === 0 && k === 'font') return faceName(v);
@@ -1398,7 +1408,7 @@
 		['.wp-block-post-content > h1', 'type', 'role:headings', 'Headings'],
 		['h1, .wp-block-post-title', 'type', 'role:title', 'Title'],
 		[':is(.wp-block-post-content, .entry-content) :is(h2, h3, h4, h5, h6), .wp-block-heading', 'type', 'role:headings', 'Headings'],
-		['.article-kicker, .post-kicker, .taxonomy-category', 'type', 'role:meta', 'Small text'],
+		['.article-kicker, .post-kicker, .taxonomy-category', 'type', 'role:meta', 'Category line', '[data-stop="roles.meta.categorySize"], [data-catown]'], /* the fifth: the row it opens on (2026-10-15) */
 		['.article-meta, .post-meta, .wp-block-post-date, .wp-block-post-terms, figcaption', 'type', 'role:meta', 'Small text'],
 		/* EVERY TEXT THE LIST LEFT OUT (Manuel, 2026-10-07, the footer's credit: "where else can I not pick text?"). Found by
 		   tools/check-pick-map.js on thirteen kinds of page: each text's own row is the one whose size moves it, measured,
@@ -1445,7 +1455,7 @@
 		var hits = [];
 		for (var i = 0; i < TARGETS.length; i++) {
 			var hit = el.closest(TARGETS[i][0]);
-			if (hit && !hits.some(function (h) { return h.el === hit; })) hits.push({ el: hit, section: TARGETS[i][1], key: TARGETS[i][2], label: TARGETS[i][3] });
+			if (hit && !hits.some(function (h) { return h.el === hit; })) hits.push({ el: hit, section: TARGETS[i][1], key: TARGETS[i][2], label: TARGETS[i][3], focus: TARGETS[i][4] });
 		}
 		if (!hits.length) return hits;
 		var first = hits[0], outer = hits.slice(1).filter(function (h) { return h.el !== first.el && h.el.contains(first.el); });
@@ -1476,7 +1486,7 @@
 		if (x.section === 'effects' && x.key.indexOf('role:') !== 0) fxFind = '="' + x.key + '"';
 		try { sessionStorage.setItem(KEY, section); } catch (e) { /* private window */ }
 		if (!open) { show(); render(); } else render(); /* drawn again after show(): a window built beforehand (prime) still showed the page it was built on, so ⌥-click on a heading opened on Styles */
-		var k = x.key.indexOf('role:') === 0 ? '' : x.key, ctl = k ? win.querySelector('.ldpw-scroll :is([data-look="' + k + '"].is-on, [data-menu="' + k + '"], [data-stop="' + k + '"], [data-set="' + k + '"])') : null;
+		var k = x.key.indexOf('role:') === 0 ? '' : x.key, ctl = k ? win.querySelector('.ldpw-scroll :is([data-look="' + k + '"].is-on, [data-menu="' + k + '"], [data-stop="' + k + '"], [data-set="' + k + '"])') : x.focus ? win.querySelector('.ldpw-scroll :is(' + x.focus + ')') : null;
 		var rowEl = ctl && ctl.closest('.ldpw-r');
 		if (rowEl) { rowEl.scrollIntoView({ block: 'center' }); rowEl.classList.remove('is-glow'); void rowEl.offsetWidth; rowEl.classList.add('is-glow'); ctl.focus({ preventScroll: true }); }
 		if (x.el.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) x.el.animate([{ outline: '2px solid #0a84ff', outlineOffset: '3px' }, { outline: '2px solid transparent', outlineOffset: '3px' }], { duration: 700, easing: 'ease-out' });
@@ -2457,6 +2467,7 @@
 		if (b.hasAttribute('data-role')) { role = b.getAttribute('data-role'); more = false; render('[data-act="back"]'); return; }
 		if (b.hasAttribute('data-font')) { fontFor = b.getAttribute('data-font'); fontq = ''; render('.ldpw-scroll [aria-checked="true"]'); return; }
 		if (b.hasAttribute('data-face')) { s.setType(fontFor, 'font', b.getAttribute('data-face')); render(); return; }
+		if (b.hasAttribute('data-catown')) { var cv = s.type(role); s.setType(role, 'categorySize', cv.categorySize !== 'same' ? 'same' : cv.categoryStep); render('[data-catown]'); return; }
 		if (b.hasAttribute('data-rset')) { var d = b.getAttribute('data-rset'); s.setType(role, d, !s.type(role)[d]); render(); return; }
 		if (b.hasAttribute('data-preset')) { s.choosePreset(b.getAttribute('data-preset')); render(); return; }
 		if (b.hasAttribute('data-edit')) { editing = b.getAttribute('data-edit'); render('[data-act="back"]'); return; }

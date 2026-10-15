@@ -439,7 +439,7 @@
 		headings: ['font', 'size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'align', 'colour'],
 		body: ['size', 'weight', 'letterSpacing', 'capitals', 'italic', 'colour'],
 		quote: ['font', 'size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour'],
-		meta: ['font', 'size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour'],
+		meta: ['font', 'size', 'categorySize', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour'],
 		interface: ['size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour'],
 		code: ['font', 'size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour']
 	};
@@ -447,7 +447,7 @@
 	var TYPE_LINE = { tight: 'dense', snug: 'tight', normal: 'default', relaxed: 'airy', loose: 'wide' };
 	var TYPE_LETTER = { tighter: 'm5', tight: 'm2', normal: 'default', wide: 'p2', wider: 'p5', widest: 'p10' };
 	var TYPE_BASE = { title: 64, headings: 36, body: 22, quote: 26, meta: 16, interface: 13, code: 18 };
-	var TYPE_MEANS = { roles: { title: 'The one big line of a page: the article\'s title, a page\'s name.', headings: 'The headings inside the text, and the site\'s name.', body: 'What people read: paragraphs, lists, excerpts, the comments\' words.', quote: 'Quotations and pull quotes.', meta: 'Small facts around the text: dates, authors, categories, tags, captions, names in comments.', interface: 'The site around the text: menus, buttons, fields, labels, section titles.', code: 'Code and keys, inline and in blocks.' }, dials: { font: 'A face id from the list, or body / interface to follow the reading or the interface font. Left out: the theme\'s own.', size: 'Steps from the role\'s own size, each 1.125 times the one before: -1 a little smaller, +1 a little larger, +3 about half again as large. 0 or left out: the theme\'s own.', weight: 'thin 100 to black 900; a face offers the weights it has and falls to the nearest.', lineHeight: 'tight for big titles, snug for headings, normal is the theme\'s own, relaxed for long reading, loose for airy small text.', letterSpacing: 'tighter and tight close large type up, normal is the theme\'s own, wide to widest open small capitals and labels.', capitals: 'true sets the role in capitals.', italic: 'true sets it in italic, where the face has one.', align: 'default (the start), center or right; title and headings.', colour: 'text (the text colour), mutedText (Soft text, the quiet colour of dates and captions), accent (the brand colour), or own (the role\'s own colour, colours.<side>.<role>). Left out: text, and for meta mutedText.' } };
+	var TYPE_MEANS = { roles: { title: 'The one big line of a page: the article\'s title, a page\'s name.', headings: 'The headings inside the text, and the site\'s name.', body: 'What people read: paragraphs, lists, excerpts, the comments\' words.', quote: 'Quotations and pull quotes.', meta: 'Small facts around the text: dates, authors, categories, tags, captions, names in comments.', interface: 'The site around the text: menus, buttons, fields, labels, section titles.', code: 'Code and keys, inline and in blocks.' }, dials: { font: 'A face id from the list, or body / interface to follow the reading or the interface font. Left out: the theme\'s own.', size: 'Steps from the role\'s own size, each 1.125 times the one before: -1 a little smaller, +1 a little larger, +3 about half again as large. 0 or left out: the theme\'s own.', weight: 'thin 100 to black 900; a face offers the weights it has and falls to the nearest.', lineHeight: 'tight for big titles, snug for headings, normal is the theme\'s own, relaxed for long reading, loose for airy small text.', letterSpacing: 'tighter and tight close large type up, normal is the theme\'s own, wide to widest open small capitals and labels.', capitals: 'true sets the role in capitals.', italic: 'true sets it in italic, where the face has one.', align: 'default (the start), center or right; title and headings.', categorySize: 'meta only: the category line under the title, on the article and its cards. same (the rest): it follows size. Or its own step from its own 26 px, -4 to +6, each 1.125 apart; the dates keep size.', colour: 'text (the text colour), mutedText (Soft text, the quiet colour of dates and captions), accent (the brand colour), or own (the role\'s own colour, colours.<side>.<role>). Left out: text, and for meta mutedText.' } };
 	var ROLES = ['head', 'read', 'quote', 'kicker', 'small', 'comment', 'ui', 'title'];
 	var ROLE_DEFAULT = {
 		head: { face: 'read', weight: 'bold', size: '64', tracking: 'default', words: 'default', caps: false, italic: false, leading: 'default', align: 'default', colour: 'ink', members: {} },
@@ -606,7 +606,7 @@
 			tint: 'Retired 2026-10-03 and still read: the accent\'s name becomes the accent colour on both sides.',
 			scope: 'Legacy. The theme always applies paragraph settings everywhere.',
 			effects: 'The extras\' details, one object per effect (title, serif, arrival, cardlight, moving, button, pattern, guides, tint, aurora, pointer, dividers, topline, picglow), each holding only the details that differ from their rest; the effect\'s own switch is its flat pick (titlefinish, headitalics, headarrival, cardlight, buttonfinish, toppattern, guides, greytint, pageglow, movinglight) or, for the last four, its look.',
-			roles: 'Typography by seven roles, named for their job and tied to the HTML every site has. title: the one big line of a page (h1, the post title). headings: the headings inside the text (h2 to h6) and the site\'s name. body: what people read (p, li). quote: quotations. meta: small facts around the text (dates, authors, categories, tags, captions). interface: menus, buttons, fields, labels. code: code, pre, kbd. Every role takes font, size, weight, lineHeight, letterSpacing, capitals, italic; title and headings also align; every role also takes a colour (text, mutedText, accent or own). A dial left out is the theme\'s own. size is a step from the role\'s own size (-4 to +6, each 1.125 apart). lineHeight: tight, snug, normal, relaxed, loose. letterSpacing: tighter, tight, normal, wide, wider, widest. Records say architrave 3 (2 before the seven colours); older records with the eight roles are read into the seven.',
+			roles: 'Typography by seven roles, named for their job and tied to the HTML every site has. title: the one big line of a page (h1, the post title). headings: the headings inside the text (h2 to h6) and the site\'s name. body: what people read (p, li). quote: quotations. meta: small facts around the text (dates, authors, categories, tags, captions). interface: menus, buttons, fields, labels. code: code, pre, kbd. Every role takes font, size, weight, lineHeight, letterSpacing, capitals, italic; title and headings also align; meta also takes categorySize (the category line under the title, same or its own step); every role also takes a colour (text, mutedText, accent or own). A dial left out is the theme\'s own. size is a step from the role\'s own size (-4 to +6, each 1.125 apart). lineHeight: tight, snug, normal, relaxed, loose. letterSpacing: tighter, tight, normal, wide, wider, widest. Records say architrave 3 (2 before the seven colours); older records with the eight roles are read into the seven.',
 			colours: 'Seven colours per side, named for their job, as hex: background (Paper: the page the text sits on), background2 (Ground: the space around the page and the rails, a theme\'s second background), card (Cards: menus, boxes, fields standing on the page), text, mutedText (Soft text: dates, captions, small facts), accent (the brand colour: links and the main buttons) and highlight (the highlighter\'s colour; left out, none). Beside them the button\'s own colour and each type role\'s own (title, headings, body, quote, meta, interface, code), used with button own and roles.<role>.colour own. Leave out what you do not need: the rest is mixed from background and text. text on background must reach 4.5:1 and accent on background 3:1 on both sides. A background2 on the other side of its background (dark around a light page, light around a dark one) is a dark ground, worn around the page on wide screens with its own words, lines and links. Older records name paper, ink, ground, lift and marker; they are read as these. primary, foreground and muted-foreground are read as accent, text and mutedText.'
 		}
 	};
@@ -793,6 +793,7 @@
 		if (dial === 'font') return typeof v === 'string' && (v === 'body' || v === 'interface' || !!FAMILY[v]);
 		if (dial === 'weight') return !!WEIGHT[WEIGHT_ALIAS[v] || v];
 		if (dial === 'size') return TYPE_SIZES.indexOf(String(v)) !== -1;
+		if (dial === 'categorySize') return v === 'same' || TYPE_SIZES.indexOf(String(v)) !== -1;
 		if (dial === 'lineHeight') return !!TYPE_LINE[v];
 		if (dial === 'letterSpacing') return !!TYPE_LETTER[v];
 		if (dial === 'capitals' || dial === 'italic') return typeof v === 'boolean';
@@ -806,7 +807,7 @@
 		TYPE_ROLES.forEach(function (r) {
 			var o = R[r], k = {};
 			if (!o || typeof o !== 'object') return;
-			TYPE_DIALS[r].forEach(function (d) { if (typeOk(r, d, o[d])) k[d] = d === 'weight' ? WEIGHT_ALIAS[o[d]] || o[d] : d === 'size' ? String(o[d]) : o[d]; });
+			TYPE_DIALS[r].forEach(function (d) { if (typeOk(r, d, o[d])) k[d] = d === 'weight' ? WEIGHT_ALIAS[o[d]] || o[d] : d === 'size' || d === 'categorySize' ? String(o[d]) : o[d]; });
 			if (Object.keys(k).length) out[r] = k;
 		});
 		return out;
@@ -845,6 +846,7 @@
 				o[ed] = engineValue(d, pub[d]);
 			});
 			if (er === 'kicker' && P.title && P.title.align !== undefined) o.align = P.title.align;
+			if (er === 'kicker' && pub.categorySize !== undefined && pub.categorySize !== 'same') o.factor = typeFactor(pub.categorySize);
 			if (er === 'comment' && bodyFace && o.face === undefined) o.face = 'read';
 			if (Object.keys(o).length) E[er] = o;
 		});
@@ -864,7 +866,7 @@
 	function bodyFaceMoved() { var f = realFace('read'); return !!f && f !== 'newsreader' && f !== 'host'; }
 	function engineNow() { return engineFrom(typeNow(), bodyFaceMoved()); }
 	function engineOf(src) { return engineFrom(typeOf(src), false); }
-	var TYPE_REST = { size: '0', lineHeight: 'normal', letterSpacing: 'normal', align: 'default' };
+	var TYPE_REST = { size: '0', categorySize: 'same', lineHeight: 'normal', letterSpacing: 'normal', align: 'default' };
 	function typeRest(role, d) { return d === 'colour' ? typeColourRest(role) : TYPE_REST[d]; }
 	function typeMerged(s, tw) {
 		var a = typeOf(s), b = typeOf(tw), out = {};
@@ -2404,7 +2406,7 @@
 			TYPE_ROLES.forEach(function (r) {
 				var o = {};
 				(r === 'body' ? ['font'].concat(TYPE_DIALS[r].slice(0, 2), 'lineHeight', TYPE_DIALS[r].slice(2)) : r === 'interface' ? ['font'].concat(TYPE_DIALS[r]) : TYPE_DIALS[r]).forEach(function (d) {
-					o[d] = d === 'font' && r === 'body' ? faces : d === 'font' && r === 'interface' ? SANS.map(function (x) { return x.id; }) : d === 'font' ? (r === 'code' ? [] : ['body', 'interface']).concat(Object.keys(FAMILY)) : d === 'size' ? TYPE_SIZES : d === 'weight' ? Object.keys(WEIGHT) : d === 'lineHeight' ? Object.keys(TYPE_LINE) : d === 'letterSpacing' ? Object.keys(TYPE_LETTER) : d === 'align' ? ALIGNS : d === 'colour' ? TYPE_COLOURS : 'boolean';
+					o[d] = d === 'font' && r === 'body' ? faces : d === 'font' && r === 'interface' ? SANS.map(function (x) { return x.id; }) : d === 'font' ? (r === 'code' ? [] : ['body', 'interface']).concat(Object.keys(FAMILY)) : d === 'size' ? TYPE_SIZES : d === 'categorySize' ? ['same'].concat(TYPE_SIZES) : d === 'weight' ? Object.keys(WEIGHT) : d === 'lineHeight' ? Object.keys(TYPE_LINE) : d === 'letterSpacing' ? Object.keys(TYPE_LETTER) : d === 'align' ? ALIGNS : d === 'colour' ? TYPE_COLOURS : 'boolean';
 				});
 				roles[r] = o;
 			});
@@ -2941,7 +2943,7 @@
 		},
 		typeRoles: TYPE_ROLES,
 		typeDials: function (role) { return TYPE_DIALS[role] ? (role === 'body' ? ['font', 'size', 'weight', 'lineHeight', 'letterSpacing', 'capitals', 'italic', 'colour'] : role === 'interface' ? ['font'].concat(TYPE_DIALS[role]) : TYPE_DIALS[role]).slice() : []; },
-		typeSizes: function (role) { return TYPE_SIZES.map(function (st) { return { id: st, px: Math.round((TYPE_BASE[role] || 16) * typeFactor(st)) }; }); },
+		typeSizes: function (role, dial) { var base = dial === 'categorySize' ? ROLE_BASE.kicker : TYPE_BASE[role] || 16; return TYPE_SIZES.map(function (st) { return { id: st, px: Math.round(base * typeFactor(st)) }; }); },
 		typeLines: Object.keys(TYPE_LINE),
 		typeLetters: Object.keys(TYPE_LETTER),
 		type: function (role) {
@@ -2959,6 +2961,11 @@
 				italic: P.italic !== undefined ? P.italic : role === 'headings' || role === 'code' ? false : !!e.italic
 			};
 			out.px = Math.round((TYPE_BASE[role] || 16) * typeFactor(out.size));
+			if (TYPE_DIALS[role].indexOf('categorySize') !== -1) {
+				out.categorySize = P.categorySize !== undefined ? P.categorySize : 'same';
+				out.categoryStep = out.categorySize !== 'same' ? out.categorySize : out.size;
+				out.categoryPx = Math.round(ROLE_BASE.kicker * typeFactor(out.categoryStep));
+			}
 			if (TYPE_DIALS[role].indexOf('align') !== -1) out.align = P.align !== undefined ? P.align : 'default';
 			if (TYPE_DIALS[role].indexOf('colour') !== -1) out.colour = P.colour !== undefined ? P.colour : typeColourRest(role);
 			out.own = Object.keys(typeMerged(byId(current), readTweaks()[current])[role] || {}); 
@@ -2969,7 +2976,7 @@
 			if (role === 'body' && dial === 'font') { press('[data-architrave-face] [data-face-choice="' + v + '"]'); return; }
 			if (role === 'interface' && dial === 'font') { this.setSans(v); return; }
 			if (role === 'body' && dial === 'lineHeight') { if (TYPE_LINE[v]) press('[data-architrave-leading] [data-leading-step="' + TYPE_LINE[v] + '"]'); return; }
-			if (dial === 'size') v = String(v);
+			if (dial === 'size' || dial === 'categorySize') v = String(v);
 			if (dial === 'weight') v = WEIGHT_ALIAS[v] || v;
 			if (!typeOk(role, dial, v)) return;
 			var s = byId(current), all = readTweaks(), entry = all[current] || {}, own = typeOf(s)[role] || {};

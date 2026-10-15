@@ -89,7 +89,7 @@
 	function liveValue(path) {
 		var s = S(), p = path.split('.');
 		try {
-			if (p[0] === 'roles' && p.length === 3) return (s.type(p[1]) || {})[p[2]]; /* the seven roles as a saved style names them */
+			if (p[0] === 'roles' && p.length === 3) { var tv = s.type(p[1]) || {}; return p[2] === 'categorySize' && tv.categorySize === 'same' ? tv.categoryStep : tv[p[2]]; } /* the seven roles as a saved style names them; a category line that follows Size steps from the size it shows */
 			if (p[0] === 'colours') return p[1] === s.side() ? s.colour(p[2]) : undefined;
 			if (p.length === 1 && entry(path)) return s.get(path);
 		} catch (e) { /* unknown here: the step starts from the first */ }
@@ -267,7 +267,7 @@
 				type: {
 					roles: roleList().map(function (r) { return { id: r.id, name: r.label, where: r.where, now: s.type(r.id), dials: dialsOf((sc.roles || {})[r.id], r.id) }; }),
 					fonts: s.faces().map(function (f) { return f.id + ' (' + f.group + ')'; }),
-					note: 'Every role is roles.<role>.<dial>, e.g. roles.headings.font, roles.body.lineHeight. font takes a font id from fonts; the roles but body and interface may also say body or interface to follow those. size is a step from the role\'s own size, -4 to +6. A dial left out is the theme\'s own.'
+					note: 'Every role is roles.<role>.<dial>, e.g. roles.headings.font, roles.body.lineHeight. font takes a font id from fonts; the roles but body and interface may also say body or interface to follow those. size is a step from the role\'s own size, -4 to +6. roles.meta.categorySize gives the category line under the title its own step from 26 px (same: it follows meta\'s size), so it can shrink while the dates stay. A dial left out is the theme\'s own.'
 				},
 				presets: s.presets().map(function (x) { return { id: x.id, name: x.label, group: x.group || '' }; }),
 				styles: styleList(),

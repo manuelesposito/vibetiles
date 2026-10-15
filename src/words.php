@@ -93,6 +93,12 @@ function architrave_panel_words( $words ) {
 		'Category line' => __( 'Category line', 'vibetiles' ),
 		'Custom colours' => __( 'Custom colours', 'vibetiles' ),
 		'Small text'   => __( 'Small text', 'vibetiles' ),
+		/* the category line's own size on Small text's page (2026-10-15) */
+		'Own category size' => __( 'Own category size', 'vibetiles' ),
+		'Category line size' => __( 'Category line size', 'vibetiles' ),
+		'The category line under the title has its own size' => __( 'The category line under the title has its own size', 'vibetiles' ),
+		'The category line follows Size' => __( 'The category line follows Size', 'vibetiles' ),
+		'Follows Size' => __( 'Follows Size', 'vibetiles' ),
 		'Comments'     => __( 'Comments', 'vibetiles' ), /* Kommentare, the eighth role (2026-09-17) */
 		/* The font page's four sections (2026-09-17). The fourth was Display
 		   until the twelve were settled that evening and all three faces under it

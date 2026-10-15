@@ -89,6 +89,12 @@ function architrave_panel_words( $words ) {
 		'Category line' => __( 'Category line', 'vibetiles' ),
 		'Custom colours' => __( 'Custom colours', 'vibetiles' ),
 		'Small text'   => __( 'Small text', 'vibetiles' ),
+
+		'Own category size' => __( 'Own category size', 'vibetiles' ),
+		'Category line size' => __( 'Category line size', 'vibetiles' ),
+		'The category line under the title has its own size' => __( 'The category line under the title has its own size', 'vibetiles' ),
+		'The category line follows Size' => __( 'The category line follows Size', 'vibetiles' ),
+		'Follows Size' => __( 'Follows Size', 'vibetiles' ),
 		'Comments'     => __( 'Comments', 'vibetiles' ),
 
 		'Sans-serif'   => __( 'Sans-serif', 'vibetiles' ),
