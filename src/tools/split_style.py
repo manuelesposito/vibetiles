@@ -572,7 +572,7 @@ def divide(items: list) -> tuple[list, list]:
 # theme's zip leaves them out (tools/build-dist.py); the plugin carries them as
 # assets/css/site.css (tools/build-site.py), loaded right after style.css.
 SITE_CLASSES = (
-    "rail-newsletter", "rail-promo", "nl-confetti", "about-numbers", "page-faces",
+    "rail-newsletter", "rail-promo", "nl-confetti", "about-numbers", "about-people", "page-faces",
     "post-origin-note", "rail-more-language", "rail-language", "mobile-panel-language",
     "readers-note", "related-list", "related-row", "release-archive", "release-checked",
     "support-box", "mailpoet", "falling-light", "site-search",

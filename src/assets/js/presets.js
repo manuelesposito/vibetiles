@@ -1417,10 +1417,11 @@
 	   measured live. So the two interface roles start at 11 and the six content
 	   roles at 12, which is the rule written as a ladder rather than fought.
 	   The content floor rose to 13 on 2026-10-16 (Manuel: dates and small text
-	   "should be not smaller then 13px"), so the content ladder starts at 13 and
-	   the interface keeps 11 and 12. */
+	   "should be not smaller then 13px"), so the content ladder starts at 13.
+	   The interface followed the same day ("nothing should be smaller than
+	   13px except keycaps"), so both ladders start at 13. */
 	var ALL_RUNGS = [13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
-	var UI_RUNGS = [11, 12].concat(ALL_RUNGS);
+	var UI_RUNGS = ALL_RUNGS;
 	var ROLE_RUNGS = {};
 	['head', 'read', 'quote', 'kicker', 'small', 'comment'].forEach(function (r) { ROLE_RUNGS[r] = ALL_RUNGS; });
 	/* ÜBERSCHRIFTEN GO ON PAST 72 (Manuel, 2026-09-18: "sometimes I wanted to have it even bigger"). Until 1.3.203 the head's base was 44, so 72 on the slider drew the title at 104; the base is the title's 64 now and the number is true, which took the top third of the range with it. Four rungs above the scale, for the one role that is a title. */

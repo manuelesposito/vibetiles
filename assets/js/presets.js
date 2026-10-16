@@ -888,7 +888,7 @@
 	}
 	
 	var ALL_RUNGS = [13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
-	var UI_RUNGS = [11, 12].concat(ALL_RUNGS);
+	var UI_RUNGS = ALL_RUNGS;
 	var ROLE_RUNGS = {};
 	['head', 'read', 'quote', 'kicker', 'small', 'comment'].forEach(function (r) { ROLE_RUNGS[r] = ALL_RUNGS; });
 	ROLE_RUNGS.head = ALL_RUNGS.concat([80, 96, 112, 128]);
