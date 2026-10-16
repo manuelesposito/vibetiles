@@ -173,7 +173,7 @@
 #ldp-window .ldpw-styles .ldpw-nm { text-align: left; padding: 0 2px; }
 #ldp-window .ldpw-nm:has(.ldpw-new) { display: flex; justify-content: center; gap: 3px; } 
 #ldp-window .ldpw-nmt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-#ldp-window .ldpw-nm .ldpw-new { flex: none; font-style: normal; font-size: 10px; font-weight: 650; color: var(--ldpw-blue); }
+#ldp-window .ldpw-nm .ldpw-new { flex: none; font-style: normal; font-size: 11px; font-weight: 650; color: var(--ldpw-blue); }
 #ldp-window .ldpw-sub { display: block; color: var(--ldpw-soft); font-size: 11.5px; padding: 0 2px; }
 #ldp-window .ldpw-tm { position: absolute; right: 6px; top: 58px; width: 24px; height: 24px; border-radius: 12px; display: grid; place-items: center; background: rgb(0 0 0 / .55); color: #fff; opacity: 0; transition: opacity .12s; }
 #ldp-window .ldpw-tm svg { width: 14px; height: 14px; }
@@ -231,6 +231,12 @@
 #ldp-window .ldpw-pick { display: flex; align-items: center; gap: 14px; padding: 4px; flex-wrap: wrap; flex: none; }
 #ldp-window .ldpw-big { width: 64px; height: 64px; border-radius: 16px; box-shadow: inset 0 0 0 1px rgb(var(--ldpw-fx) / .2); flex: none; }
 #ldp-window button.ldpw-big { cursor: copy; } 
+#ldp-window button.ldpw-big { position: relative; overflow: hidden; padding: 0; }
+#ldp-window .ldpw-copied { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: rgb(0 0 0 / .55); color: #fff; font-size: 13px; font-weight: 600; line-height: 1; opacity: 0; transition: opacity .2s ease; pointer-events: none; } 
+#ldp-window .ldpw-copied svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+#ldp-window .ldpw-big.is-copied .ldpw-copied { opacity: 1; }
+#ldp-window .ldpw-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { #ldp-window .ldpw-copied { transition: none; } }
 #ldp-window .ldpw-pick label { display: block; font-size: 12px; color: var(--ldpw-soft); margin-bottom: 4px; }
 #ldp-window .ldpw-pick input { width: 110px; height: auto; margin: 0; padding: 7px 10px; border-radius: 8px; border: 0; background: var(--ldpw-row); color: var(--ldpw-ink); box-shadow: none; font: 500 14px/1 ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; }
 #ldp-window .ldpw-pick input:focus { outline: 2px solid var(--ldpw-blue); }
@@ -659,5 +665,5 @@ html.ldp-aiming, html.ldp-aiming * { cursor: crosshair !important; }
 #ldp-window .ldpw-stile .ldpw-tm svg { width: 13px; height: 13px; }
 #ldp-window .ldpw-tm[aria-expanded="true"] { background: var(--ldpw-press); }
 @media (hover: hover) { #ldp-window .ldpw-stile .ldpw-tm:hover { background: var(--ldpw-press); } }
-#ldp-window .ldpw-dflt { position: absolute; top: 6px; right: 6px; padding: 0 6px; border-radius: 999px; background: var(--ldpw-menu); color: var(--ldpw-ink); font-style: normal; font-family: "LDP Inter", "Inter Variable", system-ui, sans-serif; letter-spacing: 0; font-size: 10px; font-weight: 590; line-height: 15px; box-shadow: 0 0 0 .5px rgb(0 0 0 / .14); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); } 
+#ldp-window .ldpw-dflt { position: absolute; top: 6px; right: 6px; padding: 0 6px; border-radius: 999px; background: var(--ldpw-menu); color: var(--ldpw-ink); font-style: normal; font-family: "LDP Inter", "Inter Variable", system-ui, sans-serif; letter-spacing: 0; font-size: 11px; font-weight: 590; line-height: 15px; box-shadow: 0 0 0 .5px rgb(0 0 0 / .14); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); } 
 #ldp-window .ldpw-spic:has(.ldpw-dflt) .ldpw-dot { top: 9.5px; right: 60px; } 

@@ -87,6 +87,7 @@
 		compare: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 3v18"/>', /* the lab's: a square split in two */
 		side: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
 		aim: '<path d="M12.034 12.681a.498.498 0 0 1 .647-.647l9 3.5a.5.5 0 0 1-.033.943l-3.444 1.068a1 1 0 0 0-.66.66l-1.067 3.443a.5.5 0 0 1-.943.033z"/><path d="M21 11V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6"/>',
+		check: '<path d="M20 6 9 17l-5-5"/>',
 		pipette: '<path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/><path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/><path d="m2 22 .414-.414"/>'
 	};
 	function svg(body) { return '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">' + body + '</svg>'; }
@@ -268,7 +269,7 @@
 			return '<div class="ldpw-r ldpw-sl ldpw-hsl"><div class="ldpw-top"><span class="ldpw-lb">' + esc(t(lb)) + '</span><span class="ldpw-val" data-hsl-val="' + key + '">' + val + (key === 'h' ? '°' : '%') + '</span></div>' +
 				'<input type="range" min="0" max="' + max + '" step="1" value="' + val + '" data-hsl="' + key + '" data-f="hsl:' + key + '" style="--track:' + track + '" aria-label="' + esc(t(lb)) + '"></div>';
 		}
-		return '<div class="ldpw-pick"><button type="button" class="ldpw-big" data-hex-copy data-f="hexcopy" title="' + esc(t('Copy')) + '" aria-label="' + esc(t('Copy')) + '" style="background:' + v + '"></button><div><label for="ldpw-hex">' + esc(named ? t(named.label) : t('Hex')) + '</label><input id="ldpw-hex" data-hex data-f="hex" value="' + v.toUpperCase() + '" spellcheck="false" maxlength="7" autocomplete="off"></div>' +
+		return '<div class="ldpw-pick"><button type="button" class="ldpw-big" data-hex-copy data-f="hexcopy" title="' + esc(t('Copy')) + '" aria-label="' + esc(t('Copy')) + '" style="background:' + v + '"><span class="ldpw-copied" aria-hidden="true">' + svg(GLYPH.check) + esc(t('Copied')) + '</span></button><span class="ldpw-sr" role="status" data-copied-live></span><div><label for="ldpw-hex">' + esc(named ? t(named.label) : t('Hex')) + '</label><input id="ldpw-hex" data-hex data-f="hex" value="' + v.toUpperCase() + '" spellcheck="false" maxlength="7" autocomplete="off"></div>' +
 				(window.EyeDropper ? '<button type="button" class="ldpw-circ" data-act="pipette" data-f="act:pipette" aria-label="' + esc(t('Pick a colour from the page')) + '" title="' + esc(t('Pick a colour from the page')) + '">' + svg(GLYPH.pipette) + '</button>' : '') +
 				(q ? '<small data-ratio title="' + q.toFixed(1) + ':1">' + esc(readable(q) + ' ' + t(k === 'background' ? 'against the text' : 'against the paper')) + '</small>' : '') + '</div>' +
 			box(hs('Hue', 'h', 360, hsl[0], 'linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)') +
@@ -737,6 +738,15 @@
 		if (x.own) last.push(['delete', t('Delete…')]);
 		if (x.site && !x.base) last.push(['unpublish', t('Remove from Site…')]); /* a base style stays (2026-10-05) */
 		return last.length ? out.concat([null], last) : out;
+	}
+	/* THE SWATCH SAYS COPIED (2026-10-16, Manuel: "copying hex values in vibetiles is weird it doesnt give any feedback"): a click on
+	   the swatch, or ⌘C in the Hex field, shows a check and "Copied" on the swatch itself for a moment, where the eye already is. */
+	var copiedTimer = 0;
+	function flashCopied() {
+		var big = win && win.querySelector('.ldpw-big'); if (!big) return;
+		big.classList.add('is-copied'); clearTimeout(copiedTimer);
+		copiedTimer = setTimeout(function () { var b = win && win.querySelector('.ldpw-big'); if (b) b.classList.remove('is-copied'); }, 1400);
+		var live = win.querySelector('[data-copied-live]'); if (live) { live.textContent = ''; live.textContent = t('Copied'); }
 	}
 	function done(word) { note = word; clearTimeout(noteTimer); noteTimer = setTimeout(function () { note = ''; if (open) render(); }, 2400); }
 	function failed(e) { done(e && e.said ? String(e.message) : t('Could not save. Try again.')); render(); return e; } /* the site's own reason where it gave one (2026-10-01: the 24-style limit said only "try again", which never helps) */
@@ -2202,6 +2212,7 @@
 			win.addEventListener('keydown', onKey);
 			win.addEventListener('input', onInput);
 			win.addEventListener('change', onChange);
+			win.addEventListener('copy', function (e) { if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-hex')) flashCopied(); });
 			win.addEventListener('contextmenu', function (e) { var tl = e.target.closest && e.target.closest('[data-style]'); if (!tl) return; e.preventDefault(); menu = 'tile:' + tl.getAttribute('data-style'); render('.ldpw-menu button:not([disabled])'); });
 			win.addEventListener('pointerdown', sortDown); /* the lab's sorting, for the style tiles and the Readers rows alike */
 			win.addEventListener('click', function (e) { if (justSorted) { e.stopPropagation(); e.preventDefault(); } }, true);
@@ -2472,7 +2483,7 @@
 		if (b.hasAttribute('data-preset')) { s.choosePreset(b.getAttribute('data-preset')); render(); return; }
 		if (b.hasAttribute('data-edit')) { editing = b.getAttribute('data-edit'); render('[data-act="back"]'); return; }
 		if (b.hasAttribute('data-hex-pick')) { setHex(b.getAttribute('data-hex-pick')); render(); return; }
-		if (b.hasAttribute('data-hex-copy')) { var hx = win.querySelector('[data-hex]'), hv = hx ? hx.value.trim().toUpperCase() : ''; if (hv && hv[0] !== '#') hv = '#' + hv; if (hv && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(hv).catch(function () {}); done(t('Copied')); render(); return; } /* the swatch copies its hex, # included (Manuel, 2026-10-07) */
+		if (b.hasAttribute('data-hex-copy')) { var hx = win.querySelector('[data-hex]'), hv = hx ? hx.value.trim().toUpperCase() : ''; if (hv && hv[0] !== '#') hv = '#' + hv; if (hv && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(hv).catch(function () {}); flashCopied(); return; } /* the swatch copies its hex, # included (Manuel, 2026-10-07) */
 		var sec = b.getAttribute('data-sec');
 		if (sec) {
 			sq = null; section = sec; phoneList = false; editing = null; role = null; fontFor = null; more = false; showChanges = false; showVersions = false;
