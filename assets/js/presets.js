@@ -1914,7 +1914,8 @@
 			css += sideRule(side, ':not([data-fills="off"])', ON_CARD_PRESS.replace(')' + NOT_PANEL, '):hover' + NOT_PANEL), rung('--step-surface-selected', B));
 			css += sideRule(side, ':not([data-fills="off"])', ON_CARD_PRESS.replace(')' + NOT_PANEL, '):active' + NOT_PANEL), rung('--step-surface-pressed', B));
 		}
-		if (F) css += sideRule(side, ':not([data-fills="off"])', ' .single-post-article .wp-block-post-content .code-block', '--interaction-surface:' + LS + ';');
+		
+		if (F) css += sideRule(side, ':not([data-fills="off"])', ' .single-post-article .wp-block-post-content .code-block', '--interaction-surface:' + B + ';');
 		if (F) css += sideRule(side, '', ' :is(.quire-menu, .rail-more-menu, .rail-more-sub, .paper-stack-menu, .quire-tooltip-bubble):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener))', 'background-color:' + LS + ';--interaction-surface:' + LS + ';');
 		
 		if (G) css += sideRule(side, '', ' .sidebar-column', '--text-subtle:' + mix(INK, 'var(--surface-navigation)', 45) + ';--text-muted:' + mix(INK, 'var(--surface-navigation)', 25) + ';');

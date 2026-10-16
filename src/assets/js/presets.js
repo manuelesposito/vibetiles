@@ -3120,7 +3120,10 @@
 		   paper: the block was a darker green with teal and green code on it, hard
 		   to read). The block names its ground once (--interaction-surface) and its
 		   controls and its fade read it, so the lift goes there, not on the fill. */
-		if (F) css += sideRule(side, ':not([data-fills="off"])', ' .single-post-article .wp-block-post-content .code-block', '--interaction-surface:' + LS + ';');
+		/* AND IT TAKES THE CARDS' GUARD (0.56.48; Manuel, 2026-10-16, Readme: the code box was gone, its padding and copy
+		   button floating on the page). Readme's Cards colour is the paper's own white, so the raw lift drew white on white;
+		   the download box above it, on B, stood. B is the lift itself wherever the lift reads against the paper. */
+		if (F) css += sideRule(side, ':not([data-fills="off"])', ' .single-post-article .wp-block-post-content .code-block', '--interaction-surface:' + B + ';');
 		/* And the menus stand on it, as the reference's white bar stands on its
 		   green: their rows' hover, press and switches are mixed from it. */
 		if (F) css += sideRule(side, '', ' :is(.quire-menu, .rail-more-menu, .rail-more-sub, .paper-stack-menu, .quire-tooltip-bubble):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener))', 'background-color:' + LS + ';--interaction-surface:' + LS + ';');
