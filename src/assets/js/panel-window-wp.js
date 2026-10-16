@@ -224,6 +224,8 @@
 			var ids = all.filter(function (x) { return !x.host && x.id !== orig; }).map(function (x) { return x.id; });
 			return { original: orig, shown: seen.filter(function (id) { return ids.indexOf(id) !== -1; }), hidden: ids.filter(function (id) { return seen.indexOf(id) === -1; }) };
 		},
+		/* the starters the site no longer holds come back (0.57.0) */
+		restoreStarters: function () { var s = S(); return s && s.restoreStarters ? s.restoreStarters() : Promise.reject(new Error('cannot publish')); },
 		/* one style as its tile shows it: its name, its paper, ink and accent on the side shown, and its face */
 		tile: function (id) {
 			var s = S(), x = s ? s.list.filter(function (y) { return y.id === id; })[0] : null; if (!x) return null;
@@ -232,7 +234,7 @@
 			var m = modeTriple(w.palette || x.palette || 'neutral', sd), pc = p ? p[sd] : {};
 			var face = x.hostFace || ((window.ArchitraveFaces || []).filter(function (f) { return f.id === (w.face || x.face); })[0] || {}).family || '';
 			return {
-				id: id, label: x.label, own: !!x.own, site: !!x.site, host: !!x.host, base: !!(s.isBase && s.isBase(id)),
+				id: id, label: x.label, own: !!x.own, site: !!x.site, host: !!x.host,
 				paper: c.paper || pc.paper || m.paper, ink: c.ink || pc.ink || m.ink, accent: c.accent || pc.accent || m.accent, face: face,
 				faces: (function () { /* the whole faces it puts on the page, for fetching ahead (panel-window.js warmFaces) */
 					var F = window.ArchitraveFaces || [], ids = [w.face || x.face, w.sans || x.sans], roles = w.roles || x.roles || {}, out = [];

@@ -1,0 +1,66 @@
+{
+	"architrave": 3,
+	"label": "Soft",
+	"base": "standard",
+	"reading": "default",
+	"justify": false,
+	"dropcap": false,
+	"alternates": false,
+	"scope": "all",
+	"capLines": "3",
+	"categories": "below",
+	"tags": "text",
+	"cards": "filled",
+	"quotes": "indented",
+	"fields": "filled",
+	"paragraphs": "spaced",
+	"capface": "text",
+	"hyphenate": "auto",
+	"opening": "off",
+	"links": "both",
+	"lineLength": "60",
+	"titleWidth": "content",
+	"pictureWidth": "content",
+	"figureWidth": "content",
+	"radius": "medium",
+	"borderWidth": "none",
+	"borderStyle": "solid",
+	"borderStrength": "45",
+	"buttonColour": "accent",
+	"buttonShape": "match",
+	"primaryButton": "filled",
+	"secondaryButton": "gray",
+	"tertiaryButton": "text",
+	"tagsMatchButtons": false,
+	"currentItem": "gray",
+	"pictureFilter": "none",
+	"colourOnHover": false,
+	"dimInDark": true,
+	"pictureFrame": "plain",
+	"frameWidth": "8",
+	"pictureFade": "none",
+	"pictureShadow": "none",
+	"pictureCorners": "match",
+	"space": "standard",
+	"spaceInside": "40",
+	"spaceItems": "96",
+	"spaceSections": "80",
+	"spaceTitle": "128",
+	"roles": {
+		"title": {
+			"weight": "medium"
+		},
+		"headings": {
+			"weight": "medium"
+		},
+		"body": {
+			"lineHeight": "relaxed",
+			"font": "source-serif-4"
+		},
+		"interface": {
+			"font": "inter"
+		}
+	},
+	"colours": [],
+	"preset": "soft"
+}

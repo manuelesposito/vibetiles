@@ -1,0 +1,74 @@
+{
+	"architrave": 3,
+	"label": "Book",
+	"base": "standard",
+	"reading": "default",
+	"justify": true,
+	"dropcap": false,
+	"alternates": false,
+	"scope": "all",
+	"capLines": "3",
+	"categories": "below",
+	"tags": "text",
+	"cards": "filled",
+	"quotes": "indented",
+	"fields": "filled",
+	"paragraphs": "indented",
+	"capface": "text",
+	"hyphenate": "auto",
+	"opening": "off",
+	"links": "both",
+	"lineLength": "64",
+	"titleWidth": "content",
+	"pictureWidth": "content",
+	"figureWidth": "content",
+	"radius": "small",
+	"borderWidth": "none",
+	"borderStyle": "solid",
+	"borderStrength": "45",
+	"buttonColour": "accent",
+	"buttonShape": "match",
+	"primaryButton": "filled",
+	"secondaryButton": "gray",
+	"tertiaryButton": "text",
+	"tagsMatchButtons": false,
+	"currentItem": "gray",
+	"pictureFilter": "none",
+	"colourOnHover": false,
+	"dimInDark": false,
+	"pictureFrame": "plain",
+	"frameWidth": "8",
+	"pictureFade": "none",
+	"pictureShadow": "none",
+	"pictureCorners": "match",
+	"space": "standard",
+	"spaceInside": "24",
+	"spaceItems": "48",
+	"spaceSections": "48",
+	"spaceTitle": "64",
+	"roles": {
+		"title": {
+			"weight": "semibold"
+		},
+		"meta": {
+			"font": "body",
+			"italic": true
+		},
+		"body": {
+			"font": "literata"
+		},
+		"interface": {
+			"font": "inter"
+		}
+	},
+	"colours": {
+		"light": {
+			"accent": "#4f321c",
+			"highlight": "#ffc46e"
+		},
+		"dark": {
+			"highlight": "#ffc46e"
+		}
+	},
+	"preset": "folio"
+}

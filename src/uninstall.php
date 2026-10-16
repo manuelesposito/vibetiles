@@ -16,6 +16,7 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 function live_design_panel_uninstall_site() {
 	delete_option( 'architrave_panel_site_styles' );
 	delete_option( 'architrave_panel_style_versions' ); /* the kept versions of each published style (0.11.164) */
+	delete_option( 'architrave_panel_starters_seeded' ); /* that the starter styles were given once (0.57.0) */
 	delete_option( 'architrave_panel_preview_links' ); /* the preview links (0.11.173) */
 	delete_option( 'architrave_panel_reader_counts' ); /* the reader numbers (0.11.175) */
 	delete_option( 'architrave_panel_count_readers' );

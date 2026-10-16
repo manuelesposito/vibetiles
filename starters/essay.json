@@ -1,0 +1,66 @@
+{
+	"architrave": 3,
+	"label": "Essay",
+	"base": "standard",
+	"reading": "default",
+	"justify": false,
+	"dropcap": false,
+	"alternates": false,
+	"scope": "all",
+	"capLines": "3",
+	"categories": "hidden",
+	"tags": "text",
+	"cards": "filled",
+	"quotes": "sideLine",
+	"fields": "filled",
+	"paragraphs": "spaced",
+	"capface": "text",
+	"hyphenate": "auto",
+	"opening": "off",
+	"links": "both",
+	"lineLength": "60",
+	"titleWidth": "content",
+	"pictureWidth": "content",
+	"figureWidth": "content",
+	"radius": "small",
+	"borderWidth": "none",
+	"borderStyle": "solid",
+	"borderStrength": "45",
+	"buttonColour": "text",
+	"buttonShape": "match",
+	"primaryButton": "filled",
+	"secondaryButton": "gray",
+	"tertiaryButton": "text",
+	"tagsMatchButtons": false,
+	"currentItem": "gray",
+	"pictureFilter": "grayscale",
+	"colourOnHover": true,
+	"dimInDark": false,
+	"pictureFrame": "plain",
+	"frameWidth": "8",
+	"pictureFade": "none",
+	"pictureShadow": "none",
+	"pictureCorners": "match",
+	"space": "standard",
+	"spaceInside": "40",
+	"spaceItems": "128",
+	"spaceSections": "96",
+	"spaceTitle": "160",
+	"roles": {
+		"title": {
+			"weight": "regular"
+		},
+		"headings": {
+			"weight": "medium"
+		},
+		"body": {
+			"lineHeight": "relaxed",
+			"font": "spectral"
+		},
+		"interface": {
+			"font": "inter"
+		}
+	},
+	"colours": [],
+	"preset": "essay"
+}

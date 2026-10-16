@@ -736,7 +736,7 @@
 		   to Original for one's own styles only, and went for the site's when they began to save themselves (0.31.0). */
 		var last = [['reset', t('Reset Style…'), !changedSince(x), '', '', changedSince(x)]]; /* grey while there is nothing to go back from, the dot in the tick's column while there is (his word, 2026-10-05) */
 		if (x.own) last.push(['delete', t('Delete…')]);
-		if (x.site && !x.base) last.push(['unpublish', t('Remove from Site…')]); /* a base style stays (2026-10-05) */
+		if (x.site) last.push(['unpublish', t('Remove from Site…')]); /* every site style may go since 0.57.0; Original is never one */
 		return last.length ? out.concat([null], last) : out;
 	}
 	/* THE SWATCH SAYS COPIED (2026-10-16, Manuel: "copying hex values in vibetiles is weird it doesnt give any feedback"): a click on
@@ -1085,7 +1085,7 @@
 		/* THE LAB'S ••• MENU: undo, then the style's own acts, copy and paste, the text size, the way back, then the panel's Settings and the current window */
 		var x0 = s && s.tile ? s.tile(s.current()) : null;
 		MENU.barmore = { label: t('More'), items: [['undo', undoName() + '  ⌘Z', !(s && s.canUndo())], ['redo', redoName() + '  ⇧⌘Z', !(s && s.canRedo && s.canRedo())], null,
-			].concat(TRY() ? [] : [['saveas', t('Save As…'), !x0 || x0.host] /* no Publish: a style on the site saves itself (0.31.0) */, ['versions', t('Browse Versions')], ['share', t('Share Preview…')], null], [ /* none of the three for a visitor trying the window (0.56.0) */
+			].concat(TRY() ? [] : [['saveas', t('Save As…'), !x0 || x0.host] /* no Publish: a style on the site saves itself (0.31.0) */, ['versions', t('Browse Versions')], ['share', t('Share Preview…')], ['starters', t('Restore Starter Styles'), !(s && s.canPublish && s.canPublish())] /* the five that came with the plugin, back when removed (0.57.0) */, null], [ /* none of the four for a visitor trying the window (0.56.0) */
 			['copystyle', t('Copy Style') + '  ⌥⌘C'], ['copycss', t('Copy as CSS')], ['copyjson', t('Copy as JSON')], ['copytheme', t('Copy as theme.json')], ['pastestyle', t('Paste Style…') + '  ⌥⌘V'], null].concat(zoomItems(),
 			(x0 && !x0.host ? [null, ['changes', t('Show Changes') + (n ? ' (' + n + ')' : ''), !n] /* where people look for what they changed (2026-10-06, C4) */, ['revertall', t('Reset Style…'), !changedSince(x0, n), '', '', changedSince(x0, n)]] : []).concat(TRY() ? [null, ['cmdk', t('Search…') + '  ⌘K']] : [null, ['settings', t('Settings…') + '  ⌘,'], ['cmdk', t('Search…') + '  ⌘K']]))), pick: function (a) {
 			if (a === 'redo') { if (s && s.canRedo && s.canRedo()) { s.redo(); render('[data-menu="barmore"]'); } }
@@ -1093,6 +1093,7 @@
 			else if (a === 'changes') { showChanges = true; showVersions = false; editing = null; }
 			else if (a === 'saveas') { var sx = s.tile(s.current()); asking = { title: t('Save As New Style'), field: t('{name} Copy').replace('{name}', t(sx.label)), go: t('Save'), back: '[data-menu="barmore"]', run: function (v) { s.saveAs(v); done(t('Saved')); } }; render(); }
 			else if (a === 'versions') openVersions();
+			else if (a === 'starters') { s.restoreStarters().then(function (n) { done(n ? t('Starter styles restored') : t('All starter styles are here')); section = 'styles'; render(); }, failed); }
 			else if (a === 'cmdk') openCmd();
 			else if (a === 'revertall') askRevertAll();
 			else if (a === 'copystyle') copyStyle();

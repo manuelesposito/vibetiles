@@ -2372,7 +2372,7 @@
 		isOwn: function (id) { var s = byId(id); return !!(s && s.own); },
 		hostSide: function () { var h = byId('host'); return h && h.hostSide ? h.hostSide : ''; },
 		isSite: function (id) { var s = byId(id); return !!(s && s.site); },
-		isBase: function (id) { return !!(SITE && Array.isArray(SITE.base) && SITE.base.indexOf(id) !== -1); },
+		restoreStarters: function () { var before = SITE && Array.isArray(SITE.styles) ? SITE.styles.length : 0; return sendSite({ action: 'starters' }).then(function (state) { return Math.max(0, (state.styles || []).length - before); }); },
 		
 		guide: function () {
 			var meaning = {};

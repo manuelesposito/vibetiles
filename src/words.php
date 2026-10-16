@@ -700,6 +700,10 @@ function live_design_window_words() {
 		'Revert All' => __( 'Revert All', 'vibetiles' ),
 		'Reverted' => __( 'Reverted', 'vibetiles' ),
 		'Type the name of a setting, a page or a style.' => __( 'Type the name of a setting, a page or a style.', 'vibetiles' ),
+		/* STARTER STYLES (0.57.0) */
+		'Restore Starter Styles' => __( 'Restore Starter Styles', 'vibetiles' ),
+		'Starter styles restored' => __( 'Starter styles restored', 'vibetiles' ),
+		'All starter styles are here' => __( 'All starter styles are here', 'vibetiles' ),
 		/* VERSIONS */
 		'Browse Versions' => __( 'Browse Versions', 'vibetiles' ),
 		'Versions' => __( 'Versions', 'vibetiles' ),

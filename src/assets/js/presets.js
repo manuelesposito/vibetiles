@@ -3817,8 +3817,8 @@
 		   the four writes, each a call to the theme's route with the record the
 		   export makes. Every answer is the whole state, taken as printed. */
 		isSite: function (id) { var s = byId(id); return !!(s && s.site); },
-		/* a base style, one the site never lets go (2026-10-05, inc/site-styles.php THE BASE STYLES) */
-		isBase: function (id) { return !!(SITE && Array.isArray(SITE.base) && SITE.base.indexOf(id) !== -1); },
+		/* RESTORE STARTER STYLES (0.57.0): the starters the site no longer holds come back as new site styles; answers how many came */
+		restoreStarters: function () { var before = SITE && Array.isArray(SITE.styles) ? SITE.styles.length : 0; return sendSite({ action: 'starters' }).then(function (state) { return Math.max(0, (state.styles || []).length - before); }); },
 		/* THE RECORD, DESCRIBED (2026-09-18): every field a style record may
 		   carry and the values each accepts, read from the lists this script
 		   runs on, so an assistant writing a record for the route does not

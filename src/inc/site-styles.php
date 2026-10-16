@@ -155,15 +155,15 @@ function architrave_site_styles_clean( $state ) {
 			}
 		}
 	}
-	/* THE BASE STYLES (Manuel, 2026-10-05: "those six styles are the base styles … so you always can go back to
-	   them"): the site styles that are the panel's starting points (on elmastudio.de Book, Soft, Still, Essay and
-	   Clear; Original is the theme and was never a site style). They can be changed, renamed and reset, never
-	   removed: the remove action refuses them. Only ids of styles that exist are kept. */
-	$base = array();
-	if ( isset( $state['base'] ) && is_array( $state['base'] ) ) {
-		foreach ( $state['base'] as $base_id ) {
-			if ( is_string( $base_id ) && isset( $seen[ $base_id ] ) && ! in_array( $base_id, $base, true ) ) {
-				$base[] = $base_id;
+	/* THE STARTER STYLES (0.57.0, 2026-10-16; Manuel: "there should be some styles coming with it, but … if we don't like
+	   them, to delete them"): which published style each starter became, by its slug, so Restore Starter Styles knows
+	   which are gone. It replaces THE BASE STYLES of 0.48.0 (five styles the remove action refused): only Original, the
+	   theme's own look, stays for good now; every site style can go. Slugs of styles that no longer exist are dropped. */
+	$starters = array();
+	if ( isset( $state['starters'] ) && is_array( $state['starters'] ) ) {
+		foreach ( $state['starters'] as $slug => $starter_id ) {
+			if ( is_string( $slug ) && preg_match( '/^[a-z][a-z0-9-]{0,30}$/', $slug ) && is_string( $starter_id ) && isset( $seen[ $starter_id ] ) ) {
+				$starters[ $slug ] = $starter_id;
 			}
 		}
 	}
@@ -171,7 +171,7 @@ function architrave_site_styles_clean( $state ) {
 		'styles'  => $styles,
 		'default' => $default,
 		'readers' => $readers,
-		'base'    => $base,
+		'starters' => $starters,
 		/* READERS MAY COPY A STYLE (2026-09-23): off until the owner says so. */
 		'readersCopy' => ! empty( $state['readersCopy'] ),
 		/* THE LIVE DESIGN BUTTON (2026-09-23): where the door sits and how it looks. */
@@ -489,6 +489,105 @@ function architrave_site_styles_sanitize( $raw ) {
 }
 
 /**
+ * THE STARTER STYLES (0.57.0, 2026-10-16). Five records travel with the plugin
+ * (plugin/starters/*.json: Book, Soft, Still, Essay and Clear, the reading styles
+ * of elmastudio.de as they stood on 2026-10-16). A site that has never held a
+ * style receives them once, shown to readers, the first time the plugin runs
+ * there; after that they are the site's own: changed, renamed, reset or removed
+ * like any style. Restore Starter Styles in the panel's More menu publishes the
+ * ones that are gone again. Only Original, the theme's own look, stays for good.
+ *
+ * @return array<string, array<string, mixed>> slug => record, in the order shown.
+ */
+function architrave_site_style_starters() {
+	if ( ! defined( 'ARCHITRAVE_PANEL_FILE' ) ) {
+		return array();
+	}
+	$dir = plugin_dir_path( ARCHITRAVE_PANEL_FILE ) . 'starters/';
+	$out = array();
+	foreach ( array( 'book', 'soft', 'still', 'essay', 'clear' ) as $slug ) {
+		$file = $dir . $slug . '.json';
+		if ( ! file_exists( $file ) ) {
+			continue;
+		}
+		$record = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- the plugin's own file
+		if ( is_array( $record ) && ! empty( $record['label'] ) ) {
+			$out[ $slug ] = $record;
+		}
+	}
+	return $out;
+}
+
+/**
+ * The starters the state does not hold, published into it. A slug in the
+ * `starters` map that still names a style counts as present; so does a style
+ * that carries a starter's name (sites from before 0.57.0 hold no map).
+ *
+ * @param array $state A clean state.
+ * @return array|WP_Error the state with the missing starters added, or the error that stopped it.
+ */
+function architrave_site_styles_add_starters( $state ) {
+	$labels = array();
+	foreach ( $state['styles'] as $existing ) {
+		$labels[ strtolower( $existing['label'] ) ] = $existing['id'];
+	}
+	$map = isset( $state['starters'] ) && is_array( $state['starters'] ) ? $state['starters'] : array();
+	foreach ( architrave_site_style_starters() as $slug => $record ) {
+		if ( isset( $map[ $slug ] ) ) {
+			continue;
+		}
+		$named = strtolower( (string) $record['label'] );
+		if ( isset( $labels[ $named ] ) ) {
+			$map[ $slug ] = $labels[ $named ];
+			continue;
+		}
+		if ( count( $state['styles'] ) >= 24 ) {
+			return new WP_Error( 'architrave_too_many', __( 'The site holds 24 styles. Remove one before publishing another.', 'vibetiles' ), array( 'status' => 400 ) );
+		}
+		$record['id'] = 'site-' . strtolower( base_convert( (string) time(), 10, 36 ) ) . strtolower( wp_generate_password( 4, false ) );
+		$clean        = architrave_site_style_record( $record );
+		if ( null === $clean ) {
+			continue;
+		}
+		$state['styles'][]       = $clean;
+		$map[ $slug ]            = $clean['id'];
+		$labels[ $named ]        = $clean['id'];
+		if ( is_array( $state['readers'] ) ) {
+			$state['readers'][] = $clean['id'];
+		}
+		architrave_style_versions_note( $clean['id'], null, false, $clean );
+	}
+	$state['starters'] = $map;
+	return $state;
+}
+
+/**
+ * THE FIRST TIME: a site without a single style receives the starters, all of
+ * them shown to readers. Runs once, marked by an option; a site that already
+ * holds styles (every site from before 0.57.0) is marked and left as it is.
+ * At `init`, after this file is loaded at after_setup_theme.
+ */
+function architrave_site_styles_seed() {
+	if ( get_option( 'architrave_panel_starters_seeded', false ) ) {
+		return;
+	}
+	if ( ! add_option( 'architrave_panel_starters_seeded', 1, '', false ) ) {
+		return; /* another request got here first */
+	}
+	if ( '' !== architrave_site_styles_raw() ) {
+		return;
+	}
+	$state = architrave_site_styles_clean( array() );
+	$state['readers'] = array();
+	$added = architrave_site_styles_add_starters( $state );
+	if ( is_wp_error( $added ) || empty( $added['styles'] ) ) {
+		return;
+	}
+	architrave_site_styles_write( $added );
+}
+add_action( 'init', 'architrave_site_styles_seed', 5 );
+
+/**
  * Whether this visitor may publish.
  *
  * @return bool
@@ -511,6 +610,8 @@ function architrave_site_styles_may_publish() {
  *   readers-copy { on }                   whether readers may copy a style
  *   button   { settings }                 where the Vibetiles button sits
  *                                         and how it looks
+ *   starters {}                           the starter styles that are gone
+ *                                         come back (0.57.0)
  *
  * Every answer is the whole state, so the page rebuilds from one truth.
  */
@@ -540,7 +641,7 @@ function architrave_site_styles_routes() {
 					'action'   => array(
 						'required' => true,
 						'type'     => 'string',
-						'enum'     => array( 'publish', 'update', 'remove', 'default', 'start', 'readers', 'readers-copy', 'button' ),
+						'enum'     => array( 'publish', 'update', 'remove', 'default', 'start', 'readers', 'readers-copy', 'button', 'starters' ),
 					),
 					'id'       => array( 'type' => 'string' ),
 					'name'     => array( 'type' => 'string' ),
@@ -868,9 +969,7 @@ function architrave_site_styles_handle( $request ) {
 			break;
 
 		case 'remove':
-			if ( in_array( $id, $state['base'] ?? array(), true ) ) {
-				return new WP_Error( 'architrave_base_style', __( 'A base style stays on the site. It can be changed and reset, not removed.', 'vibetiles' ), array( 'status' => 403 ) );
-			}
+			/* every site style may go since 0.57.0 (the base lock of 0.48.0 is gone); Original is never a site style */
 			$state['styles'] = array_values(
 				array_filter(
 					$state['styles'],
@@ -920,6 +1019,17 @@ function architrave_site_styles_handle( $request ) {
 
 		case 'button':
 			$state['button'] = architrave_site_styles_button( $request->get_param( 'settings' ) );
+			break;
+
+		case 'starters':
+			/* RESTORE STARTER STYLES (0.57.0): every starter the site no longer has is published again, as new; the ones it
+			   still has, changed or not, are left alone. A site that had the five before there were starters (elmastudio.de)
+			   holds no slugs, so a style with a starter's name counts as that starter there. */
+			$added = architrave_site_styles_add_starters( $state );
+			if ( is_wp_error( $added ) ) {
+				return $added;
+			}
+			$state = $added;
 			break;
 
 		default:

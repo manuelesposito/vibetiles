@@ -99,6 +99,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 
 == Changelog ==
 
+= 0.57.0 =
+* Five starter styles come with the plugin (Book, Soft, Still, Essay, Clear) and are given once to a site that has none. Every one of them can be removed; Original stays. Restore Starter Styles in the More menu brings the removed ones back.
+
 = 0.56.10 =
 * Make Default moves the Default badge at once; the save follows.
 

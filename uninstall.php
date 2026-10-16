@@ -13,6 +13,7 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 function live_design_panel_uninstall_site() {
 	delete_option( 'architrave_panel_site_styles' );
 	delete_option( 'architrave_panel_style_versions' );
+	delete_option( 'architrave_panel_starters_seeded' );
 	delete_option( 'architrave_panel_preview_links' );
 	delete_option( 'architrave_panel_reader_counts' );
 	delete_option( 'architrave_panel_count_readers' );

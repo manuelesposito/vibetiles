@@ -669,6 +669,10 @@ function live_design_window_words() {
 		'Reverted' => __( 'Reverted', 'vibetiles' ),
 		'Type the name of a setting, a page or a style.' => __( 'Type the name of a setting, a page or a style.', 'vibetiles' ),
 
+		'Restore Starter Styles' => __( 'Restore Starter Styles', 'vibetiles' ),
+		'Starter styles restored' => __( 'Starter styles restored', 'vibetiles' ),
+		'All starter styles are here' => __( 'All starter styles are here', 'vibetiles' ),
+
 		'Browse Versions' => __( 'Browse Versions', 'vibetiles' ),
 		'Versions' => __( 'Versions', 'vibetiles' ),
 		'Earlier' => __( 'Earlier', 'vibetiles' ),

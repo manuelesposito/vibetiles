@@ -110,11 +110,11 @@ function architrave_site_styles_clean( $state ) {
 		}
 	}
 
-	$base = array();
-	if ( isset( $state['base'] ) && is_array( $state['base'] ) ) {
-		foreach ( $state['base'] as $base_id ) {
-			if ( is_string( $base_id ) && isset( $seen[ $base_id ] ) && ! in_array( $base_id, $base, true ) ) {
-				$base[] = $base_id;
+	$starters = array();
+	if ( isset( $state['starters'] ) && is_array( $state['starters'] ) ) {
+		foreach ( $state['starters'] as $slug => $starter_id ) {
+			if ( is_string( $slug ) && preg_match( '/^[a-z][a-z0-9-]{0,30}$/', $slug ) && is_string( $starter_id ) && isset( $seen[ $starter_id ] ) ) {
+				$starters[ $slug ] = $starter_id;
 			}
 		}
 	}
@@ -122,7 +122,7 @@ function architrave_site_styles_clean( $state ) {
 		'styles'  => $styles,
 		'default' => $default,
 		'readers' => $readers,
-		'base'    => $base,
+		'starters' => $starters,
 
 		'readersCopy' => ! empty( $state['readersCopy'] ),
 
@@ -345,6 +345,80 @@ function architrave_site_styles_sanitize( $raw ) {
 	return wp_json_encode( architrave_site_styles_clean( $state ) );
 }
 
+function architrave_site_style_starters() {
+	if ( ! defined( 'ARCHITRAVE_PANEL_FILE' ) ) {
+		return array();
+	}
+	$dir = plugin_dir_path( ARCHITRAVE_PANEL_FILE ) . 'starters/';
+	$out = array();
+	foreach ( array( 'book', 'soft', 'still', 'essay', 'clear' ) as $slug ) {
+		$file = $dir . $slug . '.json';
+		if ( ! file_exists( $file ) ) {
+			continue;
+		}
+		$record = json_decode( (string) file_get_contents( $file ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- the plugin's own file
+		if ( is_array( $record ) && ! empty( $record['label'] ) ) {
+			$out[ $slug ] = $record;
+		}
+	}
+	return $out;
+}
+
+function architrave_site_styles_add_starters( $state ) {
+	$labels = array();
+	foreach ( $state['styles'] as $existing ) {
+		$labels[ strtolower( $existing['label'] ) ] = $existing['id'];
+	}
+	$map = isset( $state['starters'] ) && is_array( $state['starters'] ) ? $state['starters'] : array();
+	foreach ( architrave_site_style_starters() as $slug => $record ) {
+		if ( isset( $map[ $slug ] ) ) {
+			continue;
+		}
+		$named = strtolower( (string) $record['label'] );
+		if ( isset( $labels[ $named ] ) ) {
+			$map[ $slug ] = $labels[ $named ];
+			continue;
+		}
+		if ( count( $state['styles'] ) >= 24 ) {
+			return new WP_Error( 'architrave_too_many', __( 'The site holds 24 styles. Remove one before publishing another.', 'vibetiles' ), array( 'status' => 400 ) );
+		}
+		$record['id'] = 'site-' . strtolower( base_convert( (string) time(), 10, 36 ) ) . strtolower( wp_generate_password( 4, false ) );
+		$clean        = architrave_site_style_record( $record );
+		if ( null === $clean ) {
+			continue;
+		}
+		$state['styles'][]       = $clean;
+		$map[ $slug ]            = $clean['id'];
+		$labels[ $named ]        = $clean['id'];
+		if ( is_array( $state['readers'] ) ) {
+			$state['readers'][] = $clean['id'];
+		}
+		architrave_style_versions_note( $clean['id'], null, false, $clean );
+	}
+	$state['starters'] = $map;
+	return $state;
+}
+
+function architrave_site_styles_seed() {
+	if ( get_option( 'architrave_panel_starters_seeded', false ) ) {
+		return;
+	}
+	if ( ! add_option( 'architrave_panel_starters_seeded', 1, '', false ) ) {
+		return;
+	}
+	if ( '' !== architrave_site_styles_raw() ) {
+		return;
+	}
+	$state = architrave_site_styles_clean( array() );
+	$state['readers'] = array();
+	$added = architrave_site_styles_add_starters( $state );
+	if ( is_wp_error( $added ) || empty( $added['styles'] ) ) {
+		return;
+	}
+	architrave_site_styles_write( $added );
+}
+add_action( 'init', 'architrave_site_styles_seed', 5 );
+
 function architrave_site_styles_may_publish() {
 	return current_user_can( 'edit_theme_options' );
 }
@@ -370,7 +444,7 @@ function architrave_site_styles_routes() {
 					'action'   => array(
 						'required' => true,
 						'type'     => 'string',
-						'enum'     => array( 'publish', 'update', 'remove', 'default', 'start', 'readers', 'readers-copy', 'button' ),
+						'enum'     => array( 'publish', 'update', 'remove', 'default', 'start', 'readers', 'readers-copy', 'button', 'starters' ),
 					),
 					'id'       => array( 'type' => 'string' ),
 					'name'     => array( 'type' => 'string' ),
@@ -640,9 +714,7 @@ function architrave_site_styles_handle( $request ) {
 			break;
 
 		case 'remove':
-			if ( in_array( $id, $state['base'] ?? array(), true ) ) {
-				return new WP_Error( 'architrave_base_style', __( 'A base style stays on the site. It can be changed and reset, not removed.', 'vibetiles' ), array( 'status' => 403 ) );
-			}
+
 			$state['styles'] = array_values(
 				array_filter(
 					$state['styles'],
@@ -691,6 +763,15 @@ function architrave_site_styles_handle( $request ) {
 
 		case 'button':
 			$state['button'] = architrave_site_styles_button( $request->get_param( 'settings' ) );
+			break;
+
+		case 'starters':
+
+			$added = architrave_site_styles_add_starters( $state );
+			if ( is_wp_error( $added ) ) {
+				return $added;
+			}
+			$state = $added;
 			break;
 
 		default:

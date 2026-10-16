@@ -626,7 +626,7 @@
 		if (x.seen && !orig) { var sh = St().styles().shown, at = sh.indexOf(x.id); if (at > -1) out.push(null, ['moveleft', t('Move Left'), at === 0], ['moveright', t('Move Right'), at === sh.length - 1]); }
 		var last = [['reset', t('Reset Style…'), !changedSince(x), '', '', changedSince(x)]]; 
 		if (x.own) last.push(['delete', t('Delete…')]);
-		if (x.site && !x.base) last.push(['unpublish', t('Remove from Site…')]); 
+		if (x.site) last.push(['unpublish', t('Remove from Site…')]); 
 		return last.length ? out.concat([null], last) : out;
 	}
 	var copiedTimer = 0;
@@ -928,7 +928,7 @@
 		var ed = s && s.editable();
 		var x0 = s && s.tile ? s.tile(s.current()) : null;
 		MENU.barmore = { label: t('More'), items: [['undo', undoName() + '  ⌘Z', !(s && s.canUndo())], ['redo', redoName() + '  ⇧⌘Z', !(s && s.canRedo && s.canRedo())], null,
-			].concat(TRY() ? [] : [['saveas', t('Save As…'), !x0 || x0.host] , ['versions', t('Browse Versions')], ['share', t('Share Preview…')], null], [ 
+			].concat(TRY() ? [] : [['saveas', t('Save As…'), !x0 || x0.host] , ['versions', t('Browse Versions')], ['share', t('Share Preview…')], ['starters', t('Restore Starter Styles'), !(s && s.canPublish && s.canPublish())] , null], [ 
 			['copystyle', t('Copy Style') + '  ⌥⌘C'], ['copycss', t('Copy as CSS')], ['copyjson', t('Copy as JSON')], ['copytheme', t('Copy as theme.json')], ['pastestyle', t('Paste Style…') + '  ⌥⌘V'], null].concat(zoomItems(),
 			(x0 && !x0.host ? [null, ['changes', t('Show Changes') + (n ? ' (' + n + ')' : ''), !n] , ['revertall', t('Reset Style…'), !changedSince(x0, n), '', '', changedSince(x0, n)]] : []).concat(TRY() ? [null, ['cmdk', t('Search…') + '  ⌘K']] : [null, ['settings', t('Settings…') + '  ⌘,'], ['cmdk', t('Search…') + '  ⌘K']]))), pick: function (a) {
 			if (a === 'redo') { if (s && s.canRedo && s.canRedo()) { s.redo(); render('[data-menu="barmore"]'); } }
@@ -936,6 +936,7 @@
 			else if (a === 'changes') { showChanges = true; showVersions = false; editing = null; }
 			else if (a === 'saveas') { var sx = s.tile(s.current()); asking = { title: t('Save As New Style'), field: t('{name} Copy').replace('{name}', t(sx.label)), go: t('Save'), back: '[data-menu="barmore"]', run: function (v) { s.saveAs(v); done(t('Saved')); } }; render(); }
 			else if (a === 'versions') openVersions();
+			else if (a === 'starters') { s.restoreStarters().then(function (n) { done(n ? t('Starter styles restored') : t('All starter styles are here')); section = 'styles'; render(); }, failed); }
 			else if (a === 'cmdk') openCmd();
 			else if (a === 'revertall') askRevertAll();
 			else if (a === 'copystyle') copyStyle();
