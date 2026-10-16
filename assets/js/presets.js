@@ -887,8 +887,8 @@
 		return out;
 	}
 	
-	var ALL_RUNGS = [12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
-	var UI_RUNGS = [11].concat(ALL_RUNGS);
+	var ALL_RUNGS = [13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
+	var UI_RUNGS = [11, 12].concat(ALL_RUNGS);
 	var ROLE_RUNGS = {};
 	['head', 'read', 'quote', 'kicker', 'small', 'comment'].forEach(function (r) { ROLE_RUNGS[r] = ALL_RUNGS; });
 	ROLE_RUNGS.head = ALL_RUNGS.concat([80, 96, 112, 128]);
@@ -898,6 +898,7 @@
 		var rungs = ROLE_RUNGS[role] || ROLE_RUNGS.read;
 		if (v === 'text') return String(ROLE_BASE[role] || ROLE_BASE.read); 
 		if (rungs.indexOf(+v) !== -1) return String(v);
+		if (+v && +v < rungs[0]) return String(rungs[0]); 
 		var pct = PERCENTS[v];
 		if (!pct) return String(ROLE_BASE[role] || ROLE_BASE.read);
 		var want = (ROLE_BASE[role] || ROLE_BASE.read) * pct / 100, best = rungs[0];

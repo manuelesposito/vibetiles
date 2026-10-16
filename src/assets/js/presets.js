@@ -1415,9 +1415,12 @@
 	   and --text-floor-ui). A content role offered an 11 that the floor then
 	   clamped to 12 — the slider said one number and the page showed another,
 	   measured live. So the two interface roles start at 11 and the six content
-	   roles at 12, which is the rule written as a ladder rather than fought. */
-	var ALL_RUNGS = [12, 13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
-	var UI_RUNGS = [11].concat(ALL_RUNGS);
+	   roles at 12, which is the rule written as a ladder rather than fought.
+	   The content floor rose to 13 on 2026-10-16 (Manuel: dates and small text
+	   "should be not smaller then 13px"), so the content ladder starts at 13 and
+	   the interface keeps 11 and 12. */
+	var ALL_RUNGS = [13, 14, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 56, 64, 72];
+	var UI_RUNGS = [11, 12].concat(ALL_RUNGS);
 	var ROLE_RUNGS = {};
 	['head', 'read', 'quote', 'kicker', 'small', 'comment'].forEach(function (r) { ROLE_RUNGS[r] = ALL_RUNGS; });
 	/* ÜBERSCHRIFTEN GO ON PAST 72 (Manuel, 2026-09-18: "sometimes I wanted to have it even bigger"). Until 1.3.203 the head's base was 44, so 72 on the slider drew the title at 104; the base is the title's 64 now and the number is true, which took the top third of the range with it. Four rungs above the scale, for the one role that is a title. */
@@ -1430,6 +1433,7 @@
 		var rungs = ROLE_RUNGS[role] || ROLE_RUNGS.read;
 		if (v === 'text') return String(ROLE_BASE[role] || ROLE_BASE.read); /* the retired stop, read as the role's own size (2026-09-17) */
 		if (rungs.indexOf(+v) !== -1) return String(v);
+		if (+v && +v < rungs[0]) return String(rungs[0]); /* a size saved under today's floor (a 12 before 2026-10-16) reads as the lowest rung, not the role's rest */
 		var pct = PERCENTS[v];
 		if (!pct) return String(ROLE_BASE[role] || ROLE_BASE.read);
 		var want = (ROLE_BASE[role] || ROLE_BASE.read) * pct / 100, best = rungs[0];
