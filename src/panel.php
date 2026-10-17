@@ -81,13 +81,21 @@ function architrave_panel_runs() {
  * write from a visitor as it always did, and the window hides what only an
  * owner can do (Shown to Readers, Make Default, Save, Versions, Share, the
  * Button and Settings pages). An owner on the same page gets their own window,
- * as everywhere.
+ * as everywhere; WITH `?ldp-try` IN THE ADDRESS (0.57.1, 2026-10-17) the owner
+ * gets the sandbox too. Manuel, on the Styles gallery: Try it, for him, pasted
+ * the style into his own list under Hidden from Readers, "why when I try a style
+ * I have it immediately under hidden styles?" Now Try tries for everyone: the
+ * page wears the style, nothing is written, and Copy style is the one way home.
  *
  * @return bool
  */
 function architrave_panel_try() {
 	/* asked afresh each time: the filter reads the page, which an early call would not know yet */
-	return ! current_user_can( 'edit_theme_options' ) && (bool) apply_filters( 'live_design_panel_try', false );
+	if ( ! (bool) apply_filters( 'live_design_panel_try', false ) ) {
+		return false;
+	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a view of the page; it saves nothing.
+	return ! current_user_can( 'edit_theme_options' ) || isset( $_GET['ldp-try'] );
 }
 
 /**

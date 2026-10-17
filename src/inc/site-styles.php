@@ -1157,7 +1157,8 @@ function architrave_site_styles_print() {
 	if ( ( ! architrave_site_styles_may_publish() || architrave_as_reader() ) && ! $try ) {
 		$script .= 'window.architravePanelReader = true;';
 	}
-	if ( architrave_site_styles_may_publish() && ! architrave_as_reader() ) {
+	if ( architrave_site_styles_may_publish() && ! architrave_as_reader() && ! $try ) {
+		/* and not in the try mode (0.57.1): an owner trying a style gets no route, so nothing lands in their list */
 		$script .= 'window.architravePublish = ' . wp_json_encode(
 			array(
 				'url'   => rest_url( 'architrave/v1/site-styles' ),

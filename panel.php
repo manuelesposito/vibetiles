@@ -37,7 +37,11 @@ function architrave_panel_runs() {
 
 function architrave_panel_try() {
 
-	return ! current_user_can( 'edit_theme_options' ) && (bool) apply_filters( 'live_design_panel_try', false );
+	if ( ! (bool) apply_filters( 'live_design_panel_try', false ) ) {
+		return false;
+	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a view of the page; it saves nothing.
+	return ! current_user_can( 'edit_theme_options' ) || isset( $_GET['ldp-try'] );
 }
 
 function architrave_panel_answer( $active ) {

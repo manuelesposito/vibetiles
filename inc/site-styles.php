@@ -847,7 +847,8 @@ function architrave_site_styles_print() {
 	if ( ( ! architrave_site_styles_may_publish() || architrave_as_reader() ) && ! $try ) {
 		$script .= 'window.architravePanelReader = true;';
 	}
-	if ( architrave_site_styles_may_publish() && ! architrave_as_reader() ) {
+	if ( architrave_site_styles_may_publish() && ! architrave_as_reader() && ! $try ) {
+
 		$script .= 'window.architravePublish = ' . wp_json_encode(
 			array(
 				'url'   => rest_url( 'architrave/v1/site-styles' ),

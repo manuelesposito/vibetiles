@@ -99,6 +99,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 
 == Changelog ==
 
+= 0.57.1 =
+* A style link with ?ldp-try in the address opens the try mode for the site owner too: the page wears the style, nothing is kept. Before, Try it on a gallery pasted the style into the owner's own list.
+
 = 0.57.0 =
 * Five starter styles come with the plugin (Book, Soft, Still, Essay, Clear) and are given once to a site that has none. Every one of them can be removed; Original stays. Restore Starter Styles in the More menu brings the removed ones back.
 
