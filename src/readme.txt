@@ -99,6 +99,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 
 == Changelog ==
 
+= 0.58.0 =
+* The page paints the site's default style with no script run: the server prints the style's stamp, captured once in the owner's browser, and the design engine loads deferred. Pages paint sooner, about a second on a phone. Without a stamp the engine loads as before.
+
 = 0.57.1 =
 * A style link with ?ldp-try in the address opens the try mode for the site owner too: the page wears the style, nothing is kept. Before, Try it on a gallery pasted the style into the owner's own list.
 

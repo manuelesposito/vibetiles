@@ -58,7 +58,16 @@
 	   for the same reason color-mode.js is, and with more at stake: a reading
 	   size that arrives after first paint reflows every line of text on the
 	   page, which is far more visible than a colour changing under it. */
-	apply(initial);
+	/* THE SERVER'S WORD STANDS WHERE NOTHING IS STORED (1.5.15 / 0.58.0, the first
+	   paint printed): a site default's reading size is on the root before any
+	   script runs (the plugin's inc/site-styles.php), and writing the site's rest
+	   over it here reflowed the page once presets.js, now deferred, put it back.
+	   A reader who has chosen nothing keeps what the page came with. The theme's
+	   own first paint (functions.php, architrave_reading_attribute) prints the
+	   rest, so alone the theme reads as before. */
+	var printed = root.getAttribute(Reading.attribute);
+	if (Reading.ids.indexOf(raw) !== -1 || !printed || Reading.ids.indexOf(printed) === -1) apply(initial);
+	else initial = printed;
 
 	document.addEventListener('DOMContentLoaded', function () {
 		// The drawing comes from the system's registry (DS-228), never from a

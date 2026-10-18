@@ -219,7 +219,7 @@ function live_design_window_enqueue() {
 	);
 	$base = plugin_dir_url( ARCHITRAVE_PANEL_FILE );
 	wp_enqueue_style( 'live-design-window', $base . 'assets/css/panel-window.css', array(), architrave_panel_asset_version( 'assets/css/panel-window.css' ) );
-	wp_enqueue_script( 'live-design-window', $base . 'assets/js/panel-window.js', array(), architrave_panel_asset_version( 'assets/js/panel-window.js' ), array( 'in_footer' => true ) );
+	wp_enqueue_script( 'live-design-window', $base . 'assets/js/panel-window.js', array(), architrave_panel_asset_version( 'assets/js/panel-window.js' ), live_design_window_script_args() );
 
 	$aa = plugin_dir_path( ARCHITRAVE_PANEL_FILE ) . 'assets/fonts/aa/faces.json';
 	if ( is_readable( $aa ) ) {
@@ -234,7 +234,7 @@ function live_design_window_enqueue() {
 	if ( is_readable( get_theme_file_path( $theme_inter ) ) && is_readable( $own_inter ) && filesize( get_theme_file_path( $theme_inter ) ) === filesize( $own_inter ) ) {
 		wp_add_inline_style( 'live-design-window', '@font-face { font-family: "LDP Inter"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("' . esc_url( get_theme_file_uri( $theme_inter ) ) . '") format("woff2"); }' );
 	}
-	wp_enqueue_script( 'live-design-window-wp', $base . 'assets/js/panel-window-wp.js', array( 'live-design-window', 'architrave-reading-panel' ), architrave_panel_asset_version( 'assets/js/panel-window-wp.js' ), array( 'in_footer' => true ) );
+	wp_enqueue_script( 'live-design-window-wp', $base . 'assets/js/panel-window-wp.js', array( 'live-design-window', 'architrave-reading-panel' ), architrave_panel_asset_version( 'assets/js/panel-window-wp.js' ), live_design_window_script_args() );
 	$boot = $reader ? array( 'words' => live_design_window_words() ) : live_design_window_boot();
 	unset( $boot['css'], $boot['js'] );
 	wp_add_inline_script( 'live-design-window-wp', 'window.LiveDesignWindowBoot = ' . wp_json_encode( $boot ) . ';', 'before' );
@@ -245,9 +245,17 @@ function live_design_api_enqueue() {
 	if ( ! wp_script_is( 'live-design-window-wp', 'enqueued' ) || live_design_window_reader() || architrave_panel_try() ) {
 		return;
 	}
-	wp_enqueue_script( 'live-design-api', plugin_dir_url( ARCHITRAVE_PANEL_FILE ) . 'assets/js/live-design-api.js', array( 'live-design-window-wp' ), architrave_panel_asset_version( 'assets/js/live-design-api.js' ), array( 'in_footer' => true ) );
+	wp_enqueue_script( 'live-design-api', plugin_dir_url( ARCHITRAVE_PANEL_FILE ) . 'assets/js/live-design-api.js', array( 'live-design-window-wp' ), architrave_panel_asset_version( 'assets/js/live-design-api.js' ), live_design_window_script_args() );
 }
 add_action( 'wp_enqueue_scripts', 'live_design_api_enqueue', 14 );
+
+function live_design_window_script_args() {
+	$args = array( 'in_footer' => true );
+	if ( function_exists( 'architrave_first_paint_printed' ) && architrave_first_paint_printed() ) {
+		$args['strategy'] = 'defer';
+	}
+	return $args;
+}
 
 function live_design_window_action_link( $links ) {
 	if ( ! architrave_panel_runs() || ! live_design_window_may() ) {

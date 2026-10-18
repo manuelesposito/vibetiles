@@ -85,7 +85,9 @@
 	try { raw = localStorage.getItem(KEY); } catch (e) { raw = null; }
 	if (RETIRED[raw] && ids.indexOf(raw) === -1) raw = RETIRED[raw]; 
 	var initial = ids.indexOf(raw) !== -1 ? raw : DEFAULT;
-	apply(initial, ids.indexOf(raw) !== -1); 
+	
+	if (ids.indexOf(raw) !== -1 || !root.hasAttribute(ATTR)) apply(initial, ids.indexOf(raw) !== -1); 
+	else initial = ids.indexOf(root.getAttribute(ATTR)) !== -1 ? root.getAttribute(ATTR) : initial;
 	document.addEventListener('DOMContentLoaded', function () {
 		var CHECK = window.QuireIcons
 			? window.QuireIcons.markup('check', 'class="quire-menu-check"')

@@ -4,7 +4,7 @@ Tags: style sharing, typography, fonts, dark mode, styles
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.57.1
+Stable tag: 0.58.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 6. On a phone the panel is a sheet from below.
 
 == Changelog ==
+
+= 0.58.0 =
+* The page paints the site's default style with no script run: the server prints the style's stamp, captured once in the owner's browser, and the design engine loads deferred. Pages paint sooner, about a second on a phone. Without a stamp the engine loads as before.
 
 = 0.57.1 =
 * A style link with ?ldp-try in the address opens the try mode for the site owner too: the page wears the style, nothing is kept. Before, Try it on a gallery pasted the style into the owner's own list.

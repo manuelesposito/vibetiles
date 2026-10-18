@@ -60,7 +60,11 @@
 	if (NEAR[raw]) { raw = NEAR[raw]; try { if (raw === DEFAULT) localStorage.removeItem(KEY); else localStorage.setItem(KEY, raw); } catch (e) {} }
 	var initial = ids.indexOf(raw) !== -1 ? raw : DEFAULT;
 
-	apply(initial);
+	/* THE SERVER'S WORD STANDS WHERE NOTHING IS STORED (0.58.0, the first paint
+	   printed): see reading-face.js. A site default's leading printed on the root
+	   is kept for a reader who has chosen nothing. */
+	if (ids.indexOf(raw) !== -1 || !root.hasAttribute(ATTR)) apply(initial);
+	else initial = ids.indexOf(root.getAttribute(ATTR)) !== -1 ? root.getAttribute(ATTR) : initial;
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var CHECK = window.QuireIcons

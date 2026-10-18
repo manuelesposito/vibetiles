@@ -856,9 +856,199 @@ function architrave_site_styles_print() {
 			)
 		) . ';';
 	}
+
+	$paint = architrave_first_paint();
+	$plain = architrave_first_paint_plain_page();
+	$script .= 'window.architraveFirstPaint = ' . wp_json_encode(
+		array(
+			'key'     => function_exists( 'architrave_panel_has_host' ) && architrave_panel_has_host() ? architrave_first_paint_key() : '',
+			'printed' => null !== $paint,
+			'attrs'   => $paint ? array_keys( $paint['attrs'] ) : array(),
+			'props'   => $paint ? array_keys( $paint['props'] ) : array(),
+			'capture' => architrave_first_paint_capturing(),
+			'frame'   => $plain && architrave_site_styles_may_publish() ? add_query_arg( array( 'ldp-as-reader' => '1', 'ldp-capture' => '1' ), home_url( '/' ) ) : '',
+			'url'     => $plain && architrave_site_styles_may_publish() ? rest_url( 'architrave/v1/first-paint' ) : '',
+		)
+	) . ';';
+	if ( null !== $paint ) {
+
+		$script .= '(function(){try{var d=document.documentElement,D=' . wp_json_encode( '' !== $state['default'] ? $state['default'] : 'standard' ) . ',s=localStorage.getItem("architrave-style"),t=localStorage.getItem("architrave-style-tweaks"),a=localStorage.getItem("architrave-accent");'
+			. 'if((s&&s!==D)||(t&&t.indexOf("\""+D+"\"")!==-1)||a==="off"||/[?&#]style=/.test(location.search+location.hash)){d.setAttribute("data-ldp-settling","");setTimeout(function(){d.removeAttribute("data-ldp-settling");},2000);}}catch(e){}})();';
+	}
 	wp_add_inline_script( 'architrave-presets', $script, 'before' );
 }
 add_action( 'wp_enqueue_scripts', 'architrave_site_styles_print', 11 );
+
+const ARCHITRAVE_FIRST_PAINT_OPTION = 'architrave_panel_first_paint';
+
+function architrave_first_paint_key() {
+	static $key = null;
+	if ( null !== $key ) {
+		return $key;
+	}
+	$state  = architrave_site_styles();
+	$record = '';
+	foreach ( $state['styles'] as $style ) {
+		if ( isset( $style['id'] ) && $style['id'] === $state['default'] ) {
+			$record = wp_json_encode( $style );
+			break;
+		}
+	}
+	$plugin = defined( 'ARCHITRAVE_PANEL_VERSION' ) ? ARCHITRAVE_PANEL_VERSION : '';
+	$theme  = wp_get_theme()->get( 'Version' );
+	$key    = md5( $record . '|' . $plugin . '|' . $theme . '|host' );
+	return $key;
+}
+
+function architrave_first_paint_plain_page() {
+	if ( ! function_exists( 'architrave_panel_has_host' ) || ! architrave_panel_has_host() ) {
+		return false;
+	}
+	if ( architrave_preview_asked() || architrave_as_reader() ) {
+		return false;
+	}
+	if ( function_exists( 'architrave_panel_try' ) && architrave_panel_try() ) {
+		return false;
+	}
+	if ( is_admin() || is_customize_preview() ) {
+		return false;
+	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a view of the page; it saves nothing.
+	if ( isset( $_GET['style'] ) ) {
+		return false;
+	}
+	return true;
+}
+
+function architrave_first_paint() {
+	static $paint = false;
+	if ( false !== $paint ) {
+		return $paint;
+	}
+	$paint = null;
+	if ( ! architrave_first_paint_plain_page() ) {
+		return $paint;
+	}
+	$stored = get_option( ARCHITRAVE_FIRST_PAINT_OPTION, null );
+	if ( ! is_array( $stored ) || ( $stored['key'] ?? '' ) !== architrave_first_paint_key() ) {
+		return $paint;
+	}
+	$clean = architrave_first_paint_clean( $stored );
+	if ( null === $clean || ( empty( $clean['attrs'] ) && empty( $clean['props'] ) && '' === $clean['css'] ) ) {
+		return $paint;
+	}
+	$paint = $clean;
+	return $paint;
+}
+
+function architrave_first_paint_printed() {
+	return null !== architrave_first_paint();
+}
+
+function architrave_first_paint_clean( $raw ) {
+	if ( ! is_array( $raw ) || ! isset( $raw['key'] ) || ! is_string( $raw['key'] ) || ! preg_match( '/^[a-f0-9]{32}$/', $raw['key'] ) ) {
+		return null;
+	}
+	$attrs = array();
+	foreach ( ( isset( $raw['attrs'] ) && is_array( $raw['attrs'] ) ) ? $raw['attrs'] : array() as $name => $value ) {
+		if ( ! is_string( $name ) || ! preg_match( '/^data-[a-z0-9-]{1,60}$/', $name ) || 'data-theme' === $name || str_starts_with( $name, 'data-ldp-' ) ) {
+			continue;
+		}
+		if ( ! is_string( $value ) || strlen( $value ) > 80 || preg_match( '/[<>"\'\\\\]/', $value ) ) {
+			continue;
+		}
+		$attrs[ $name ] = $value;
+		if ( count( $attrs ) >= 160 ) {
+			break;
+		}
+	}
+	$props = array();
+	foreach ( ( isset( $raw['props'] ) && is_array( $raw['props'] ) ) ? $raw['props'] : array() as $name => $value ) {
+		if ( ! is_string( $name ) || ! preg_match( '/^--[a-z0-9-]{1,60}$/', $name ) ) {
+			continue;
+		}
+		if ( ! is_string( $value ) || strlen( $value ) > 400 || preg_match( '/[<>{}"\\\\]|;|\/\*|url\(|expression\(|@import/i', $value ) ) {
+			continue;
+		}
+		$props[ $name ] = trim( $value );
+		if ( count( $props ) >= 160 ) {
+			break;
+		}
+	}
+	$css = isset( $raw['css'] ) && is_string( $raw['css'] ) ? $raw['css'] : '';
+	if ( strlen( $css ) > 65536 || preg_match( '/<\/|<!--|@import|url\(|expression\(|javascript:/i', $css ) ) {
+		$css = '';
+	}
+	return array( 'key' => $raw['key'], 'attrs' => $attrs, 'props' => $props, 'css' => $css );
+}
+
+function architrave_first_paint_attributes( $output ) {
+	$paint = architrave_first_paint();
+	if ( null === $paint ) {
+		return $output;
+	}
+	foreach ( $paint['attrs'] as $name => $value ) {
+		$pair = ' ' . $name . '="' . esc_attr( $value ) . '"';
+		if ( preg_match( '/ ' . preg_quote( $name, '/' ) . '="[^"]*"/', $output ) ) {
+			$output = preg_replace( '/ ' . preg_quote( $name, '/' ) . '="[^"]*"/', $pair, $output, 1 );
+		} else {
+			$output .= $pair;
+		}
+	}
+	$style = '';
+	foreach ( $paint['props'] as $name => $value ) {
+		$style .= ( '' === $style ? '' : ' ' ) . $name . ': ' . $value . ';';
+	}
+	if ( '' !== $style ) {
+		$output .= ' style="' . esc_attr( $style ) . '"';
+	}
+	return $output;
+}
+add_filter( 'language_attributes', 'architrave_first_paint_attributes', 12 );
+
+function architrave_first_paint_head() {
+	$paint = architrave_first_paint();
+	if ( null === $paint ) {
+		return;
+	}
+	echo '<style id="architrave-first-paint-settling">:root[data-ldp-settling] body{visibility:hidden}</style>' . "\n";
+	if ( '' !== $paint['css'] ) {
+		echo '<style id="architrave-own-colours">' . $paint['css'] . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cleaned by architrave_first_paint_clean(), no closing tag can pass.
+	}
+}
+add_action( 'wp_head', 'architrave_first_paint_head', 10 );
+
+function architrave_first_paint_route() {
+	register_rest_route(
+		'architrave/v1',
+		'/first-paint',
+		array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'permission_callback' => 'architrave_site_styles_may_publish',
+			'callback'            => static function ( $request ) {
+				$clean = architrave_first_paint_clean( $request->get_json_params() );
+				if ( null === $clean ) {
+					return new WP_Error( 'architrave_bad_paint', __( 'That is not a first paint.', 'vibetiles' ), array( 'status' => 400 ) );
+				}
+				if ( $clean['key'] !== architrave_first_paint_key() ) {
+					return new WP_Error( 'architrave_old_paint', __( 'The site has changed since this was captured.', 'vibetiles' ), array( 'status' => 409 ) );
+				}
+				$before = get_option( ARCHITRAVE_FIRST_PAINT_OPTION, null );
+				update_option( ARCHITRAVE_FIRST_PAINT_OPTION, $clean, true );
+				if ( $before !== $clean ) {
+					architrave_site_styles_purge();
+				}
+				return rest_ensure_response( array( 'key' => $clean['key'], 'attrs' => count( $clean['attrs'] ), 'props' => count( $clean['props'] ), 'css' => strlen( $clean['css'] ) ) );
+			},
+		)
+	);
+}
+add_action( 'rest_api_init', 'architrave_first_paint_route' );
+
+function architrave_first_paint_capturing() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- a view of the page; it saves nothing.
+	return architrave_as_reader() && isset( $_GET['ldp-capture'] );
+}
 
 function architrave_site_styles_customize( $wp_customize ) {
 	$wp_customize->add_section(

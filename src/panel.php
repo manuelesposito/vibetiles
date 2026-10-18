@@ -883,8 +883,21 @@ function architrave_panel_enqueue_scripts() {
 		'architrave-space'           => array( 'assets/js/space.js', array(), true ), /* the Space dial's work, on Architrave and any theme (2026-09-25) */
 		'architrave-dropcap'         => array( 'assets/js/dropcap.js', array(), true ), /* a drop cap only where the paragraph has room for it (2026-10-08) */
 	);
+	/* THE ENGINE WAITS WHERE THE SERVER PRINTED THE FIRST PAINT (0.58.0, inc/site-styles.php,
+	   THE FIRST PAINT, PRINTED BY THE SERVER): presets.js and everything that waits for it take
+	   `defer` when this page carries the stamp, and load as before, blocking in the head, when it
+	   does not. The three dial scripts (face, leading, size) stay blocking: tiny, and a reader's own
+	   choice must be on before the paint. A deferred script's dependents must defer too, or
+	   WordPress quietly makes the whole chain blocking again; window.php does the same for the
+	   owner's window. Decided here, at priority 11, after inc/site-styles.php has read the stamp. */
+	$defer = function_exists( 'architrave_first_paint_printed' ) && architrave_first_paint_printed();
+	$waits = array( 'architrave-presets' => true, 'architrave-reading-panel' => true, 'architrave-panel-opener' => true, 'architrave-space' => true, 'architrave-dropcap' => true );
 	foreach ( $list as $handle => $item ) {
-		wp_enqueue_script( $handle, $base . $item[0], $item[1], architrave_panel_asset_version( $item[0] ), array( 'in_footer' => $item[2] ) );
+		$args = array( 'in_footer' => $item[2] );
+		if ( $defer && isset( $waits[ $handle ] ) ) {
+			$args['strategy'] = 'defer';
+		}
+		wp_enqueue_script( $handle, $base . $item[0], $item[1], architrave_panel_asset_version( $item[0] ), $args );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'architrave_panel_enqueue_scripts', 11 );

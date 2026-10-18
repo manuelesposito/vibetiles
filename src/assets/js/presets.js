@@ -39,6 +39,15 @@
  */
 (function () {
 	var root = document.documentElement;
+	/* WHAT THE ROOT WORE BEFORE THIS SCRIPT (0.58.0, THE FIRST PAINT PRINTED BY THE SERVER,
+	   inc/site-styles.php): the theme's and the dial scripts' own attributes, by name and value,
+	   and the root's properties by name. Read at the first line so the capture at the end can
+	   tell what this script stamped from what was there. Cheap; a dozen names. */
+	var ROOT_BEFORE = { attrs: {}, props: {} };
+	try {
+		for (var i0 = 0; i0 < root.attributes.length; i0++) ROOT_BEFORE.attrs[root.attributes[i0].name] = root.attributes[i0].value;
+		for (var j0 = 0; j0 < root.style.length; j0++) ROOT_BEFORE.props[root.style[j0]] = true;
+	} catch (e0) { /* the stub of tools/settings-list.mjs has no attribute list; nothing is captured there */ }
 	/* HELD STILL (0.11.149): read and written with transitions at no length;
 	   the plugin's guest-size.js says
 	   why (the lift below, THE TILE WEARS THE THEME'S OWN PAPER, reads the page
@@ -5070,4 +5079,62 @@
 			void dial; /* remembered by the observer above, once the change has landed */
 		});
 	});
+
+	/* THE FIRST PAINT, PRINTED BY THE SERVER (0.58.0, 2026-10-18; inc/site-styles.php says the whole
+	   of it). This script's boot is over here: everything it stamps on the root for the first paint
+	   has been stamped. Three things happen, by what the server said (window.architraveFirstPaint):
+	   1. A READER WHO WAITED: a reader with a choice of their own was hidden under data-ldp-settling
+	      by the inline script before this tag, until the boot had put their choice on. It is over.
+	   2. THE CAPTURE FRAME (`capture`): this page is the hidden frame an owner's page opened as a first
+	      visitor (Preview as Reader, storage empty, nothing printed, this script blocking as it always
+	      was). What the boot stamped is handed to the parent: every root attribute that was not there
+	      before this script or stands with another value, except data-theme, whose side is each
+	      visitor's own; every root property this script set; the colour sheet. The parent sends it.
+	   3. AN OWNER'S PAGE WITHOUT A PRINTED STAMP (`url`, not `printed`): opens the frame once, hidden,
+	      and sends what comes back to the route with the publish nonce. Asked once a minute at most,
+	      so a frame that cannot answer does not queue up. Once the server holds a stamp under today's
+	      key it prints it and `printed` is true; the frame is not opened again. */
+	(function () {
+		var FP = window.architraveFirstPaint || {};
+		root.removeAttribute('data-ldp-settling');
+		if (!root.attributes || !root.style || typeof document.getElementById !== 'function') return; /* the stub */
+		function captured() {
+			var attrs = {}, props = {}, i;
+			for (i = 0; i < root.attributes.length; i++) {
+				var a = root.attributes[i];
+				if (!/^data-/.test(a.name) || a.name === 'data-theme' || /^data-ldp-/.test(a.name)) continue;
+				if (ROOT_BEFORE.attrs[a.name] === a.value) continue;
+				attrs[a.name] = a.value;
+			}
+			for (i = 0; i < root.style.length; i++) {
+				var n = root.style[i];
+				if (/^--/.test(n) && !ROOT_BEFORE.props[n]) props[n] = root.style.getPropertyValue(n);
+			}
+			var sheet = document.getElementById(COLOURS_STYLE);
+			return { key: FP.key || '', attrs: attrs, props: props, css: sheet ? sheet.textContent : '' };
+		}
+		if (FP.capture) {
+			try { if (window.parent && window.parent !== window) window.parent.postMessage({ architraveFirstPaint: captured() }, location.origin); } catch (e) { /* nothing to tell */ }
+			return;
+		}
+		if (!FP.url || !FP.key || FP.printed || !PUBLISH || !FP.frame || window.top !== window || !window.fetch) return;
+		var ASKED = 'architrave-first-paint-asked';
+		try { var last = Number(sessionStorage.getItem(ASKED) || 0); if (Date.now() - last < 60000) return; sessionStorage.setItem(ASKED, String(Date.now())); } catch (e) { /* ask anyway */ }
+		var frame = document.createElement('iframe'), done = false;
+		frame.setAttribute('aria-hidden', 'true'); frame.tabIndex = -1;
+		frame.style.cssText = 'position:fixed;width:1px;height:1px;left:-9999px;top:0;border:0;opacity:0;pointer-events:none;';
+		function finish() { if (done) return; done = true; window.removeEventListener('message', onMessage); if (frame.parentNode) frame.parentNode.removeChild(frame); }
+		function onMessage(e) {
+			if (e.origin !== location.origin || !e.data || !e.data.architraveFirstPaint || e.source !== frame.contentWindow) return;
+			var stamp = e.data.architraveFirstPaint;
+			finish();
+			if (!stamp || stamp.key !== FP.key) return; /* the frame saw another site than this page: let the next page ask */
+			fetch(FP.url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': PUBLISH.nonce }, body: JSON.stringify(stamp) }).catch(function () { /* the next page asks again */ });
+		}
+		window.addEventListener('message', onMessage);
+		setTimeout(finish, 20000); /* a frame that never answers is taken down */
+		frame.src = FP.frame;
+		var put = function () { (document.body || root).appendChild(frame); };
+		if (document.body) put(); else document.addEventListener('DOMContentLoaded', put);
+	})();
 })();

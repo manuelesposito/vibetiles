@@ -136,7 +136,14 @@
 	if (RETIRED[raw] && ids.indexOf(raw) === -1) raw = RETIRED[raw]; /* a face that came back is itself again, not what stood in for it; this is also what JetBrains Mono needed since it returned on 2026-09-19 */
 	var initial = ids.indexOf(raw) !== -1 ? raw : DEFAULT;
 
-	apply(initial, ids.indexOf(raw) !== -1); /* a choice is a face this list knows; a stored word it does not is nothing chosen, not the default chosen */
+	/* THE SERVER'S WORD STANDS WHERE NOTHING IS STORED (0.58.0, the first paint
+	   printed): a site default's face is on the root before any script runs
+	   (inc/site-styles.php, architrave_first_paint_attributes), and clearing it
+	   here, as "nothing chosen" did, made the page fall back to Newsreader for
+	   a frame until presets.js, now deferred, put the face back. A reader who
+	   has chosen nothing keeps what the page came with; a choice still rules. */
+	if (ids.indexOf(raw) !== -1 || !root.hasAttribute(ATTR)) apply(initial, ids.indexOf(raw) !== -1); /* a choice is a face this list knows; a stored word it does not is nothing chosen, not the default chosen */
+	else initial = ids.indexOf(root.getAttribute(ATTR)) !== -1 ? root.getAttribute(ATTR) : initial;
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var CHECK = window.QuireIcons

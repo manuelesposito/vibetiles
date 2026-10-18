@@ -45,7 +45,9 @@
 	try { raw = localStorage.getItem(KEY); } catch (e) { raw = null; }
 	var initial = Reading.ids.indexOf(raw) !== -1 ? raw : SITE_DEFAULT;
 	
-	apply(initial);
+	var printed = root.getAttribute(Reading.attribute);
+	if (Reading.ids.indexOf(raw) !== -1 || !printed || Reading.ids.indexOf(printed) === -1) apply(initial);
+	else initial = printed;
 	document.addEventListener('DOMContentLoaded', function () {
 		var CHECK = window.QuireIcons
 			? window.QuireIcons.markup('check', 'class="quire-menu-check"')

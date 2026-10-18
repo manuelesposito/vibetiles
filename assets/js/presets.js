@@ -39,6 +39,11 @@
  */
 (function () {
 	var root = document.documentElement;
+	var ROOT_BEFORE = { attrs: {}, props: {} };
+	try {
+		for (var i0 = 0; i0 < root.attributes.length; i0++) ROOT_BEFORE.attrs[root.attributes[i0].name] = root.attributes[i0].value;
+		for (var j0 = 0; j0 < root.style.length; j0++) ROOT_BEFORE.props[root.style[j0]] = true;
+	} catch (e0) {  }
 	var still = window.ldpStill || (window.ldpStill = (function () {
 		var sheet = null, depth = 0;
 		return function (fn) {
@@ -3351,4 +3356,48 @@
 			void dial; 
 		});
 	});
+	
+	(function () {
+		var FP = window.architraveFirstPaint || {};
+		root.removeAttribute('data-ldp-settling');
+		if (!root.attributes || !root.style || typeof document.getElementById !== 'function') return; 
+		function captured() {
+			var attrs = {}, props = {}, i;
+			for (i = 0; i < root.attributes.length; i++) {
+				var a = root.attributes[i];
+				if (!/^data-/.test(a.name) || a.name === 'data-theme' || /^data-ldp-/.test(a.name)) continue;
+				if (ROOT_BEFORE.attrs[a.name] === a.value) continue;
+				attrs[a.name] = a.value;
+			}
+			for (i = 0; i < root.style.length; i++) {
+				var n = root.style[i];
+				if (/^--/.test(n) && !ROOT_BEFORE.props[n]) props[n] = root.style.getPropertyValue(n);
+			}
+			var sheet = document.getElementById(COLOURS_STYLE);
+			return { key: FP.key || '', attrs: attrs, props: props, css: sheet ? sheet.textContent : '' };
+		}
+		if (FP.capture) {
+			try { if (window.parent && window.parent !== window) window.parent.postMessage({ architraveFirstPaint: captured() }, location.origin); } catch (e) {  }
+			return;
+		}
+		if (!FP.url || !FP.key || FP.printed || !PUBLISH || !FP.frame || window.top !== window || !window.fetch) return;
+		var ASKED = 'architrave-first-paint-asked';
+		try { var last = Number(sessionStorage.getItem(ASKED) || 0); if (Date.now() - last < 60000) return; sessionStorage.setItem(ASKED, String(Date.now())); } catch (e) {  }
+		var frame = document.createElement('iframe'), done = false;
+		frame.setAttribute('aria-hidden', 'true'); frame.tabIndex = -1;
+		frame.style.cssText = 'position:fixed;width:1px;height:1px;left:-9999px;top:0;border:0;opacity:0;pointer-events:none;';
+		function finish() { if (done) return; done = true; window.removeEventListener('message', onMessage); if (frame.parentNode) frame.parentNode.removeChild(frame); }
+		function onMessage(e) {
+			if (e.origin !== location.origin || !e.data || !e.data.architraveFirstPaint || e.source !== frame.contentWindow) return;
+			var stamp = e.data.architraveFirstPaint;
+			finish();
+			if (!stamp || stamp.key !== FP.key) return; 
+			fetch(FP.url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': PUBLISH.nonce }, body: JSON.stringify(stamp) }).catch(function () {  });
+		}
+		window.addEventListener('message', onMessage);
+		setTimeout(finish, 20000); 
+		frame.src = FP.frame;
+		var put = function () { (document.body || root).appendChild(frame); };
+		if (document.body) put(); else document.addEventListener('DOMContentLoaded', put);
+	})();
 })();

@@ -46,7 +46,9 @@
 	try { raw = localStorage.getItem(KEY); } catch (e) { raw = null; }
 	if (NEAR[raw]) { raw = NEAR[raw]; try { if (raw === DEFAULT) localStorage.removeItem(KEY); else localStorage.setItem(KEY, raw); } catch (e) {} }
 	var initial = ids.indexOf(raw) !== -1 ? raw : DEFAULT;
-	apply(initial);
+	
+	if (ids.indexOf(raw) !== -1 || !root.hasAttribute(ATTR)) apply(initial);
+	else initial = ids.indexOf(root.getAttribute(ATTR)) !== -1 ? root.getAttribute(ATTR) : initial;
 	document.addEventListener('DOMContentLoaded', function () {
 		var CHECK = window.QuireIcons
 			? window.QuireIcons.markup('check', 'class="quire-menu-check"')
