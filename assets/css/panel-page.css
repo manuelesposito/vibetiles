@@ -1396,4 +1396,5 @@ body::after {
 body img:not(.emoji, .wp-smiley):not(:where(.reading-panel *, #wpadminbar *)) {
 	filter: var(--picture-filter) var(--picture-dim);
 	image-rendering: var(--picture-rendering);
+	transition: filter var(--picture-lift-time) var(--motion-easing-standard);
 }

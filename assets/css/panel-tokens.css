@@ -90,6 +90,7 @@
 	--font-weight-semibold: 600;
 	--layer-host-offset: 0;
 	--layer-overlay: calc(var(--layer-host-offset) + 40);
+	--motion-duration-instant: 0ms;
 	--motion-duration-fast: 120ms;
 	--motion-duration-default: 180ms;
 	--motion-duration-slow: 240ms;
@@ -178,6 +179,9 @@
 	--surface-vignette: 0;
 	--picture-filter: ;
 	--picture-dim: ;
+	--picture-lift: ;
+	--picture-dim-lift: ;
+	--picture-lift-time: var(--motion-duration-slow);
 	--picture-rendering: auto;
 	--picture-frame: var(--space-2);
 	--reading-align: start;

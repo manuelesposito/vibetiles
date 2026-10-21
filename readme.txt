@@ -4,7 +4,7 @@ Tags: style sharing, typography, fonts, dark mode, styles
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.58.0
+Stable tag: 0.58.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 6. On a phone the panel is a sheet from below.
 
 == Changelog ==
+
+= 0.58.1 =
+* Colour on hover fades the picture look in and out over a quarter second instead of switching it in one frame. Black & white, Sepia, Sun-warmed and Dim in the dark fade; the two-colour looks and Grain, which have no in-between, still lift at once.
 
 = 0.58.0 =
 * The page paints the site's default style with no script run: the server prints the style's stamp, captured once in the owner's browser, and the design engine loads deferred. Pages paint sooner, about a second on a phone. Without a stamp the engine loads as before.

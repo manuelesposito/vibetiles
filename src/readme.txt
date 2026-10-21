@@ -99,6 +99,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 
 == Changelog ==
 
+= 0.58.1 =
+* Colour on hover fades the picture look in and out over a quarter second instead of switching it in one frame. Black & white, Sepia, Sun-warmed and Dim in the dark fade; the two-colour looks and Grain, which have no in-between, still lift at once.
+
 = 0.58.0 =
 * The page paints the site's default style with no script run: the server prints the style's stamp, captured once in the owner's browser, and the design engine loads deferred. Pages paint sooner, about a second on a phone. Without a stamp the engine loads as before.
 

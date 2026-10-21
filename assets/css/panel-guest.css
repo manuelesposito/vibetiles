@@ -942,7 +942,7 @@
 	border-radius: 0;
 }
 :root[data-pictures="warm"] {
-	--picture-filter: sepia(.18) saturate(1.12) contrast(1.02);
+	--picture-filter: sepia(.18) saturate(1.12) contrast(1.02); --picture-lift: sepia(0) saturate(1) contrast(1);
 }
 html:root[data-cap-face="title"] {
 	--reading-dropcap-face: var(--head-face, var(--font-reading)); --reading-dropcap-weight: min(900, calc(var(--head-weight, 600) + 200)); --reading-dropcap-settings: "opsz" 11;
@@ -953,19 +953,19 @@ html:root[data-cap-face="title"] {
 :root[data-links="bold"] {
 	--reading-link-ink: var(--text-primary);
 }
-:root[data-links="bold"] .wp-block-post-content a:not(.wp-block-button__link, .quire-button, .card-cover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+:root[data-links="bold"] :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button, .card-cover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	text-decoration-line: underline; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: .18em;
 }
-:root[data-links="bold"] .wp-block-post-content a:not(.wp-block-button__link, .quire-button, .card-cover):is(:hover, :focus-visible):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+:root[data-links="bold"] :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button, .card-cover):is(:hover, :focus-visible):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	color: var(--accent-writing, var(--accent-contrast)); background: var(--accent); text-decoration-color: transparent; opacity: 1;
 }
 :root[data-links="wash"] {
 	--reading-link-ink: var(--text-primary);
 }
-:root[data-links="wash"] .wp-block-post-content a:not(.wp-block-button__link, .quire-button, .card-cover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+:root[data-links="wash"] :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button, .card-cover):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	text-decoration-line: none; background: var(--accent-muted); border-radius: var(--radius-xs); padding-inline: .12em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-:root[data-links="wash"] .wp-block-post-content a:not(.wp-block-button__link, .quire-button, .card-cover):is(:hover, :focus-visible):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
+:root[data-links="wash"] :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button, .card-cover):is(:hover, :focus-visible):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	color: var(--accent-writing, var(--accent-contrast)); background: var(--accent); opacity: 1;
 }
 :root[data-opening="big"] .single-post-article .wp-block-post-content > p:first-child:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
@@ -1425,10 +1425,10 @@ html:root[data-cap-face="title"] {
 :root[data-links="underlined"] {
 	--reading-link-ink: var(--text-primary);
 }
-:root[data-links="underlined"] .wp-block-post-content a:not(.wp-block-button__link, .quire-button) {
+:root[data-links="underlined"] :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button) {
 	text-decoration-color: var(--text-subtle);
 }
-:root[data-links="coloured"]:not([data-accent="off"]) .wp-block-post-content a:not(.wp-block-button__link, .quire-button):not(:focus-visible) {
+:root[data-links="coloured"]:not([data-accent="off"]) :is(.wp-block-post-content, .comments-mentions-list) a:not(.wp-block-button__link, .quire-button):not(:focus-visible) {
 	text-decoration-line: none;
 }
 :root[data-small-soft] body {
@@ -1476,10 +1476,11 @@ html:root[data-soft="on"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navi
 	--code-line: calc(var(--code-line-height) * var(--code-leading, 1) * var(--text-lg) * var(--code-size, 1));
 }
 :root[data-pictures="bw"] {
-	--picture-filter: grayscale(1) contrast(1.05);
+	--picture-filter: grayscale(1) contrast(1.05); --picture-lift: grayscale(0) contrast(1);
 }
 :root[data-pictures="duo"] {
 	--picture-filter: grayscale(1) contrast(1.1) url("#architrave-duotone");
+	--picture-lift-time: var(--motion-duration-instant);
 	--duo-dark: var(--text-primary);
 	--duo-light: var(--surface-base);
 }
@@ -1489,6 +1490,7 @@ html:root[data-soft="on"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navi
 }
 :root[data-pictures="accent"] {
 	--picture-filter: grayscale(1) contrast(1.1) url("#architrave-duotone");
+	--picture-lift-time: var(--motion-duration-instant);
 	--duo-dark: var(--accent);
 	--duo-light: var(--surface-base);
 }
@@ -1497,22 +1499,22 @@ html:root[data-soft="on"] :is(.sidebar-column, .mobile-panel) :is(.wp-block-navi
 	--duo-light: var(--accent);
 }
 :root[data-pictures="grain"] {
-	--picture-filter: url("#architrave-grain");
+	--picture-filter: url("#architrave-grain"); --picture-lift-time: var(--motion-duration-instant);
 }
 :root[data-pictures="sepia"] {
-	--picture-filter: sepia(1) contrast(.95);
+	--picture-filter: sepia(1) contrast(.95); --picture-lift: sepia(0) contrast(1);
 }
 :root[data-picturedim="on"][data-theme$="-dark"]:is(:not([data-pictures]), [data-pictures="bw"], [data-pictures="sepia"], [data-pictures="grain"]) {
-	--picture-dim: brightness(.85); --picture-dim-amount: .85;
+	--picture-dim: brightness(.85); --picture-dim-amount: .85; --picture-dim-lift: brightness(1);
 }
 @media (hover: hover) {
 	:root[data-picturehover="on"] :is(.post-card .post-media, .single-post-article .article-media) img:hover, :root[data-picturehover="on"] body img:not(.emoji, .wp-smiley):hover:not(:where(.reading-panel *, #wpadminbar *)), :root[data-picturehover="on"] :is(.single-post-article, .post-card.format-link .post-format-body) .wp-block-post-content :is(img:not(.emoji, .wp-smiley):hover, figure:hover > img, figure:hover > a > img) {
-		filter: none;
+		filter: var(--picture-lift) var(--picture-dim-lift);
 	}
 }
 @media (hover: hover) {
 	:root[data-picturehover="on"] :is(.theme-card, .post-link-card):hover :is(img, .illustration) {
-		filter: none;
+		filter: var(--picture-lift) var(--picture-dim-lift);
 	}
 }
 :root[data-pictureframe="off"] :is(.post-card .post-media img, .single-post-article .article-media img, :is(.single-post-article, .post-card.format-link .post-format-body) .wp-block-post-content img:not(.emoji, .wp-smiley, .post-link-shot)) {
@@ -2990,16 +2992,16 @@ html:root[data-interface-colour] :is(.sidebar-column, .mobile-panel) :is(.wp-blo
 :root[data-comment-m-name-italic] :is(.comments-section .wp-block-comment-author-name, .comments-section .wp-block-comment-author-name a) {
 	--comment-style: var(--comment-style-name);
 }
-:root[data-comment-m-small-face] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-face] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	--comment-face: var(--comment-face-small);
 }
-:root[data-comment-m-small-italic] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-italic] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	--comment-style: var(--comment-style-small);
 }
-:root[data-comment-m-form-face] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-face] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	--comment-face: var(--comment-face-form);
 }
-:root[data-comment-m-form-italic] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-italic] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	--comment-style: var(--comment-style-form);
 }
 :root[data-small-m-author-size] :is(.author-box .wp-block-post-author__name, .author-box .wp-block-post-author__bio) {
@@ -3122,40 +3124,40 @@ html:root[data-interface-colour] :is(.sidebar-column, .mobile-panel) :is(.wp-blo
 :root[data-comment-m-name-tracking][data-comment-m-name-tracking] :is(.comments-section .wp-block-comment-author-name, .comments-section .wp-block-comment-author-name a) {
 	letter-spacing: var(--comment-tracking-name);
 }
-:root[data-comment-m-small-weight] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-weight] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	--comment-weight: var(--comment-weight-small);
 }
-:root[data-comment-m-small-caps] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-caps] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	--comment-case: var(--comment-case-small);
 }
-:root[data-comment-m-small-tracking] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-tracking] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	--comment-tracking: var(--comment-tracking-small);
 }
-:root[data-comment-m-small-weight][data-comment-m-small-weight] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-weight][data-comment-m-small-weight] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	font-weight: var(--comment-weight-small);
 }
-:root[data-comment-m-small-caps][data-comment-m-small-caps] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-caps][data-comment-m-small-caps] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	text-transform: var(--comment-case-small);
 }
-:root[data-comment-m-small-tracking][data-comment-m-small-tracking] :is(.comments-section .wp-block-comment-date, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
+:root[data-comment-m-small-tracking][data-comment-m-small-tracking] :is(.comments-section .wp-block-comment-date, .comments-section .comment-replying-to, .comments-section .wp-block-comment-reply-link, .comments-section .wp-block-comment-reply-link a) {
 	letter-spacing: var(--comment-tracking-small);
 }
-:root[data-comment-m-form-weight] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-weight] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	--comment-weight: var(--comment-weight-form);
 }
-:root[data-comment-m-form-caps] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-caps] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	--comment-case: var(--comment-case-form);
 }
-:root[data-comment-m-form-tracking] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-tracking] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	--comment-tracking: var(--comment-tracking-form);
 }
-:root[data-comment-m-form-weight][data-comment-m-form-weight] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-weight][data-comment-m-form-weight] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	font-weight: var(--comment-weight-form);
 }
-:root[data-comment-m-form-caps][data-comment-m-form-caps] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-caps][data-comment-m-form-caps] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	text-transform: var(--comment-case-form);
 }
-:root[data-comment-m-form-tracking][data-comment-m-form-tracking] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-replying-to, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
+:root[data-comment-m-form-tracking][data-comment-m-form-tracking] :is(.comments-section .comment-form p, .comments-section .comment-form label, .comments-section .comment-reply-title small, .comments-section #cancel-comment-reply-link, .comments-section .form-submit .quire-button, .comments-section .form-submit input[type="submit"], .comments-section #submit) {
 	letter-spacing: var(--comment-tracking-form);
 }
 :root[data-read-m-boxes-weight] :is(.single-post-article .wp-block-post-content .wp-block-group.has-background :is(p, li, .wp-block-button__link)) {
