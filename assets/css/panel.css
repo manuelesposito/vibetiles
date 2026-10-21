@@ -885,13 +885,13 @@
 }
 :root[data-fields="box"] body :is(#ldp-lv, .quire-input, .quire-textarea, input.mailpoet_text, .comment-form textarea, .comment-form input:not([type="submit"]):not([type="checkbox"]), .quire-search-field):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	border-color: transparent;
-	background: var(--surface-base);
+	background: var(--surface-hover);
 	background-clip: padding-box;
 	box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) var(--line);
 }
 :root[data-fields="raised"] body :is(#ldp-lv, .quire-input, .quire-textarea, input.mailpoet_text, .comment-form textarea, .comment-form input:not([type="submit"]):not([type="checkbox"]), .quire-search-field):not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
 	border-color: transparent;
-	background: var(--surface-base);
+	background: var(--surface-hover);
 	box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 6px 16px rgb(0 0 0 / 0.1);
 }
 @media (hover: hover) {
@@ -902,7 +902,7 @@
 		box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 10px 28px rgb(0 0 0 / 0.14);
 	}
 	:root[data-fields="box"] body .quire-search-field:has(input[readonly]):hover:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
-		background: var(--surface-hover);
+		background: var(--surface-selected);
 		box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) var(--line);
 	}
 }
@@ -911,7 +911,7 @@
 	box-shadow: inset 0 0 0 max(1px, var(--border-width-default)) color-mix(in srgb, var(--line), var(--text-primary) 25%);
 }
 :root[data-fields="raised"] body :is(#ldp-lv, .quire-input, .quire-textarea, input.mailpoet_text, .comment-form textarea, .comment-form input:not([type="submit"]):not([type="checkbox"]), .quire-search-field):active:not(:where(.reading-panel, .reading-panel *, .architrave-panel-opener)) {
-	background: var(--surface-hover);
+	background: var(--surface-selected);
 	box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 10%, transparent), 0 1px 2px rgb(0 0 0 / 0.08), 0 6px 16px rgb(0 0 0 / 0.1);
 }
 :root[data-fields] body :is(#ldp-lv, .quire-search-field) input {

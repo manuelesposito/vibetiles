@@ -99,6 +99,9 @@ The readable source and the build scripts are at https://github.com/manuelesposi
 
 == Changelog ==
 
+= 0.58.2 =
+* Outlined and Raised fields now rest one rung off their ground, like Filled fields do, so the search field and the comment form show on dark styles and dark rails instead of melting into them. The line and the shadow come on top of that rung.
+
 = 0.58.1 =
 * Colour on hover fades the picture look in and out over a quarter second instead of switching it in one frame. Black & white, Sepia, Sun-warmed and Dim in the dark fade; the two-colour looks and Grain, which have no in-between, still lift at once.
 
